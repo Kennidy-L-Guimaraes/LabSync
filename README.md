@@ -1,0 +1,3 @@
+LabSync is a network management tool designed for controlled environments such as laboratories or enterprise systems.
+It allows administrators to execute authorized remote management actions on connected machines, including system shutdown, configuration updates, and policy enforcement.
+All actions are explicitly defined, logged, and executed under administrator control. The system is intended for legitimate IT administration and device management within a trusted network environment.

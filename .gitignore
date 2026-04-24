@@ -1,0 +1,31 @@
+# =========================
+# Delphi Build Artifacts
+# =========================
+*.dcu
+*.exe
+*.dll
+*.bpl
+*.bpi
+*.map
+*.rsm
+*.drc
+*.ilc
+*.ild
+*.obj
+*.hpp
+*.bak
+*.tmp
+*.log
+
+# =========================
+# Build Output
+# =========================
+build/
+__history/
+
+# =========================
+# Delphi IDE Files
+# =========================
+*.identcache
+*.stat
+*.dproj.local
