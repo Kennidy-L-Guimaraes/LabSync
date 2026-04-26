@@ -1,7 +1,8 @@
 unit Command.Dispatcher;
 
 interface
-uses Command.Parser, SysUtils, Windows, Dialogs;
+uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
+ Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service, Path.Service;
  type
   TCommandDispatcher = Class
     public
@@ -11,7 +12,7 @@ uses Command.Parser, SysUtils, Windows, Dialogs;
      {Private Declarations}
     procedure ReturnError(const Command, Suggestion, ErrorMsg: string);
     function  SuggestCommand(const cmd: string): string;
-    procedure Get_Printscreen;
+    procedure Get_Printscreen(const Command: string);
 
   End;
 
@@ -22,28 +23,37 @@ implementation
 
 procedure TCommandDispatcher.Execute(const Command: string);
 var
- Cml    : string;
- Parser : TParser;
+  CmdName : string;
+  Parser  : TParser;
 begin
- Cml := Parser.GetCommandName(Command);
+  CmdName := Parser.GetCommandName(Command);
 
- if Cml = '$get_printscreen' then
-    Get_Printscreen
+  if CmdName = '$get_printscreen' then
+    Get_Printscreen(Command)
 
- else if Cml = '' then
-    begin
-
-    end
- else
-    begin
-    ReturnError(Cml, SuggestCommand(Cml), 'Not valid!');
-    end;
+  else if CmdName = '' then
+  begin
+    // ignora
+  end
+  else
+  begin
+    ReturnError(CmdName, SuggestCommand(CmdName), 'Not valid!');
+  end;
 end;
 
-procedure TCommandDispatcher.Get_Printscreen;
+procedure TCommandDispatcher.Get_Printscreen(const Command: string);
+var
+  Quality: integer;
+  Parser : TParser;
+  FileName: string;
 begin
    //logic
-   ShowMessage('Printscreen');
+  Quality   := Parser.GetQuality(Command);
+  FileName  := TPath.Combine(TPathService.PathLabSync('Screenshots'),
+               FormatDateTime('yyyymmdd_hhnnss', Now) + '.jpg');
+  TScreenService.CaptureScreenToJpg(FileName, Quality);
+  ShowMessage('Printscreen Quality: ' + IntToStr(Quality));
+  TLog.SaveLog('$get_printscreen quality=' + IntToStr(Quality));
 end;
 
 procedure TCommandDispatcher.ReturnError(const Command, Suggestion, ErrorMsg: string);

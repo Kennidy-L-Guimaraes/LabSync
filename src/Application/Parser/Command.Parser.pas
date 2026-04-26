@@ -7,6 +7,7 @@ interface
       function Normalize(const S: string): string;
       function GetCommandName(const S: string): string;
       function GetCommandValue(const S: string): string;
+      function GetQuality(const S: string): Integer;
   end;
 
 implementation
@@ -19,11 +20,12 @@ implementation
 
 function TParser.GetCommandName(const S: string): string;
 var
-  P: Integer;
   Clean: string;
+  P: Integer;
 begin
   Clean := Normalize(S);
-  P := Pos('=', Clean);
+
+  P := Pos(' ', Clean);
   if P > 0 then
     Result := Copy(Clean, 1, P - 1)
   else
@@ -47,6 +49,23 @@ begin
     Value := Copy(Value, 2, Length(Value) - 2);
 
   Result := Value;
+end;
+
+function TParser.GetQuality(const S: string): Integer;
+var
+  Clean: string;
+  P: Integer;
+  Value: string;
+begin
+  Result := 50; //Default
+  Clean := LowerCase(S);
+
+  P := Pos('quality=', Clean);
+  if P > 0 then
+  begin
+    Value := Copy(Clean, P + 8, 3);
+    Result := StrToIntDef(Value, 50);
+  end;
 end;
 
 function TParser.Normalize(const S: string): string;
