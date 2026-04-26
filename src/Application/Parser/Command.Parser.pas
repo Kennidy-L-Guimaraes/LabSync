@@ -57,7 +57,7 @@ var
   P: Integer;
   Value: string;
 begin
-  Result := 50; //Default
+  Result := 20; //Default
   Clean := LowerCase(S);
 
   P := Pos('quality=', Clean);

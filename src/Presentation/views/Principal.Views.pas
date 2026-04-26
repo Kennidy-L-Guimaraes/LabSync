@@ -5,16 +5,14 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Command.Parser,
-  Command.Dispatcher, Command.Logs, Vcl.ExtCtrls;
+  Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service;
 
 type
   TForm1 = class(TForm)
     Button1: TButton;
     Memo1: TMemo;
-    Timer1: TTimer;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
@@ -42,8 +40,9 @@ var
 begin
   CommandDis := TCommandDispatcher.Create;
   try
-   Command := '$get_printscreen quality=100';
-   CommandDis.Execute(Command)
+   Command := '$get_printscreenloop value=True';
+   CommandDis.Execute(Command);
+   Memo1.Lines.Add(TLog.ReadLogs);
   finally
   CommandDis.Free;
   end;
@@ -56,14 +55,11 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
- Timer1.Enabled := True;
  ShowLog := Tlog.Create;
  Memo1.Clear;
-end;
-
-procedure TForm1.Timer1Timer(Sender: TObject);
-begin
- Memo1.Lines.add(ShowLog.ReadLogs);
+ Memo1.Lines.Add(TLog.ReadLogs);
+ TId.CreateNewID;
+ ShowMessage(TId.GetID);
 end;
 
 end.

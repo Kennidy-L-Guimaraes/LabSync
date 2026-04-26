@@ -6,7 +6,7 @@ interface
   TLog = class
   public
     {Public Declarations}
-    class procedure SaveLog(const Msg: string);
+    class procedure SaveLog(const NewLog: string);
     class function  ReadLogs: string;
   private
     {Private Declarations}
@@ -36,11 +36,11 @@ begin
     Result := 'There are no system logs yet.';
 end;
 
-class procedure TLog.SaveLog(const Msg: string);
+class procedure TLog.SaveLog(const NewLog: string);
 Var
  Line: string;
 begin
- Line := FormatDateTime('yyyy-mm-dd hh:nn:ss', Now) + ' - ' + Msg + '---DONE---';
+ Line := NewLog;
  try
   TFile.AppendAllText(GetLogPath, Line + sLineBreak, TEncoding.UTF8);
  except

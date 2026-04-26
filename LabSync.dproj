@@ -136,6 +136,7 @@
         </DCCReference>
         <DCCReference Include="src\Application\Parser\Command.Parser.pas"/>
         <DCCReference Include="src\Application\Dispatcher\Command.Dispatcher.pas"/>
+        <DCCReference Include="src\Application\Services\ID.Service.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -162,7 +163,7 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="4">
-                <DeployFile LocalName="Win32\Debug\LabSync.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Build\Win32\Debug\LabSync.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>LabSync.exe</RemoteName>
                         <Overwrite>true</Overwrite>

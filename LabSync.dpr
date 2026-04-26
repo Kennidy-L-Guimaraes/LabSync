@@ -2,9 +2,10 @@ program LabSync;
 
 uses
   Vcl.Forms,
-  Principal.Views in '.\src\Presentation\views\Principal.Views.pas' {Form1},
-  Command.Parser in '.\src\Application\Parser\Command.Parser.pas',
-  Command.Dispatcher in '.\src\Application\Dispatcher\Command.Dispatcher.pas';
+  Principal.Views in 'src\Presentation\views\Principal.Views.pas' {Form1},
+  Command.Parser in 'src\Application\Parser\Command.Parser.pas',
+  Command.Dispatcher in 'src\Application\Dispatcher\Command.Dispatcher.pas',
+  ID.Service in 'src\Application\Services\ID.Service.pas';
 
 {$R *.res}
 
