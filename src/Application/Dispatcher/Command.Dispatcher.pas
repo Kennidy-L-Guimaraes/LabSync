@@ -1,4 +1,4 @@
-unit Command.Dispatcher;
+ï»¿unit Command.Dispatcher;
 
 interface
 uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
@@ -9,6 +9,9 @@ uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
     public
      {Public Declarations}
        class var Parser   : TCommandParser;
+       Quality: integer;
+       Scalead: integer;
+       Count  : integer;
        procedure Execute(const Command: string);
        class function  return_printscreen: string;
     private
@@ -71,7 +74,7 @@ begin
   Stream := TMemoryStream.Create;
   try
     TScreenService.CaptureScreenToStream(Stream, Quality);
-    TScreenshotStreamQueue.Enqueue(Stream); // stream vai para a fila
+    TScreenshotStreamQueue.Enqueue(Stream);
     Elapsed := MilliSecondsBetween(Now, StartTime);
   if not ASilent then
   begin
@@ -82,7 +85,7 @@ begin
   except
     on E: Exception do
     begin
-      Stream.Free; // só libera se falhou — fila não recebeu
+      Stream.Free;
       Elapsed := MilliSecondsBetween(Now, StartTime);
       TLog.SaveLog(
         Format('FAIL | %s | %s | %s | %s | %dms | Error=%s',
@@ -92,22 +95,57 @@ begin
 end;
 
 class procedure TCommandDispatcher.get_printscreenLoop(const Command: string);
- var
-  Value : string;
+var
+  Value  : string;
 begin
   Parser := Default(TCommandParser);
-  Value := Parser.GetCommandValue(Command);
+  Value  := Parser.GetCommandValue(Command);
+  Count  := TScreenshotStreamQueue.Count;
+
   if Parser.Normalize(Value) = Parser.Normalize('True') then
   begin
-     TLoopService.Start(
-  procedure
-  begin
-    TCommandDispatcher.get_printscreen('$get_print quality=25', True, 2);
-  end,5);
+    TLoopService.Start(
+      procedure
+      var
+        Stream: TMemoryStream;
+      begin
+        //Backpressure Controll
+        if Count > 2 then
+          Exit;
+         if TScreenshotStreamQueue.IsUnderPressure then
+          begin
+            Quality := 12;
+            Scalead := 1;
+          end
+          else if Count <= 2 then
+          begin
+            Quality := 55;
+            Scalead := 2;
+          end
+          else
+          begin
+            Quality := 80;
+            Scalead := 2;
+            end;
+        Stream := TMemoryStream.Create;
+        try
+          TScreenService.CaptureScreenToStream(Stream, Quality, Scalead, True);
+
+          if Stream.Size > 0 then
+            TScreenshotStreamQueue.Enqueue(Stream)
+          else
+            Stream.Free;
+
+        except
+          Stream.Free;
+          raise;
+        end;
+      end,
+      15);
   end
   else
   begin
-   TLoopService.Stop;
+    TLoopService.Stop;
   end;
 end;
 

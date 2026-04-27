@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Command.Parser,
   Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service, IOUtils,
-  Screenshot.Queue;
+  Screenshot.Queue, Vcl.Imaging.jpeg;
 
 type
   TForm1 = class(TForm)
@@ -72,12 +72,24 @@ end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 var
-  Stream: TMemoryStream;
+  Stream : TMemoryStream;
+  Jpg    : TJPEGImage;
 begin
   if TScreenshotStreamQueue.Dequeue(Stream) then
   try
     Stream.Position := 0;
-    Image1.Picture.LoadFromStream(Stream);
+
+    Jpg := TJPEGImage.Create;
+    try
+      Jpg.LoadFromStream(Stream);
+
+      // reaproveita o bitmap interno do Image
+      Image1.Picture.Bitmap.Assign(Jpg);
+
+    finally
+      Jpg.Free;
+    end;
+
   finally
     Stream.Free;
   end;

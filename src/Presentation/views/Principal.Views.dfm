@@ -22,6 +22,9 @@ object Form1: TForm1
     Width = 409
     Height = 347
     Anchors = [akLeft, akTop, akRight, akBottom]
+    Center = True
+    ParentShowHint = False
+    ShowHint = True
     Stretch = True
   end
   object Button1: TButton
@@ -60,7 +63,7 @@ object Form1: TForm1
   end
   object Timer1: TTimer
     Enabled = False
-    Interval = 5
+    Interval = 60
     OnTimer = Timer1Timer
     Left = 8
     Top = 296

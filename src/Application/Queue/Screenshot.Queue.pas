@@ -13,14 +13,16 @@ type
     class var FQueue    : TQueue<TMemoryStream>;
     class var FLock     : TCriticalSection;
     class var FMaxItems : Integer;
+    class var FHighPressure: Boolean;
   public
     class constructor Create;
-    class destructor Destroy;
+    class destructor  Destroy;
     class procedure Enqueue(AStream: TMemoryStream);
-    class function Dequeue(out AStream: TMemoryStream): Boolean;
-    class function Count: Integer;
+    class function  Dequeue(out AStream: TMemoryStream): Boolean;
+    class function  Count: Integer;
     class procedure TrimIfNeeded;
-    class property MaxItems: Integer read FMaxItems write FMaxItems;
+    class property  MaxItems: Integer read FMaxItems write FMaxItems;
+    class function  IsUnderPressure: Boolean;
   end;
 
 implementation
@@ -45,7 +47,21 @@ begin
   FLock.Enter;
   try
     FQueue.Enqueue(AStream);
+
+    //Detects pressure before removal from the list.
+    FHighPressure := FQueue.Count >= FMaxItems;
+
     TrimIfNeeded;
+  finally
+    FLock.Leave;
+  end;
+end;
+
+class function TScreenshotStreamQueue.IsUnderPressure: Boolean;
+begin
+  FLock.Enter;
+  try
+    Result := FHighPressure;
   finally
     FLock.Leave;
   end;
