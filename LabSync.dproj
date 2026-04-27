@@ -137,6 +137,11 @@
         <DCCReference Include="src\Application\Parser\Command.Parser.pas"/>
         <DCCReference Include="src\Application\Dispatcher\Command.Dispatcher.pas"/>
         <DCCReference Include="src\Application\Services\ID.Service.pas"/>
+        <DCCReference Include="src\Application\Services\Path.Service.pas"/>
+        <DCCReference Include="src\Application\Services\Screen.Service.pas"/>
+        <DCCReference Include="src\Application\Logs\Command.Logs.pas"/>
+        <DCCReference Include="src\Application\Services\Loop.Service.pas"/>
+        <DCCReference Include="src\Application\Queue\Screenshot.Queue.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

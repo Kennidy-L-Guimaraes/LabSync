@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 470
-  ClientWidth = 495
+  ClientHeight = 363
+  ClientWidth = 710
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,14 +13,22 @@ object Form1: TForm1
   OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
-    495
-    470)
+    710
+    363)
   TextHeight = 15
+  object Image1: TImage
+    Left = 280
+    Top = 8
+    Width = 409
+    Height = 347
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Stretch = True
+  end
   object Button1: TButton
-    Left = 8
-    Top = 437
+    Left = 135
+    Top = 271
     Width = 75
-    Height = 25
+    Height = 23
     Caption = 'Button1'
     TabOrder = 0
     OnClick = Button1Click
@@ -28,19 +36,33 @@ object Form1: TForm1
   object Memo1: TMemo
     Left = 8
     Top = 8
-    Width = 457
-    Height = 417
-    Anchors = [akLeft, akTop, akRight, akBottom]
+    Width = 253
+    Height = 248
+    Anchors = []
     Color = clMenu
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clDimgray
-    Font.Height = -16
+    Font.Height = -13
     Font.Name = 'Segoe UI'
     Font.Style = []
     Lines.Strings = (
       'Memo1')
     ParentFont = False
+    ScrollBars = ssVertical
     TabOrder = 1
-    ExplicitHeight = 415
+  end
+  object Edit1: TEdit
+    Left = 8
+    Top = 271
+    Width = 121
+    Height = 23
+    TabOrder = 2
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 5
+    OnTimer = Timer1Timer
+    Left = 8
+    Top = 296
   end
 end

@@ -2,11 +2,12 @@ unit Command.Parser;
 interface
  uses System.SysUtils;
  type
-  TParser = record
+  TCommandParser = record
     public
       function Normalize(const S: string): string;
-      function GetCommandName(const S: string): string;
-      function GetCommandValue(const S: string): string;
+      function GetCommandName(const   S: string)  : string;
+      function GetCommandValue(const  S: string)  : string;
+      function GetCommandTarget(const S: string)  : string;
       function GetQuality(const S: string): Integer;
   end;
 
@@ -18,7 +19,7 @@ implementation
 
 { TParser }
 
-function TParser.GetCommandName(const S: string): string;
+function TCommandParser.GetCommandName(const S: string): string;
 var
   Clean: string;
   P: Integer;
@@ -32,43 +33,70 @@ begin
     Result := Clean;
 end;
 
-function TParser.GetCommandValue(const S: string): string;
+function TCommandParser.GetCommandTarget(const S: string): string;
 var
-  P: Integer;
-  Value: string;
+  P     : Integer;
+  Clean : string;
+  Value : string;
 begin
-  P := Pos('=', S);
+  Clean := LowerCase(S);
+  P := Pos('target=', Clean);
   if P = 0 then
     Exit('');
 
-  Value := Copy(S, P + 1, MaxInt);
-  Value := Trim(Value);
-  if (Length(Value) >= 2) and
-     (Value[1] = '"') and
-     (Value[Length(Value)] = '"') then
-    Value := Copy(Value, 2, Length(Value) - 2);
+  Value := Copy(S, P + 7, MaxInt);// 7 = length('target=')
+  P := Pos(' ', Value);
+  if P > 0 then
+    Value := Copy(Value, 1, P - 1);
 
-  Result := Value;
+  Result := Trim(Value);
 end;
 
-function TParser.GetQuality(const S: string): Integer;
+function TCommandParser.GetCommandValue(const S: string): string;
+var
+  P     : Integer;
+  Clean : string;
+  Value : string;
+begin
+  Clean := LowerCase(S);
+  P := Pos('value=', Clean);
+  if P = 0 then
+    Exit('');
+
+  Value := Copy(S, P + 6, MaxInt); //6 = length('value=')
+  P := Pos(' ', Value);
+  if P > 0 then
+    Value := Copy(Value, 1, P - 1);
+
+  Result := Trim(Value);
+end;
+
+function TCommandParser.GetQuality(const S: string): Integer;
 var
   Clean: string;
-  P: Integer;
-  Value: string;
+  P, I: Integer;
+  NumStr: string;
 begin
-  Result := 20; //Default
+  Result := 20; // Default
   Clean := LowerCase(S);
 
   P := Pos('quality=', Clean);
   if P > 0 then
   begin
-    Value := Copy(Clean, P + 8, 3);
-    Result := StrToIntDef(Value, 50);
+    I := P + Length('quality=');
+    NumStr := '';
+
+    while (I <= Length(Clean)) and CharInSet(Clean[I], ['0'..'9']) do
+    begin
+      NumStr := NumStr + Clean[I];
+      Inc(I);
+    end;
+
+    Result := StrToIntDef(NumStr, 50);
   end;
 end;
 
-function TParser.Normalize(const S: string): string;
+function TCommandParser.Normalize(const S: string): string;
 begin
   Result := LowerCase(Trim(S));
 end;
