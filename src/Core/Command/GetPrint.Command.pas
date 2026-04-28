@@ -62,14 +62,14 @@ interface
     public
      {Public Declarations}
      class var Parser   : TCommandParser;
-     class procedure get_print(const Command: string; const ASilent: Boolean = False; AScaled: integer = 1);
+     class procedure Run(const Command: string; const ASilent: Boolean = False; AScaled: integer = 1);
    end;
 
 implementation
 
 { TGetPrintCommand }
 
-class procedure TGetPrintCommand.get_print(const Command: string;
+class procedure TGetPrintCommand.Run(const Command: string;
   const ASilent: Boolean; AScaled: integer);
 var
   TimeStamp   : string;

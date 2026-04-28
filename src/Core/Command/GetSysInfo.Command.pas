@@ -51,79 +51,36 @@
       The design must allow new commands to be added without modifying
       existing ones (Open/Closed Principle).
 }
-unit GetLiveMode.Command;
+unit GetSysInfo.Command;
 
 interface
- uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
- Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service, Path.Service, DateUtils,
-  ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes;
-  type
-   TGetLiveModeCommand = class
+
+uses Command.Parser, Winapi.Windows,
+  System.SysUtils, System.Win.Registry,WinSock, Path.Service, Transporter.Dto;
+ type
+  TGetSysInfoCommand = class
     public
      {Public Declarations}
-      class var Parser   : TCommandParser;
-      Quality: integer;
-      Scalead: integer;
-      Count  : integer;
-     class procedure Run(const Command: string);
-   end;
+     class var Parser   : TCommandParser;
+     class function Run(const Command: string): TCommandResult;
+  end;
+
 implementation
 
-{ TGetLiveModeCommand }
+{ TGetSysInfoCommand }
 
-class procedure TGetLiveModeCommand.Run(const Command: string);
+class function TGetSysInfoCommand.Run(const Command: string): TCommandResult;
 var
-  Value  : string;
+ MachineName: string;
+ MachineID  : string;
+ MachineStorage: string;
+ MachineTime: string;
+ MachineCPU : string;
+ MachineRAM : string;
+ MachineIP  : string;
 begin
-  Parser := Default(TCommandParser);
-  Value  := Parser.GetCommandValue(Command);
-  Count  := TScreenshotStreamQueue.Count;
-
-  if Parser.Normalize(Value) = Parser.Normalize('True') then
-  begin
-    TLoopService.Start(
-      procedure
-      var
-        Stream: TMemoryStream;
-      begin
-        //Backpressure Controll
-        if Count > 2 then
-          Exit;
-         if TScreenshotStreamQueue.IsUnderPressure then
-          begin  //Good
-            Quality := 100;
-            Scalead := 2;
-          end
-          else if Count <= 2 then
-          begin //Medium
-            Quality := 55;
-            Scalead := 2;
-          end
-          else
-          begin  //Low
-            Quality := 10;
-            Scalead := 3;
-            end;
-        Stream := TMemoryStream.Create;
-        try
-          TScreenService.CaptureScreenToStream(Stream, Quality, Scalead, True);
-
-          if Stream.Size > 0 then
-            TScreenshotStreamQueue.Enqueue(Stream)
-          else
-            Stream.Free;
-
-        except
-          Stream.Free;
-          raise;
-        end;
-      end,
-      15);
-  end
-  else
-  begin
-    TLoopService.Stop;
-  end;
+ Result.DataType:= crtText;
+ Result.Success := True;
+ Result.Text    := '';
 end;
-
 end.

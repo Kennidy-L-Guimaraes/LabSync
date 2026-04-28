@@ -4,17 +4,16 @@ interface
 uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
  Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service, Path.Service, DateUtils,
   ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes,
-  GetPrint.Command, GetLiveMode.Command, CommandSuggestion.Service;
+  GetPrint.Command, GetLiveMode.Command, CommandSuggestion.Service,
+  GetSysInfo.Command;
  type
   TCommandDispatcher = Class
     public
      {Public Declarations}
        var Parser   : TCommandParser;
        procedure Execute(const Command: string);
-       class function  Return_CommandPrint: string;
     private
      {Private Declarations}
-      class var FFileName : string;
       procedure ReturnError(const Command, Suggestion, ErrorMsg: string);
   End;
 
@@ -35,10 +34,13 @@ begin
     Exit; //Another Machine
 
   if CmdName = '$get_print' then
-     TGetPrintCommand.get_print(Command)
+     TGetPrintCommand.Run(Command)
 
   else if CmdName = '$get_livemode' then
-          TGetLiveModeCommand.get_livemode(Command)
+          TGetLiveModeCommand.Run(Command)
+
+  else if CmdName = '%get_sysinfo' then
+          TGetSysInfoCommand.Run(Command)
   else
   begin
     ReturnError(
@@ -60,11 +62,6 @@ begin
 
   //For developer testing, it needs to be replaced with HTTP delivery mechanisms.
   showmessage((Msg));
-end;
-
-class function TCommandDispatcher.Return_CommandPrint: string;
-begin
- Result := FFileName;
 end;
 
 end.
