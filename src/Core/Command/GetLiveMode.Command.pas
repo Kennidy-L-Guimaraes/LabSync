@@ -90,19 +90,19 @@ begin
         if Count > 2 then
           Exit;
          if TScreenshotStreamQueue.IsUnderPressure then
-          begin
-            Quality := 12;
-            Scalead := 1;
+          begin  //Good
+            Quality := 100;
+            Scalead := 2;
           end
           else if Count <= 2 then
-          begin
+          begin //Medium
             Quality := 55;
             Scalead := 2;
           end
           else
-          begin
-            Quality := 80;
-            Scalead := 2;
+          begin  //Low
+            Quality := 10;
+            Scalead := 3;
             end;
         Stream := TMemoryStream.Create;
         try

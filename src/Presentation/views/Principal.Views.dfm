@@ -2,7 +2,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
   Left = 0
   Top = 0
   Caption = 'LabSync Agent'
-  ClientHeight = 363
+  ClientHeight = 377
   ClientWidth = 710
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,18 +14,19 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
   OnCreate = FormCreate
   DesignSize = (
     710
-    363)
+    377)
   TextHeight = 15
   object Image1: TImage
     Left = 280
     Top = 8
     Width = 409
-    Height = 347
+    Height = 361
     Anchors = [akLeft, akTop, akRight, akBottom]
     Center = True
     ParentShowHint = False
     ShowHint = True
     Stretch = True
+    ExplicitHeight = 347
   end
   object Button1: TButton
     Left = 135
@@ -38,7 +39,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
   end
   object Memo1: TMemo
     Left = 8
-    Top = 8
+    Top = 13
     Width = 253
     Height = 248
     Anchors = []
@@ -53,7 +54,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     ParentFont = False
     ScrollBars = ssVertical
     TabOrder = 1
-    ExplicitTop = 7
+    ExplicitTop = 12
   end
   object Edit1: TEdit
     Left = 8

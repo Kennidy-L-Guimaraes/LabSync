@@ -46,7 +46,7 @@ var
 begin
   CommandDis := TCommandDispatcher.Create;
   try
-   Command := Edit1.Text;    //$get_printloop value=true target=all
+   Command := Edit1.Text;
    CommandDis.Execute(Command);  //$get_livemode value=true target=all
    Memo1.Clear;
    Memo1.Lines.Add(TLog.ReadLogs('Audit.log'));

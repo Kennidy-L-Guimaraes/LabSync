@@ -1,16 +1,17 @@
 ﻿unit Screen.Service;
-
 interface
+
 uses
   SysUtils, Windows, System.Classes, System.SyncObjs,
   Vcl.Graphics, Winapi.GDIPAPI, Winapi.GDIPOBJ, Winapi.GDIPUTIL,
   ActiveX, AxCtrls, Math,
-  System.Generics.Collections; // TThreadedQueue
+  System.Generics.Collections;
 
 const
-  TILE_COUNT = 50;
-  TILE_COLS  = 10;
-  TILE_ROWS  = TILE_COUNT div TILE_COLS; // 5
+  TILE_COUNT  = 12;
+  TILE_COLS   = 10;
+  TILE_ROWS   = TILE_COUNT div TILE_COLS; // 5
+  TARGET_FPS  = 20;
 
 type
   TTileChecksum = Cardinal;
@@ -31,6 +32,7 @@ type
     ScaledH : Integer;
   end;
 
+  { TDeltaPacket}
   TDeltaPacket = class
     Stream     : TMemoryStream;
     ChangedIdx : array of Integer;
@@ -45,8 +47,6 @@ type
   end;
 
   TOnDelta = procedure(Packet: TDeltaPacket) of object;
-
-  { ── Fila thread-safe no generics ── }
   TCaptureQueue = class
   private
     FItems    : array[0..3] of TCapturePacket;
@@ -62,35 +62,46 @@ type
     function  Pop(out Item: TCapturePacket; TimeoutMs: Cardinal): Boolean;
   end;
 
-  { ── Thread A: print GDI ── }
+  { Thread A}
   TCaptureThread = class(TThread)
   private
-    FBitmapA : TBitmap;
-    FBitmapB : TBitmap;
-    FCurrent : Integer;
-    FScaled  : Integer;
-    FQueue   : TCaptureQueue;
+    FBitmapA  : TBitmap;
+    FBitmapB  : TBitmap;
+    FCurrent  : Integer;
+    FScaled   : Integer;
+    FQueue    : TCaptureQueue;
+    FFreq     : Int64;   // QPC frequency
+    FInterval : Int64;   // ticks por frame
     procedure BuildTileBounds(var Tiles: array of TTileInfo; W, H: Integer);
     function  ActiveBmp: TBitmap;
   protected
     procedure Execute; override;
   public
-    constructor Create(AQueue: TCaptureQueue; AScaled: Integer = 1);
+    constructor Create(AQueue: TCaptureQueue; AScaled: Integer = 1;
+                       AFPS: Integer = TARGET_FPS);
     destructor  Destroy; override;
   end;
 
-  { ── Thread B: XOR checksum + encode ── }
+  { Thread B}
   TDiffEncodeThread = class(TThread)
   private
     FQueue        : TCaptureQueue;
     FPrevChecksum : TTileBuffer;
+    FCurrChecksum : TTileBuffer;
     FQuality      : Integer;
     FGDIPToken    : ULONG_PTR;
     FJpgClsid     : TGUID;
     FOnDelta      : TOnDelta;
+
+    FNativeBitmap : Pointer;
+    FBmpWidth     : Integer;
+    FBmpHeight    : Integer;
+    FEncStream    : TMemoryStream;
+    FGDIStream    : IStream;
+
+    procedure RebuildGDIPBitmap(ABmp: TBitmap);
     function  XorChecksumTile(ABmp: TBitmap; const R: TRect): TTileChecksum;
-    procedure EncodeTile(ABmp: TBitmap; const R: TRect;
-                         AStream: TMemoryStream; Quality: Integer);
+    procedure EncodeFrame(ABmp: TBitmap; AStream: TMemoryStream);
   protected
     procedure Execute; override;
   public
@@ -189,7 +200,10 @@ end;
 
 { TCaptureThread }
 
-constructor TCaptureThread.Create(AQueue: TCaptureQueue; AScaled: Integer);
+constructor TCaptureThread.Create(AQueue: TCaptureQueue;
+  AScaled: Integer; AFPS: Integer);
+var
+  FPS: Integer;
 begin
   inherited Create(True);
   FQueue   := AQueue;
@@ -199,6 +213,11 @@ begin
   FCurrent := 0;
   FreeOnTerminate := False;
   Priority := tpHigher;
+
+  //FPS
+  QueryPerformanceFrequency(FFreq);
+  FPS := Max(1, Min(AFPS, 60));
+  FInterval := FFreq div FPS;
 end;
 
 destructor TCaptureThread.Destroy;
@@ -236,16 +255,20 @@ end;
 
 procedure TCaptureThread.Execute;
 var
-  DC      : HDC;
-  SW, SH  : Integer;
-  ScW, ScH: Integer;
-  Bmp     : TBitmap;
-  Pkt     : TCapturePacket;
+  DC        : HDC;
+  SW, SH    : Integer;
+  ScW, ScH  : Integer;
+  Bmp       : TBitmap;
+  Pkt       : TCapturePacket;
+  T0, T1    : Int64;
+  SleepMs   : Integer;
 begin
   SW  := GetSystemMetrics(SM_CXSCREEN);
   SH  := GetSystemMetrics(SM_CYSCREEN);
   ScW := SW div FScaled;
   ScH := SH div FScaled;
+
+  QueryPerformanceCounter(T0);
 
   while not Terminated do
   begin
@@ -271,11 +294,18 @@ begin
     Pkt.ScaledW := ScW;
     Pkt.ScaledH := ScH;
     BuildTileBounds(Pkt.Tiles, ScW, ScH);
-
     FQueue.Push(Pkt);
 
     FCurrent := 1 - FCurrent;
-    Sleep(1);
+
+    QueryPerformanceCounter(T1);
+    SleepMs := Trunc((FInterval - (T1 - T0)) * 1000 / FFreq);
+    if SleepMs > 1 then
+      Sleep(SleepMs)
+    else
+      Sleep(1);
+
+    QueryPerformanceCounter(T0);
   end;
 end;
 
@@ -287,11 +317,17 @@ var
   SI: GdiplusStartupInput;
 begin
   inherited Create(True);
-  FQueue    := AQueue;
-  FQuality  := AQuality;
-  FOnDelta  := AOnDelta;
-  FillChar(FPrevChecksum, SizeOf(FPrevChecksum), 0);
+  FQueue          := AQueue;
+  FQuality        := AQuality;
+  FOnDelta        := AOnDelta;
+  FNativeBitmap   := nil;
+  FBmpWidth       := 0;
+  FBmpHeight      := 0;
+  FEncStream      := TMemoryStream.Create;
+  FGDIStream      := nil;
   FreeOnTerminate := False;
+  FillChar(FPrevChecksum, SizeOf(FPrevChecksum), 0);
+  FillChar(FCurrChecksum, SizeOf(FCurrChecksum), 0);
 
   SI.GdiplusVersion           := 1;
   SI.DebugEventCallback       := nil;
@@ -303,8 +339,32 @@ end;
 
 destructor TDiffEncodeThread.Destroy;
 begin
+  if Assigned(FNativeBitmap) then
+  begin
+    GdipDisposeImage(FNativeBitmap);
+    FNativeBitmap := nil;
+  end;
+  FGDIStream := nil;
+  FEncStream.Free;
   GdiplusShutdown(FGDIPToken);
   inherited;
+end;
+
+procedure TDiffEncodeThread.RebuildGDIPBitmap(ABmp: TBitmap);
+var
+  Status: GpStatus;
+begin
+  if Assigned(FNativeBitmap) then
+  begin
+    GdipDisposeImage(FNativeBitmap);
+    FNativeBitmap := nil;
+  end;
+  Status := GdipCreateBitmapFromHBITMAP(ABmp.Handle, 0, FNativeBitmap);
+  if Status <> Ok then
+    raise Exception.CreateFmt('GdipCreateBitmapFromHBITMAP: %d', [Ord(Status)]);
+  FBmpWidth  := ABmp.Width;
+  FBmpHeight := ABmp.Height;
+  FGDIStream := nil;
 end;
 
 function TDiffEncodeThread.XorChecksumTile(ABmp: TBitmap;
@@ -325,63 +385,45 @@ begin
     for X := 0 to PixW - 1 do
     begin
       Acc := Acc xor Row^;
-      Acc := (Acc shl 1) or (Acc shr 31); // rotate left — diferencia posição
+      Acc := (Acc shl 1) or (Acc shr 31);
       Inc(Row);
     end;
   end;
   Result := Acc;
 end;
 
-procedure TDiffEncodeThread.EncodeTile(ABmp: TBitmap; const R: TRect;
-  AStream: TMemoryStream; Quality: Integer);
+procedure TDiffEncodeThread.EncodeFrame(ABmp: TBitmap; AStream: TMemoryStream);
 var
-  TileBmp       : TBitmap;
-  NativeBitmap  : Pointer;
   EncoderParams : TEncoderParameters;
   QP            : Integer;
-  GDIStream     : IStream;
   Status        : GpStatus;
 begin
-  TileBmp := TBitmap.Create;
-  try
-    TileBmp.PixelFormat := pf32bit;
-    TileBmp.Width  := R.Right  - R.Left;
-    TileBmp.Height := R.Bottom - R.Top;
+  if (ABmp.Width <> FBmpWidth) or (ABmp.Height <> FBmpHeight) then
+    RebuildGDIPBitmap(ABmp);
 
-    BitBlt(TileBmp.Canvas.Handle, 0, 0, TileBmp.Width, TileBmp.Height,
-           ABmp.Canvas.Handle, R.Left, R.Top, SRCCOPY);
+  AStream.Clear;
+  AStream.Position := 0;
+  FGDIStream := TStreamAdapter.Create(AStream, soReference);
 
-    Status := GdipCreateBitmapFromHBITMAP(TileBmp.Handle, 0, NativeBitmap);
-    if Status <> Ok then
-      raise Exception.CreateFmt('GdipCreateBitmapFromHBITMAP tile: %d',
-                                 [Ord(Status)]);
-    try
-      QP := Quality;
-      EncoderParams.Count := 1;
-      EncoderParams.Parameter[0].Guid           := EncoderQuality;
-      EncoderParams.Parameter[0].Type_          := EncoderParameterValueTypeLong;
-      EncoderParams.Parameter[0].NumberOfValues := 1;
-      EncoderParams.Parameter[0].Value          := @QP;
+  QP := FQuality;
+  EncoderParams.Count := 1;
+  EncoderParams.Parameter[0].Guid           := EncoderQuality;
+  EncoderParams.Parameter[0].Type_          := EncoderParameterValueTypeLong;
+  EncoderParams.Parameter[0].NumberOfValues := 1;
+  EncoderParams.Parameter[0].Value          := @QP;
 
-      GDIStream := TStreamAdapter.Create(AStream, soReference);
-      Status := GdipSaveImageToStream(NativeBitmap, GDIStream,
-                                      @FJpgClsid, @EncoderParams);
-      if Status <> Ok then
-        raise Exception.CreateFmt('GdipSaveImageToStream tile: %d',
-                                   [Ord(Status)]);
-    finally
-      GdipDisposeImage(NativeBitmap);
-    end;
-  finally
-    TileBmp.Free;
-  end;
+  Status := GdipSaveImageToStream(FNativeBitmap, FGDIStream,
+                                  @FJpgClsid, @EncoderParams);
+  if Status <> Ok then
+    raise Exception.CreateFmt('GdipSaveImageToStream: %d', [Ord(Status)]);
+
+  AStream.Position := 0;
 end;
 
 procedure TDiffEncodeThread.Execute;
 var
   Pkt       : TCapturePacket;
   Delta     : TDeltaPacket;
-  CurrCk    : TTileChecksum;
   i         : Integer;
   AnyChange : Boolean;
   IdxCount  : Integer;
@@ -390,10 +432,22 @@ begin
   begin
     if not FQueue.Pop(Pkt, 100) then
       Continue;
-
     AnyChange := False;
     IdxCount  := 0;
-    Delta     := TDeltaPacket.Create;
+    for i := 0 to TILE_COUNT - 1 do
+    begin
+      FCurrChecksum[i] := XorChecksumTile(Pkt.Bitmap, Pkt.Tiles[i].Bounds);
+      if FCurrChecksum[i] <> FPrevChecksum[i] then
+      begin
+        AnyChange := True;
+        Inc(IdxCount);
+      end;
+    end;
+
+    if not AnyChange then
+      Continue;
+
+    Delta := TDeltaPacket.Create;
     try
       Delta.ScaledW := Pkt.ScaledW;
       Delta.ScaledH := Pkt.ScaledH;
@@ -401,27 +455,22 @@ begin
       Delta.Rows    := TILE_ROWS;
       Delta.TileW   := Pkt.ScaledW div TILE_COLS;
       Delta.TileH   := Pkt.ScaledH div TILE_ROWS;
+      SetLength(Delta.ChangedIdx, IdxCount);
 
-      SetLength(Delta.ChangedIdx, TILE_COUNT); //allocate maximum, then cut.
-
+      IdxCount := 0;
       for i := 0 to TILE_COUNT - 1 do
       begin
-        CurrCk := XorChecksumTile(Pkt.Bitmap, Pkt.Tiles[i].Bounds);
-
-        if CurrCk <> FPrevChecksum[i] then
+        if FCurrChecksum[i] <> FPrevChecksum[i] then
         begin
-          AnyChange           := True;
-          FPrevChecksum[i]    := CurrCk;
           Delta.ChangedIdx[IdxCount] := i;
           Inc(IdxCount);
-          EncodeTile(Pkt.Bitmap, Pkt.Tiles[i].Bounds,
-                     Delta.Stream, FQuality);
         end;
+        FPrevChecksum[i] := FCurrChecksum[i];
       end;
 
-      SetLength(Delta.ChangedIdx, IdxCount); //Ajust
+      EncodeFrame(Pkt.Bitmap, Delta.Stream);
 
-      if AnyChange and Assigned(FOnDelta) then
+      if Assigned(FOnDelta) then
         FOnDelta(Delta)
       else
         Delta.Free;
@@ -439,7 +488,7 @@ class procedure TScreenService.Start(AScaled, AQuality: Integer;
 begin
   Stop;
   FQueue         := TCaptureQueue.Create;
-  FCaptureThread := TCaptureThread.Create(FQueue, AScaled);
+  FCaptureThread := TCaptureThread.Create(FQueue, AScaled, TARGET_FPS);
   FDiffThread    := TDiffEncodeThread.Create(FQueue, AQuality, AOnDelta);
   FCaptureThread.Start;
   FDiffThread.Start;
@@ -462,6 +511,7 @@ begin
   FreeAndNil(FQueue);
 end;
 
+{ CaptureScreenToStream }
 class procedure TScreenService.CaptureScreenToStream(AStream: TMemoryStream;
   Quality: Integer; AScaled: Integer; ACompareHash: Boolean);
 var
@@ -532,5 +582,6 @@ begin
     Bmp.Free;
   end;
 end;
+
 
 end.
