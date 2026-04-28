@@ -1,7 +1,7 @@
-object Form1: TForm1
+object Frm_LabSyncAgent: TFrm_LabSyncAgent
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'LabSync Agent'
   ClientHeight = 363
   ClientWidth = 710
   Color = clBtnFace
@@ -53,6 +53,7 @@ object Form1: TForm1
     ParentFont = False
     ScrollBars = ssVertical
     TabOrder = 1
+    ExplicitTop = 7
   end
   object Edit1: TEdit
     Left = 8

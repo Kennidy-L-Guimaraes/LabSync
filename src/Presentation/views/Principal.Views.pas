@@ -9,7 +9,7 @@ uses
   Screenshot.Queue, Vcl.Imaging.jpeg;
 
 type
-  TForm1 = class(TForm)
+  TFrm_LabSyncAgent = class(TForm)
     Button1: TButton;
     Memo1: TMemo;
     Edit1: TEdit;
@@ -27,7 +27,7 @@ type
   end;
 
 var
-  Form1    : TForm1;
+  Frm_LabSyncAgent    : TFrm_LabSyncAgent;
   ShowLog : Tlog;
 
 implementation
@@ -39,7 +39,7 @@ implementation
 }
 {$R *.dfm}
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TFrm_LabSyncAgent.Button1Click(Sender: TObject);
 var
  CommandDis: TCommandDispatcher;
  Command   : string;
@@ -47,7 +47,7 @@ begin
   CommandDis := TCommandDispatcher.Create;
   try
    Command := Edit1.Text;    //$get_printloop value=true target=all
-   CommandDis.Execute(Command);
+   CommandDis.Execute(Command);  //$get_livemode value=true target=all
    Memo1.Clear;
    Memo1.Lines.Add(TLog.ReadLogs('Audit.log'));
    Timer1.Enabled := true;
@@ -56,12 +56,12 @@ begin
   end;
 end;
 
-procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TFrm_LabSyncAgent.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
  Showlog.Free;
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TFrm_LabSyncAgent.FormCreate(Sender: TObject);
 begin
  ShowLog := Tlog.Create;
  Memo1.Clear;
@@ -70,7 +70,7 @@ begin
  ShowMessage(TId.GetID);
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TFrm_LabSyncAgent.Timer1Timer(Sender: TObject);
 var
   Stream : TMemoryStream;
   Jpg    : TJPEGImage;
