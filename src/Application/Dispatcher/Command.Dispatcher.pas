@@ -5,13 +5,13 @@ uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
  Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service, Path.Service, DateUtils,
   ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes,
   GetPrint.Command, GetLiveMode.Command, CommandSuggestion.Service,
-  GetSysInfo.Command;
+  GetSysInfo.Command, Transporter.Dto;
  type
   TCommandDispatcher = Class
     public
      {Public Declarations}
        var Parser   : TCommandParser;
-       procedure Execute(const Command: string);
+       function Execute(const Command: string): TCommandResult;
     private
      {Private Declarations}
       procedure ReturnError(const Command, Suggestion, ErrorMsg: string);
@@ -22,7 +22,7 @@ implementation
 
 { TCommandDispatcher }
 
-procedure TCommandDispatcher.Execute(const Command: string);
+function TCommandDispatcher.Execute(const Command: string): TCommandResult;
 var
   CmdName  : string;
   CmdTarget: string;
@@ -34,20 +34,20 @@ begin
     Exit; //Another Machine
 
   if CmdName = '$get_print' then
-     TGetPrintCommand.Run(Command)
+     Result := TGetPrintCommand.Run(Command)
 
   else if CmdName = '$get_livemode' then
-          TGetLiveModeCommand.Run(Command)
+          Result := TGetLiveModeCommand.Run(Command)
 
-  else if CmdName = '%get_sysinfo' then
-          TGetSysInfoCommand.Run(Command)
+  else if CmdName = '$get_sysinfo' then
+          Result := TGetSysInfoCommand.Run(Command)
   else
   begin
     ReturnError(
     CmdName,
     TCommandSuggestionService.Suggest(
     CmdName,
-    ['$get_print', '$get_livemode', '$exec_shutdown']), 'Not valid!');
+    ['$get_print', '$get_livemode', '$get_sysinfo', '$exec_shutdown', '']), 'Not valid!');
   end;
 end;
 

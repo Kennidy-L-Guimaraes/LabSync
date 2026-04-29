@@ -13,7 +13,9 @@ uses
   Screenshot.Queue in 'src\Application\Queue\Screenshot.Queue.pas',
   GetPrint.Command in 'src\Core\Command\GetPrint.Command.pas',
   GetLiveMode.Command in 'src\Core\Command\GetLiveMode.Command.pas',
-  CommandSuggestion.Service in 'src\Application\Services\CommandSuggestion.Service.pas';
+  CommandSuggestion.Service in 'src\Application\Services\CommandSuggestion.Service.pas',
+  GetSysInfo.Command in 'src\Core\Command\GetSysInfo.Command.pas',
+  Transporter.Dto in 'src\Application\Dtos\Transporter.Dto.pas';
 
 {$R *.res}
 
