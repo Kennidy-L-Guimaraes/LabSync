@@ -176,7 +176,8 @@ begin
       'CPU=' + MachineCPU + sLineBreak +
       'RAM=' + MachineRAM + sLineBreak +
       'IP=' + MachineIP + SlineBreak +
-      'UserName=' + MachineUserName;
+      'UserName=' + MachineUserName + sLineBreak +
+      'Status=' + 'Active';
    Result.DataType:= crtText;
    Result.Success := True;
    Tlog.Success(TimeStamp, ID, CommandName, Params, Elapsed); //For Logs
