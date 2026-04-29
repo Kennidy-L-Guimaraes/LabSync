@@ -8,6 +8,8 @@ interface
     {Public Declarations}
     class procedure SaveLog(const NewLog, NameOfLog: string);
     class function  ReadLogs(const NameOfLog: string): string;
+    class procedure Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string);
+    class procedure Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer);
   private
     {Private Declarations}
     class function  GetLogPath(const nameOfLog: string): string;
@@ -46,6 +48,20 @@ begin
  except
   raise Exception.Create('The log could not be saved to the local system.');
  end;
+end;
+
+class procedure TLog.Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string);
+begin
+  TLog.SaveLog(
+        Format('FAIL | %s | %s | %s | %s | %dms | Error=%s',
+        [TimeStamp, ID, CommandName, Params, Elapsed, ErrorMessage]), 'Audit.log');
+end;
+
+class procedure TLog.Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer);
+begin
+  SaveLog(
+      Format('SUCCESS | %s | %s | %s | %s | %dms',
+      [TimeStamp, ID, CommandName, Params, Elapsed]), 'Audit.log');
 end;
 
 end.
