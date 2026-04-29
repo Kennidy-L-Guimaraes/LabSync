@@ -103,13 +103,12 @@
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <BRCC_OutputDir>C:\Users\PC-Kenny\Desktop\Projetos\LabSync\Build\</BRCC_OutputDir>
+        <BRCC_OutputDir>Build\</BRCC_OutputDir>
         <BRCC_Defines>$(PROJECTDIR)\build;$(BRCC_Defines)</BRCC_Defines>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <BRCC_IncludePath>C:\Users\PC-Kenny\Desktop\Projetos\LabSync\Build\;$(BRCC_IncludePath)</BRCC_IncludePath>
+        <BRCC_IncludePath>Build\;$(BRCC_IncludePath)</BRCC_IncludePath>
         <DCC_ExeOutput>.\Build\$(Platform)\$(Config)</DCC_ExeOutput>
-        <DCC_UnitSearchPath>C:\Users\PC-Kenny\Desktop\Projetos\LabSync\src\Application;C:\Users\PC-Kenny\Desktop\Projetos\LabSync\src\Application\Dispatcher;C:\Users\PC-Kenny\Desktop\Projetos\LabSync\src\Application\Logs;C:\Users\PC-Kenny\Desktop\Projetos\LabSync\src\Application\Parser;C:\Users\PC-Kenny\Desktop\Projetos\LabSync\src\Application\Services;C:\Users\PC-Kenny\Desktop\Projetos\LabSync\src\Core;C:\Users\PC-Kenny\Desktop\Projetos\LabSync\src\Infraestructure;C:\Users\PC-Kenny\Desktop\Projetos\LabSync\src\Presentation;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_DcuOutput>.\Build\$(Platform)\$(Config)\dcu</DCC_DcuOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
