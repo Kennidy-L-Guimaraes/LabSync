@@ -15,10 +15,6 @@ implementation
 
 { TParser }
 
-
-
-{ TParser }
-
 function TCommandParser.GetCommandName(const S: string): string;
 var
   Clean: string;

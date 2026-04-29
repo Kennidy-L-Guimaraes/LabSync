@@ -56,21 +56,22 @@ unit GetPrint.Command;
 interface
  uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
  Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service, Path.Service, DateUtils,
-  ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes;
+  ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes,
+  Transporter.Dto;
   type
    TGetPrintCommand = class
     public
      {Public Declarations}
      class var Parser   : TCommandParser;
-     class procedure Run(const Command: string; const ASilent: Boolean = False; AScaled: integer = 1);
+     class function Run(const Command: string; const ASilent: Boolean = False; AScaled: integer = 1): TCommandResult;
    end;
 
 implementation
 
 { TGetPrintCommand }
 
-class procedure TGetPrintCommand.Run(const Command: string;
-  const ASilent: Boolean; AScaled: integer);
+class function TGetPrintCommand.Run(const Command: string;
+  const ASilent: Boolean; AScaled: integer): TCommandResult;
 var
   TimeStamp   : string;
   StartTime   : TDateTime;
@@ -80,31 +81,46 @@ var
   CommandName : string;
   Stream      : TMemoryStream;
 begin
+  //default
+  Result.Success  := False;
+  Result.DataType := crtNone;
+  Result.Text     := '';
+  Result.Stream   := nil;
+  Result.Error    := '';
+
   TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
   StartTime   := Now;
   Quality     := Parser.GetQuality(Command);
   Params      := Format('Quality=%d', [Quality]);
-  CommandName := '$get_print';
+  CommandName := Parser.GetCommandName(Command);
 
   Stream := TMemoryStream.Create;
   try
     TScreenService.CaptureScreenToStream(Stream, Quality);
+
+    //The queue is in charge of the process.
     TScreenshotStreamQueue.Enqueue(Stream);
+    Stream := nil; //No double free in finally/except
     Elapsed := MilliSecondsBetween(Now, StartTime);
-  if not ASilent then
-  begin
-    TLog.SaveLog(
-      Format('SUCCESS | %s | %s | %s | %s | %dms',
-      [TimeStamp, TId.GetID, CommandName, Params, Elapsed]), 'Audit.log');
-  end;
+
+    Result.Success  := True;
+    Result.DataType := crtNone; //Don't return Payload here;
+                                //the queue needs management to avoid overload.
+    if not ASilent then
+      TLog.Success(TimeStamp, TId.GetID, CommandName, Params, Elapsed);
   except
     on E: Exception do
     begin
-      Stream.Free;
+      if Assigned(Stream) then
+        Stream.Free;
+
       Elapsed := MilliSecondsBetween(Now, StartTime);
-      TLog.SaveLog(
-        Format('FAIL | %s | %s | %s | %s | %dms | Error=%s',
-        [TimeStamp, TId.GetID, CommandName, Params, Elapsed, E.Message]), 'Audit.log');
+
+      Result.Success  := False;
+      Result.DataType := crtNone;
+      Result.Error    := E.Message;
+
+      TLog.Fail(TimeStamp, TId.GetID, CommandName, Params, Elapsed, E.Message);
     end;
   end;
 end;

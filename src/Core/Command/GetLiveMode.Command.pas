@@ -56,7 +56,8 @@ unit GetLiveMode.Command;
 interface
  uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
  Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service, Path.Service, DateUtils,
-  ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes;
+  ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes,
+  Transporter.Dto;
   type
    TGetLiveModeCommand = class
     public
@@ -65,64 +66,90 @@ interface
       Quality: integer;
       Scalead: integer;
       Count  : integer;
-     class procedure Run(const Command: string);
+     class function Run(const Command: string): TCommandResult;
    end;
 implementation
 
 { TGetLiveModeCommand }
 
-class procedure TGetLiveModeCommand.Run(const Command: string);
+class function TGetLiveModeCommand.Run(const Command: string): TCommandResult;
 var
-  Value  : string;
+  Value: string;
 begin
+  //default
+  Result.Success  := False;
+  Result.DataType := crtNone;
+  Result.Text     := '';
+  Result.Stream   := nil;
+  Result.Error    := '';
+
   Parser := Default(TCommandParser);
   Value  := Parser.GetCommandValue(Command);
-  Count  := TScreenshotStreamQueue.Count;
 
-  if Parser.Normalize(Value) = Parser.Normalize('True') then
-  begin
-    TLoopService.Start(
-      procedure
-      var
-        Stream: TMemoryStream;
-      begin
-        //Backpressure Controll
-        if Count > 2 then
-          Exit;
-         if TScreenshotStreamQueue.IsUnderPressure then
-          begin  //Good
+  try
+    if Parser.Normalize(Value) = Parser.Normalize('True') then
+    begin
+      TLoopService.Start(
+        procedure
+        var
+          Stream: TMemoryStream;
+          Count : Integer;
+        begin
+          Count := TScreenshotStreamQueue.Count;
+
+          //Backpressure
+          if Count > 2 then
+            Exit;
+
+          if TScreenshotStreamQueue.IsUnderPressure then
+          begin
             Quality := 100;
             Scalead := 2;
           end
           else if Count <= 2 then
-          begin //Medium
+          begin
             Quality := 55;
             Scalead := 2;
           end
           else
-          begin  //Low
+          begin
             Quality := 10;
             Scalead := 3;
-            end;
-        Stream := TMemoryStream.Create;
-        try
-          TScreenService.CaptureScreenToStream(Stream, Quality, Scalead, True);
+          end;
 
-          if Stream.Size > 0 then
-            TScreenshotStreamQueue.Enqueue(Stream)
-          else
+          Stream := TMemoryStream.Create;
+          try
+            TScreenService.CaptureScreenToStream(Stream, Quality, Scalead, True);
+
+            if Stream.Size > 0 then
+              TScreenshotStreamQueue.Enqueue(Stream)
+            else
+              Stream.Free;
+
+          except
             Stream.Free;
+            raise;
+          end;
+        end,
+        15
+      );
 
-        except
-          Stream.Free;
-          raise;
-        end;
-      end,
-      15);
-  end
-  else
-  begin
-    TLoopService.Stop;
+      Result.Success := True;
+      Result.Text    := 'LiveMode started';
+    end
+    else
+    begin
+      TLoopService.Stop;
+      Result.Success := True;
+      Result.Text    := 'LiveMode stopped';
+    end;
+
+  except
+    on E: Exception do
+    begin
+      Result.Success := False;
+      Result.Error   := E.Message;
+    end;
   end;
 end;
 

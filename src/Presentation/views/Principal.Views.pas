@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Command.Parser,
   Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service, IOUtils,
-  Screenshot.Queue, Vcl.Imaging.jpeg;
+  Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -21,7 +21,6 @@ type
     procedure Timer1Timer(Sender: TObject);
   private
     { Private declarations }
-    FLastShown : string;
   public
     { Public declarations }
   end;
@@ -39,15 +38,17 @@ implementation
 }
 {$R *.dfm}
 
-procedure TFrm_LabSyncAgent.Button1Click(Sender: TObject);
+procedure TFrm_LabSyncAgent.Button1Click(Sender: TObject);   //$get_livemode value=true target=all
 var
  CommandDis: TCommandDispatcher;
  Command   : string;
+ Transporter: TCommandResult;
 begin
   CommandDis := TCommandDispatcher.Create;
   try
    Command := Edit1.Text;
-   CommandDis.Execute(Command);  //$get_livemode value=true target=all
+   Transporter := CommandDis.Execute(Command);  //$get_sysinfo target=all
+   Showmessage(Transporter.Text);
    Memo1.Clear;
    Memo1.Lines.Add(TLog.ReadLogs('Audit.log'));
    Timer1.Enabled := true;
