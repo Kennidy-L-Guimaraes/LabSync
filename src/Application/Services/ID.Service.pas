@@ -7,7 +7,8 @@ interface
     public
      {Public Declarations}
      class procedure CreateNewID;
-     class function GetID : string;
+     class function GetID     : string;
+     class function GetVersion: string;
     private
      {Private Declarations}
      class function NewID : string;
@@ -39,6 +40,28 @@ begin
   end;
 end;
 
+class function TId.GetVersion: string;
+var
+  Lines: TStringList;
+  FilePath: string;
+begin
+  FilePath := TPath.Combine(
+    TPathService.PathLabSync('Machine'),
+    'MachineId.pc'
+  );
+
+  if not FileExists(FilePath) then
+    CreateNewID;
+
+  Lines := TStringList.Create;
+  try
+    Lines.LoadFromFile(FilePath);
+    Result := Lines.Values['Version'];
+  finally
+    Lines.Free;
+  end;
+end;
+
 class function TId.NewID: string;
 var
  ID : string;
@@ -60,9 +83,10 @@ begin
     Exit;
   Lines := TStringList.Create;
   try
-    Lines.Values['Date'] := FormatDateTime('yyyy-mm-dd hh:nn:ss', Now);
-    Lines.Values['ID']   := NewID;
-    Lines.Values['Name'] := GetEnvironmentVariable('COMPUTERNAME');
+    Lines.Values['Date']    := FormatDateTime('yyyy-mm-dd hh:nn:ss', Now);
+    Lines.Values['ID']      := NewID;
+    Lines.Values['Name']    := GetEnvironmentVariable('COMPUTERNAME');
+    Lines.Values['Version'] := '1.0';
 
     Lines.SaveToFile(FilePath, TEncoding.UTF8);
   finally

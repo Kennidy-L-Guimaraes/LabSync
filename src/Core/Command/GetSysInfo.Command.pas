@@ -107,6 +107,7 @@ var
  MachineRAM : string;
  MachineIP  : string;
  MachineUserName: string;
+ SoftwareVersion: string;
 
  //Variables Assistants
  SysInfo: TSystemInfo;
@@ -160,8 +161,9 @@ begin
     MachineID := ID;
 
     //IP(Windows)
-    MachineIP := GetLocalIP;
-    MachineID := ID;
+    MachineIP       := GetLocalIP;
+    MachineID       := ID;
+    SoftwareVersion := TID.GetVersion;
 
     //User Name
     Size := SizeOf(UserName);
@@ -177,7 +179,8 @@ begin
       'RAM=' + MachineRAM + sLineBreak +
       'IP=' + MachineIP + SlineBreak +
       'UserName=' + MachineUserName + sLineBreak +
-      'Status=' + 'Active';
+      'Status=' + 'Active' + sLineBreak +
+      'Version=' + SoftwareVersion;
    Result.DataType:= crtText;
    Result.Success := True;
    Tlog.Success(TimeStamp, ID, CommandName, Params, Elapsed); //For Logs
