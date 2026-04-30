@@ -15,46 +15,110 @@ type
     Timer_AgentLiveMode: TTimer;
     Pnl_AgentStatus: TPanel;
     Shp_AgentStatus: TShape;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
+    Lbl_MachineInformation: TLabel;
+    Lbl_MachineName: TLabel;
+    Lbl_MachineCPU: TLabel;
+    Lbl_MachineRAM: TLabel;
+    Lbl_LocalIP: TLabel;
+    Lbl_MachineStatus: TLabel;
     Lbl_ReturnName: TLabel;
     Lbl_ReturCPU: TLabel;
     Lbl_ReturnRAM: TLabel;
     Lbl_ReturnIP: TLabel;
     Lbl_ReturnStatus: TLabel;
-    Label17: TLabel;
-    Shape2: TShape;
-    Pnl_AgentLiveMode: TPanel;
-    Label1: TLabel;
+    Lbl_NetworkLab: TLabel;
+    Shp_Separator: TShape;
+    Pnl_Options: TPanel;
+    Lbl_MachineUser: TLabel;
     Lbl_ReturnMachineUser: TLabel;
     Lbl_ReturnID: TLabel;
-    Label9: TLabel;
+    Lbl_MachineID: TLabel;
     Lbl_ReturnVersion: TLabel;
-    Label10: TLabel;
-    Panel1: TPanel;
-    Shape1: TShape;
-    Panel2: TPanel;
-    Label8: TLabel;
-    Image1: TImage;
+    Lbl_LabSyncVersion: TLabel;
+    Pnl_LogReceiver: TPanel;
+    Shp_LogReceiver: TShape;
+    Pnl_Log: TPanel;
+    Lbl_ExecutingCommands: TLabel;
+    Img_LogReceiver: TImage;
     Rch_LogReceiver: TRichEdit;
     Lbl_CommandReceiver: TLabel;
     Timer_LogReceiver: TTimer;
-    Panel3: TPanel;
-    Image2: TImage;
-    Shape3: TShape;
-    Label11: TLabel;
-    Panel4: TPanel;
-    Shape4: TShape;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
-    Shp_Screenshot: TShape;
-    Lbl_Screenshot: TLabel;
+    Pnl_AboutOpt: TPanel;
+    Shp_AboutOpt: TShape;
+    Lbl_Permission: TLabel;
+    Lbl_Description: TLabel;
+    Lbl_Status: TLabel;
+    Pnl_Separator: TPanel;
+    Pnl_Information: TPanel;
+    Shp_BtnInformation: TShape;
+    Img_Information: TImage;
+    Lbl_PermissionInformation: TLabel;
+    Lbl_DescriptionInformation: TLabel;
+    Shp_StateInformation: TShape;
+    Lbl_StateInformation: TLabel;
+    Pnl_Commands: TPanel;
+    Shp_BtnCommands: TShape;
+    Img_Commands: TImage;
+    Lbl_PermissionCommands: TLabel;
+    Lbl_DescriptionCommands: TLabel;
+    Shp_StateCommands: TShape;
+    Lbl_StateCommands: TLabel;
+    Pnl_Folders: TPanel;
+    Shp_BtnFolders: TShape;
+    Img_Folders: TImage;
+    Lbl_PermissionFolders: TLabel;
+    Lbl_DescriptionFolders: TLabel;
+    Shp_StateFolders: TShape;
+    Lbl_StateFolders: TLabel;
+    Pnl_Registry: TPanel;
+    Shp_BtnRegistry: TShape;
+    Img_Registry: TImage;
+    Lbl_PermissionRegistry: TLabel;
+    Lbl_DescriptionRegistry: TLabel;
+    Shp_StateRegistry: TShape;
+    Lbl_StateRegistry: TLabel;
+    Pnl_Shutdown: TPanel;
+    Shp_BtnShutdown: TShape;
+    Img_Shutdown: TImage;
+    Lbl_PermissionShutdown: TLabel;
+    Lbl_DescriptionShutdown: TLabel;
+    Shp_StateShutdown: TShape;
+    Lbl_StateShutdown: TLabel;
+    Pnl_Downloads: TPanel;
+    Shp_BtnDownload: TShape;
+    Img_Downloads: TImage;
+    Lbl_PermissionDownload: TLabel;
+    Lbl_DescriptionDownload: TLabel;
+    Shp_StateDownloads: TShape;
+    Lbl_StateDownloads: TLabel;
+    Pnl_Messages: TPanel;
+    Shp_BtnMessages: TShape;
+    Img_Messages: TImage;
+    Lbl_PermissionMessage: TLabel;
+    Lbl_DescriptionMessages: TLabel;
+    Shp_StateMessages: TShape;
+    Lbl_StateMessages: TLabel;
+    Pnl_LiveMode: TPanel;
+    Shp_BtnLiveMode: TShape;
+    Img_LiveMode: TImage;
+    Lbl_PermissionLiveMode: TLabel;
+    Lbl_DescriptionLiveMode: TLabel;
+    Shp_StateLiveMode: TShape;
+    Lbl_StateLiveMode: TLabel;
+    Pnl_Screenshot: TPanel;
+    Shp_BtnScreenshot: TShape;
+    Img_Screenshot: TImage;
+    Lbl_PermissionScreenshot: TLabel;
+    Lbl_DescriptionScreenshot: TLabel;
+    Shp_StateScreenshot: TShape;
+    Lbl_StateScreenShot: TLabel;
+    Lbl_LabSyncAgent: TLabel;
+    Pnl_Connection: TPanel;
+    Shp_ConnectServer: TShape;
+    Img_Server: TImage;
+    Lbl_ApplyServer: TLabel;
+    Edt_ConnectServer: TEdit;
+    TryIcon_LabSyncAgent: TTrayIcon;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -63,7 +127,17 @@ type
     procedure CreateObj;
     procedure ToggleStatus(ALabel: TLabel; AShape: TShape);
     procedure Timer_LogReceiverTimer(Sender: TObject);
-    procedure Lbl_ScreenshotClick(Sender: TObject);
+    procedure Lbl_StateScreenShotClick(Sender: TObject);
+    procedure Lbl_StateLiveModeClick(Sender: TObject);
+    procedure Lbl_StateMessagesClick(Sender: TObject);
+    procedure Lbl_StateDownloadsClick(Sender: TObject);
+    procedure Lbl_StateShutdownClick(Sender: TObject);
+    procedure Lbl_StateRegistryClick(Sender: TObject);
+    procedure Lbl_StateFoldersClick(Sender: TObject);
+    procedure Lbl_StateCommandsClick(Sender: TObject);
+    procedure Lbl_StateInformationClick(Sender: TObject);
+    procedure TryIcon_LabSyncAgentClick(Sender: TObject);
+    procedure HideForm;
   private
     { Private declarations }
   public
@@ -146,9 +220,55 @@ begin
  end;
 end;
 
-procedure TFrm_LabSyncAgent.Lbl_ScreenshotClick(Sender: TObject);
+procedure TFrm_LabSyncAgent.HideForm;
 begin
- ToggleStatus(Lbl_Screenshot, Shp_Screenshot);
+ Self.Hide;
+ Visible := False;
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateCommandsClick(Sender: TObject);
+begin
+ ToggleStatus(Lbl_StateCommands, Shp_StateCommands);
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateDownloadsClick(Sender: TObject);
+begin
+  ToggleStatus(Lbl_StateDownloads, Shp_stateDownloads)
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateFoldersClick(Sender: TObject);
+begin
+ ToggleStatus(Lbl_StateFolders, Shp_StateFolders);
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateInformationClick(Sender: TObject);
+begin
+  ToggleStatus(Lbl_StateInformation, Shp_StateInformation);
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateLiveModeClick(Sender: TObject);
+begin
+  ToggleStatus(Lbl_StateLiveMode, Shp_StateLiveMode);
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateMessagesClick(Sender: TObject);
+begin
+ ToggleStatus(Lbl_StateMessages, Shp_StateMessages);
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateRegistryClick(Sender: TObject);
+begin
+  ToggleStatus(Lbl_StateRegistry, Shp_StateRegistry);
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateScreenShotClick(Sender: TObject);
+begin
+ ToggleStatus(Lbl_StateScreenShot, Shp_StateScreenshot);
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateShutdownClick(Sender: TObject);
+begin
+  ToggleStatus(Lbl_StateShutdown, Shp_StateShutdown);
 end;
 
 procedure TFrm_LabSyncAgent.Timer_AgentLiveModeTimer(Sender: TObject);
@@ -186,13 +306,20 @@ begin
   if SameText(ALabel.Caption, EnabledText) then
   begin
     ALabel.Caption := DisabledText;
-    AShape.Brush.Color := clRed;
+    AShape.Brush.Color := Clred;
+    AShape.Pen.Color   := ClRed;
   end
   else
   begin
     ALabel.Caption := EnabledText;
-    AShape.Brush.Color := clLime;
+    AShape.Brush.Color := ClLime;
+    Ashape.Pen.Color   := ClLime;
   end;
+end;
+
+procedure TFrm_LabSyncAgent.TryIcon_LabSyncAgentClick(Sender: TObject);
+begin
+ Frm_LabSyncAgent.Show;
 end;
 
 end.
