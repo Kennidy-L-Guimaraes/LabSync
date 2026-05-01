@@ -3,6 +3,8 @@ unit Transporter.Dto;
 interface
 uses Classes;
   type
+   TExecutionContext = (ecLocal, ecRemote);
+  type
    TResultTypes = (crtNone, crtText, crtStream);
   type
    TCommandResult = record
