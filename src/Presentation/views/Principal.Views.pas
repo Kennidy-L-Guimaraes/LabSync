@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Command.Parser,
   Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service, IOUtils,
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
-  Vcl.ComCtrls;
+  Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -118,6 +118,8 @@ type
     Img_Server: TImage;
     Lbl_ApplyServer: TLabel;
     Edt_ConnectServer: TEdit;
+    Panel1: TPanel;
+    Panel2: TPanel;
     TryIcon_LabSyncAgent: TTrayIcon;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
@@ -125,7 +127,7 @@ type
     procedure GetSysData;
     procedure GetLogs;
     procedure CreateObj;
-    procedure ToggleStatus(ALabel: TLabel; AShape: TShape);
+    procedure ToggleAndSave(const Key: string; ALabel: TLabel; AShape: TShape);
     procedure Timer_LogReceiverTimer(Sender: TObject);
     procedure Lbl_StateScreenShotClick(Sender: TObject);
     procedure Lbl_StateLiveModeClick(Sender: TObject);
@@ -138,6 +140,10 @@ type
     procedure Lbl_StateInformationClick(Sender: TObject);
     procedure TryIcon_LabSyncAgentClick(Sender: TObject);
     procedure HideForm;
+    procedure FirstConfig;
+    procedure LoadConfig;
+    procedure ApplyVisualState(ALabel: TLabel; AShape: TShape);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -149,6 +155,8 @@ var
   Log         : Tlog;
   Transporter : TCommandResult;
   Dispatcher  : TCommandDispatcher;
+  Config      : TConfig;
+  ID          : TID;
 
 implementation
 {
@@ -159,20 +167,42 @@ implementation
 }
 {$R *.dfm}
 
+procedure TFrm_LabSyncAgent.ApplyVisualState(ALabel: TLabel; AShape: TShape);
+begin
+  if SameText(ALabel.Caption, 'Enabled') then
+  begin
+    AShape.Brush.Color := clLime;
+    AShape.Pen.Color   := clLime;
+  end
+  else
+  begin
+    AShape.Brush.Color := clRed;
+    AShape.Pen.Color   := clRed;
+  end;
+end;
+
 procedure TFrm_LabSyncAgent.CreateObj;
 begin
  Dispatcher   := TCommandDispatcher.Create;
  Log          := TLog.Create;
+ Config       := TConfig.Create;
+ ID           := TID.Create;
 end;
 
 procedure TFrm_LabSyncAgent.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
  Log.Free;
+ Dispatcher.Free;
+ Config.Free;
+ ID.Free;
 end;
 
 procedure TFrm_LabSyncAgent.FormCreate(Sender: TObject);
 begin
- CreateObj;
+ CreateObj; //Create the objects first.
+ Config.Initialize;
+ HideForm;
+ LoadConfig;
  GetSysData;
  GetLogs;
  Timer_LogReceiver.Enabled := True;
@@ -200,8 +230,8 @@ procedure TFrm_LabSyncAgent.GetSysData;
  Command : string;
  SysInfo  : Tstringlist;
 begin
- Command := '$get_sysinfo target=all';
- Transporter := Dispatcher.Execute(Command);
+ Command := '$get_sysinfo target='+TId.GetID;
+ Transporter := Dispatcher.Execute(Command, Config, ecLocal);
  SysInfo  := TStringList.Create;
  try
   SysInfo.Text := Transporter.Text;
@@ -222,53 +252,101 @@ end;
 
 procedure TFrm_LabSyncAgent.HideForm;
 begin
- Self.Hide;
- Visible := False;
+  if Config.AlreadyStarted = False then
+   begin
+    FirstConfig;
+    Config.SetStarted(True);
+   end
+   else
+   begin
+    Hide
+   end;
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateCommandsClick(Sender: TObject);
 begin
- ToggleStatus(Lbl_StateCommands, Shp_StateCommands);
+ ToggleAndSave('Commands',Lbl_StateCommands, Shp_StateCommands);
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateDownloadsClick(Sender: TObject);
 begin
-  ToggleStatus(Lbl_StateDownloads, Shp_stateDownloads)
+  ToggleAndSave('Downloads',Lbl_StateDownloads, Shp_stateDownloads)
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateFoldersClick(Sender: TObject);
 begin
- ToggleStatus(Lbl_StateFolders, Shp_StateFolders);
+ ToggleAndSave('Folders',Lbl_StateFolders, Shp_StateFolders);
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateInformationClick(Sender: TObject);
 begin
-  ToggleStatus(Lbl_StateInformation, Shp_StateInformation);
+  ToggleAndSave('Information',Lbl_StateInformation, Shp_StateInformation);
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateLiveModeClick(Sender: TObject);
 begin
-  ToggleStatus(Lbl_StateLiveMode, Shp_StateLiveMode);
+  ToggleAndSave('LiveMode',Lbl_StateLiveMode, Shp_StateLiveMode);
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateMessagesClick(Sender: TObject);
 begin
- ToggleStatus(Lbl_StateMessages, Shp_StateMessages);
+ ToggleAndSave('Messages',Lbl_StateMessages, Shp_StateMessages);
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateRegistryClick(Sender: TObject);
 begin
-  ToggleStatus(Lbl_StateRegistry, Shp_StateRegistry);
+  ToggleAndSave('Registry',Lbl_StateRegistry, Shp_StateRegistry);
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateScreenShotClick(Sender: TObject);
 begin
- ToggleStatus(Lbl_StateScreenShot, Shp_StateScreenshot);
+ ToggleAndSave('Screenshot', Lbl_StateScreenShot, Shp_StateScreenshot);
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateShutdownClick(Sender: TObject);
 begin
-  ToggleStatus(Lbl_StateShutdown, Shp_StateShutdown);
+  ToggleAndSave('Shutdown',Lbl_StateShutdown, Shp_StateShutdown);
+end;
+
+procedure TFrm_LabSyncAgent.LoadConfig;
+begin
+  Lbl_StateScreenShot.Caption :=  Config.GetOptionAsDisplay('Screenshot');
+  Lbl_StateLiveMode.Caption   :=  Config.GetOptionAsDisplay('LiveMode');
+  Lbl_StateMessages.Caption   :=  Config.GetOptionAsDisplay('Messages');
+  Lbl_StateDownloads.Caption  :=  Config.GetOptionAsDisplay('Downloads');
+  Lbl_StateShutdown.Caption   :=  Config.GetOptionAsDisplay('Shutdown');
+  Lbl_StateRegistry.Caption   :=  Config.GetOptionAsDisplay('Registry');
+  Lbl_StateFolders.Caption    :=  Config.GetOptionAsDisplay('Folders');
+  Lbl_StateCommands.Caption   :=  Config.GetOptionAsDisplay('Commands');
+  Lbl_StateInformation.Caption:=  Config.GetOptionAsDisplay('Information');
+
+  ApplyVisualState(Lbl_StateScreenShot, Shp_StateScreenshot);
+  ApplyVisualState(Lbl_StateLiveMode,   Shp_StateLiveMode);
+  ApplyVisualState(Lbl_StateMessages,   Shp_StateMessages);
+  ApplyVisualState(Lbl_StateDownloads,  Shp_StateDownloads);
+  ApplyVisualState(Lbl_StateShutdown,   Shp_StateShutdown);
+  ApplyVisualState(Lbl_StateRegistry,   Shp_StateRegistry);
+  ApplyVisualState(Lbl_StateFolders,    Shp_StateFolders);
+  ApplyVisualState(Lbl_StateCommands,   Shp_StateCommands);
+  ApplyVisualState(Lbl_StateInformation,Shp_StateInformation);
+end;
+
+procedure TFrm_LabSyncAgent.FirstConfig;
+begin
+  Config.SetOption('Screenshot', osEnabled);
+  Config.SetOption('LiveMode',   osEnabled);
+  Config.SetOption('Messages',   osEnabled);
+  Config.SetOption('Downloads',  osEnabled);
+  Config.SetOption('Shutdown',   osEnabled);
+  Config.SetOption('Registry',   osEnabled);
+  Config.SetOption('Folders',    osEnabled);
+  Config.SetOption('Commands',   osEnabled);
+  Config.SetOption('Information', osEnabled);
+end;
+
+procedure TFrm_LabSyncAgent.SpeedButton1Click(Sender: TObject);
+begin
+ Frm_LabSyncAgent.Close;
 end;
 
 procedure TFrm_LabSyncAgent.Timer_AgentLiveModeTimer(Sender: TObject);
@@ -276,21 +354,30 @@ var
   Stream : TMemoryStream;
   Jpg    : TJPEGImage;
 begin
-  {if TScreenshotStreamQueue.Dequeue(Stream) then
+  {var
+  Stream : TMemoryStream;
+  Jpg    : TJPEGImage;
+  Transporter : TCommandResult;
+  Command     : string;
+begin
+  Command := '$get_print quality=100 target='+TId.GetID;
+  Transporter := Dispatcher.Execute(Command, Config, ecLocal);
+  if TScreenshotStreamQueue.Dequeue(Stream) then
   try
     Stream.Position := 0;
 
     Jpg := TJPEGImage.Create;
     try
       Jpg.LoadFromStream(Stream);
-      Img_AgentLiveMode.Picture.Bitmap.Assign(Jpg);
+      Image1.Picture.Bitmap.Assign(Jpg);
     finally
       Jpg.Free;
     end;
 
   finally
     Stream.Free;
-  end;}
+  end;
+end;}
 end;
 
 procedure TFrm_LabSyncAgent.Timer_LogReceiverTimer(Sender: TObject);
@@ -298,23 +385,25 @@ begin
  GetLogs;
 end;
 
-procedure TFrm_LabSyncAgent.ToggleStatus(ALabel: TLabel; AShape: TShape);
-const
-  EnabledText  = 'Enabled';
-  DisabledText = 'Disabled';
+procedure TFrm_LabSyncAgent.ToggleAndSave(const Key: string; ALabel: TLabel; AShape: TShape);
+var
+  State: TOptionState;
 begin
-  if SameText(ALabel.Caption, EnabledText) then
-  begin
-    ALabel.Caption := DisabledText;
-    AShape.Brush.Color := Clred;
-    AShape.Pen.Color   := ClRed;
-  end
+  // pega estado real do config (não do label)
+  State := Config.GetOption(Key);
+
+  // inverte
+  if State = osEnabled then
+    State := osDisabled
   else
-  begin
-    ALabel.Caption := EnabledText;
-    AShape.Brush.Color := ClLime;
-    Ashape.Pen.Color   := ClLime;
-  end;
+    State := osEnabled;
+
+  // salva no arquivo
+  Config.SetOption(Key, State);
+
+  // atualiza UI com base no valor REAL salvo
+  ALabel.Caption := Config.GetOptionAsDisplay(Key);
+  ApplyVisualState(ALabel, AShape);
 end;
 
 procedure TFrm_LabSyncAgent.TryIcon_LabSyncAgentClick(Sender: TObject);
