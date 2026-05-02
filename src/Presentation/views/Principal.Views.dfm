@@ -540,6 +540,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'Information'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -554,7 +555,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateInformationClick
+          OnClick = OptionClick
         end
       end
       object Pnl_Commands: TPanel
@@ -665,6 +666,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'Commands'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -679,7 +681,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateCommandsClick
+          OnClick = OptionClick
         end
       end
       object Pnl_Folders: TPanel
@@ -802,6 +804,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'Folders'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -816,7 +819,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateFoldersClick
+          OnClick = OptionClick
         end
       end
       object Pnl_Registry: TPanel
@@ -947,6 +950,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'Registry'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -961,7 +965,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateRegistryClick
+          OnClick = OptionClick
         end
       end
       object Pnl_Shutdown: TPanel
@@ -1105,6 +1109,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'Shutdown'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -1119,7 +1124,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateShutdownClick
+          OnClick = OptionClick
         end
       end
       object Pnl_Downloads: TPanel
@@ -1238,6 +1243,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'Downloads'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -1252,7 +1258,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateDownloadsClick
+          OnClick = OptionClick
         end
       end
       object Pnl_Messages: TPanel
@@ -1397,6 +1403,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'Messages'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -1411,7 +1418,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateMessagesClick
+          OnClick = OptionClick
         end
       end
       object Pnl_LiveMode: TPanel
@@ -1523,6 +1530,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'LiveMode'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -1537,7 +1545,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateLiveModeClick
+          OnClick = OptionClick
         end
       end
       object Pnl_Screenshot: TPanel
@@ -1638,6 +1646,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 78
           Height = 14
           Cursor = crHandPoint
+          Hint = 'Screenshot'
           Margins.Left = 10
           Margins.Top = 10
           Margins.Right = 10
@@ -1652,7 +1661,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = Lbl_StateScreenShotClick
+          OnClick = OptionClick
         end
       end
       object Pnl_AboutOpt: TPanel
