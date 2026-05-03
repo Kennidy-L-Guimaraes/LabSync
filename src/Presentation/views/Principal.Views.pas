@@ -125,10 +125,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure GetSysData;
-    procedure GetLogs;
-    procedure CreateObj;
-    procedure ToggleAndSave(const Key: string; ALabel: TLabel; AShape: TShape);
+    procedure ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);
     procedure Timer_LogReceiverTimer(Sender: TObject);
     procedure TryIcon_LabSyncAgentClick(Sender: TObject);
     procedure LoadConfig;
@@ -136,10 +133,10 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure OptionClick(Sender: TObject);
     function  FindShapeForLabel(ALabel: TLabel): TShape;
+    procedure GetSysData;
+    procedure GetLogs;
   private
     { Private declarations }
-      FConfig     : TConfig;
-      FID         : TID;
       FController : TAgentController;
   public
     { Public declarations }
@@ -171,13 +168,6 @@ begin
   end;
 end;
 
-procedure TFrm_LabSyncAgent.CreateObj;
-begin
- FController   := TAgentController.Create;
- FConfig       := TConfig.Create;
- FID           := TID.Create;
-end;
-
 function TFrm_LabSyncAgent.FindShapeForLabel(ALabel: TLabel): TShape;
 begin
   if ALabel = Lbl_StateDownloads     then Result    := Shp_StateDownloads
@@ -195,18 +185,16 @@ end;
 procedure TFrm_LabSyncAgent.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
  FController.Free;
- FConfig.Free;
- FID.Free;
 end;
 
 procedure TFrm_LabSyncAgent.FormCreate(Sender: TObject);
 begin
- CreateObj; //Create the objects first.
+ FController   := TAgentController.Create;
+ Timer_LogReceiver.Enabled := True;
  FController.InitializeIfNeeded;
  LoadConfig;
  GetSysData;
  GetLogs;
- Timer_LogReceiver.Enabled := True;
 end;
 
 procedure TFrm_LabSyncAgent.GetLogs;
@@ -245,15 +233,16 @@ end;
 
 procedure TFrm_LabSyncAgent.LoadConfig;
 begin
-  Lbl_StateScreenShot.Caption :=  FConfig.GetOptionAsDisplay('Screenshot');
-  Lbl_StateLiveMode.Caption   :=  FConfig.GetOptionAsDisplay('LiveMode');
-  Lbl_StateMessages.Caption   :=  FConfig.GetOptionAsDisplay('Messages');
-  Lbl_StateDownloads.Caption  :=  FConfig.GetOptionAsDisplay('Downloads');
-  Lbl_StateShutdown.Caption   :=  FConfig.GetOptionAsDisplay('Shutdown');
-  Lbl_StateRegistry.Caption   :=  FConfig.GetOptionAsDisplay('Registry');
-  Lbl_StateFolders.Caption    :=  FConfig.GetOptionAsDisplay('Folders');
-  Lbl_StateCommands.Caption   :=  FConfig.GetOptionAsDisplay('Commands');
-  Lbl_StateInformation.Caption:=  FConfig.GetOptionAsDisplay('Information');
+  FController.GetValues;
+  Lbl_StateScreenShot.Caption :=  FController.Screenshot;
+  Lbl_StateLiveMode.Caption   :=  FController.LiveMode;
+  Lbl_StateMessages.Caption   :=  FController.Messages;
+  Lbl_StateDownloads.Caption  :=  FController.Downloads;
+  Lbl_StateShutdown.Caption   :=  FController.Shutdown;
+  Lbl_StateRegistry.Caption   :=  FController.Registry;
+  Lbl_StateFolders.Caption    :=  FController.Folders;
+  Lbl_StateCommands.Caption   :=  FController.Commands;
+  Lbl_StateInformation.Caption:=  FController.Information;
 
   ApplyVisualState(Lbl_StateScreenShot, Shp_StateScreenshot);
   ApplyVisualState(Lbl_StateLiveMode,   Shp_StateLiveMode);
@@ -276,7 +265,7 @@ begin
   Lbl := TLabel(Sender);
   Key := Lbl.Hint;
 
-  ToggleAndSave(Key, Lbl, FindShapeForLabel(Lbl));
+  ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
 end;
 
 procedure TFrm_LabSyncAgent.SpeedButton1Click(Sender: TObject);
@@ -285,9 +274,9 @@ begin
 end;
 
 procedure TFrm_LabSyncAgent.Timer_AgentLiveModeTimer(Sender: TObject);
-var
-  Stream : TMemoryStream;
-  Jpg    : TJPEGImage;
+//var
+  //Stream : TMemoryStream;
+  //Jpg    : TJPEGImage;
 begin
   {var
   Stream : TMemoryStream;
@@ -320,20 +309,12 @@ begin
  GetLogs;
 end;
 
-procedure TFrm_LabSyncAgent.ToggleAndSave(const Key: string; ALabel: TLabel; AShape: TShape);
+procedure TFrm_LabSyncAgent.ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);
 var
   State: TOptionState;
 begin
-  State := FConfig.GetOption(Key);
-
-  if State = osEnabled then
-    State := osDisabled
-  else
-    State := osEnabled;
-
-  FConfig.SetOption(Key, State);
-
-  ALabel.Caption := FConfig.GetOptionAsDisplay(Key);
+  State := FController.ToggleOption(Key);
+  ALabel.Caption := FController.GetOptionDisplay(Key);
   ApplyVisualState(ALabel, AShape);
 end;
 

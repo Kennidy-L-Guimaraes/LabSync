@@ -16,7 +16,8 @@ uses
   CommandSuggestion.Service in 'src\Application\Services\CommandSuggestion.Service.pas',
   GetSysInfo.Command in 'src\Core\Command\GetSysInfo.Command.pas',
   Transporter.Dto in 'src\Application\Dtos\Transporter.Dto.pas',
-  Config.Service in 'src\Application\Services\Config.Service.pas';
+  Config.Service in 'src\Application\Services\Config.Service.pas',
+  Agent.Controller in 'src\Application\Controllers\Agent.Controller.pas';
 
 {$R *.res}
 

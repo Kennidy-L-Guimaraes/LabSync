@@ -3,7 +3,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
   Top = 0
   Caption = 'LabSync Agent'
   ClientHeight = 636
-  ClientWidth = 825
+  ClientWidth = 839
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
   object Pnl_Background: TPanel
     Left = 0
     Top = 0
-    Width = 825
+    Width = 839
     Height = 636
     Align = alClient
     BevelOuter = bvNone
@@ -1756,7 +1756,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     object Pnl_LogReceiver: TPanel
       Left = 0
       Top = 520
-      Width = 825
+      Width = 839
       Height = 116
       Align = alBottom
       BevelOuter = bvNone
@@ -1766,7 +1766,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Shp_LogReceiver: TShape
         Left = 0
         Top = 0
-        Width = 825
+        Width = 839
         Height = 116
         Align = alClient
         Brush.Color = 1776411
@@ -1985,7 +1985,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     object Pnl_Separator: TPanel
       Left = 0
       Top = 515
-      Width = 825
+      Width = 839
       Height = 5
       Align = alBottom
       BevelOuter = bvNone
@@ -1996,7 +1996,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     object Panel1: TPanel
       Left = 0
       Top = 0
-      Width = 825
+      Width = 839
       Height = 5
       Align = alTop
       BevelOuter = bvNone

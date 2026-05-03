@@ -14,14 +14,27 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       FID: TID;
     public
      {Public Declarations}
+      var
+      Screenshot  : string;
+      LiveMode    : string;
+      Messages    : string;
+      Downloads   : string;
+      Shutdown    : string;
+      Registry    : string;
+      Folders     : string;
+      Commands    : string;
+      Information : string;
+
       constructor Create;
       destructor Destroy; override;
 
       function  GetSysInfo: TCommandResult;
       function  GetLogs: string;
-      procedure ToggleOption(const Key: string);
+      function ToggleOption(const Key: string):TOptionState;
       function  GetOptionDisplay(const Key: string): string;
       procedure InitializeIfNeeded;
+      procedure GetValues;
+
   end;
 
 implementation
@@ -79,7 +92,7 @@ end;
 
 function TAgentController.GetOptionDisplay(const Key: string): string;
 begin
-
+ Result := FConfig.GetOptionAsDisplay(Key);
 end;
 
 function TAgentController.GetSysInfo: TCommandResult;
@@ -92,9 +105,27 @@ begin
   Result      := Transporter;
 end;
 
-procedure TAgentController.ToggleOption(const Key: string);
+procedure TAgentController.GetValues;
 begin
+  Screenshot :=  FConfig.GetOptionAsDisplay('Screenshot');
+  LiveMode   :=  FConfig.GetOptionAsDisplay('LiveMode');
+  Messages   :=  FConfig.GetOptionAsDisplay('Messages');
+  Downloads  :=  FConfig.GetOptionAsDisplay('Downloads');
+  Shutdown   :=  FConfig.GetOptionAsDisplay('Shutdown');
+  Registry   :=  FConfig.GetOptionAsDisplay('Registry');
+  Folders    :=  FConfig.GetOptionAsDisplay('Folders');
+  Commands   :=  FConfig.GetOptionAsDisplay('Commands');
+  Information:=  FConfig.GetOptionAsDisplay('Information');
+end;
 
+function TAgentController.ToggleOption(const Key: string): TOptionState;
+begin
+   Result := FConfig.GetOption(Key);
+  if Result = osEnabled then
+    Result := osDisabled
+  else
+    Result := osEnabled;
+  FConfig.SetOption(Key, Result);
 end;
 
 end.

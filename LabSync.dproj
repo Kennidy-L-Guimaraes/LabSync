@@ -147,6 +147,7 @@
         <DCCReference Include="src\Core\Command\GetSysInfo.Command.pas"/>
         <DCCReference Include="src\Application\Dtos\Transporter.Dto.pas"/>
         <DCCReference Include="src\Application\Services\Config.Service.pas"/>
+        <DCCReference Include="src\Application\Controllers\Agent.Controller.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
