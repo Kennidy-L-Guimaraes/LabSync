@@ -110,6 +110,9 @@
         <BRCC_IncludePath>Build\;$(BRCC_IncludePath)</BRCC_IncludePath>
         <DCC_ExeOutput>.\Build\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_DcuOutput>.\Build\$(Platform)\$(Config)\dcu</DCC_DcuOutput>
+        <Icon_MainIcon>LabSync_Icon.ico</Icon_MainIcon>
+        <UWP_DelphiLogo44>..\..\..\Downloads\LabSync Logo.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>..\..\..\Downloads\LabSync Logo.png</UWP_DelphiLogo150>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
@@ -174,6 +177,13 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="4">
+                <DeployFile LocalName="..\..\..\Downloads\LabSync Logo.png" Configuration="Debug" Class="UWP_DelphiLogo44">
+                    <Platform Name="Win32">
+                        <RemoteDir>Assets\</RemoteDir>
+                        <RemoteName>Logo44x44.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Build\Win32\Debug\LabSync.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>LabSync.exe</RemoteName>

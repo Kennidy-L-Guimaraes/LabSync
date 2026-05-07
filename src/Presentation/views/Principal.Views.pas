@@ -122,6 +122,7 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     TryIcon_LabSyncAgent: TTrayIcon;
+    Image1: TImage;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
