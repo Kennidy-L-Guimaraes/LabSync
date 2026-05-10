@@ -8,7 +8,7 @@ uses
   Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service, IOUtils,
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
   Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command,
-  Agent.Controller;
+  Agent.Controller, Vcl.Menus;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -123,12 +123,14 @@ type
     Panel2: TPanel;
     TryIcon_LabSyncAgent: TTrayIcon;
     Image1: TImage;
+    PopMenu_TryIcon: TPopupMenu;
+    Close1: TMenuItem;
+    Show1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);
     procedure Timer_LogReceiverTimer(Sender: TObject);
-    procedure TryIcon_LabSyncAgentClick(Sender: TObject);
     procedure LoadConfig;
     procedure ApplyVisualState(ALabel: TLabel; AShape: TShape);
     procedure SpeedButton1Click(Sender: TObject);
@@ -136,6 +138,8 @@ type
     function  FindShapeForLabel(ALabel: TLabel): TShape;
     procedure GetSysData;
     procedure GetLogs;
+    procedure Close1Click(Sender: TObject);
+    procedure Show1Click(Sender: TObject);
   private
     { Private declarations }
       FController : TAgentController;
@@ -167,6 +171,11 @@ begin
     AShape.Brush.Color := clRed;
     AShape.Pen.Color   := clRed;
   end;
+end;
+
+procedure TFrm_LabSyncAgent.Close1Click(Sender: TObject);
+begin
+ Frm_LabSyncAgent.Close;
 end;
 
 function TFrm_LabSyncAgent.FindShapeForLabel(ALabel: TLabel): TShape;
@@ -269,6 +278,11 @@ begin
   ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
 end;
 
+procedure TFrm_LabSyncAgent.Show1Click(Sender: TObject);
+begin
+ Frm_LabSyncAgent.Show;
+end;
+
 procedure TFrm_LabSyncAgent.SpeedButton1Click(Sender: TObject);
 begin
  Frm_LabSyncAgent.Close;
@@ -317,11 +331,6 @@ begin
   State := FController.ToggleOption(Key);
   ALabel.Caption := FController.GetOptionDisplay(Key);
   ApplyVisualState(ALabel, AShape);
-end;
-
-procedure TFrm_LabSyncAgent.TryIcon_LabSyncAgentClick(Sender: TObject);
-begin
- Frm_LabSyncAgent.Show;
 end;
 
 end.
