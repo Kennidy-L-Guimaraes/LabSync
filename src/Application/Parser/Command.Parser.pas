@@ -1,6 +1,6 @@
 unit Command.Parser;
 interface
- uses System.SysUtils;
+ uses System.SysUtils, CommandParsed.Dto, Generics.Collections;
  type
   TCommandParser = record
     public
@@ -9,6 +9,7 @@ interface
       function GetCommandValue(const  S: string)  : string;
       function GetCommandTarget(const S: string)  : string;
       function GetQuality(const S: string): Integer;
+      function Parse(const S: string): TCommandParsed;
   end;
 
 implementation
@@ -95,6 +96,23 @@ end;
 function TCommandParser.Normalize(const S: string): string;
 begin
   Result := LowerCase(Trim(S));
+end;
+
+function TCommandParser.Parse(const S: string): TCommandParsed;
+begin
+  Result.Name   := GetCommandName(S);
+  Result.Target := GetCommandTarget(S);
+  Result.Text   := S;
+  Result.Options := TDictionary<string,string>.Create;
+  Result.Options.Add(
+    'quality',
+    intToStr(GetQuality(S))
+  );
+
+  Result.Options.Add(
+    'value',
+    GetCommandValue(S)
+  );
 end;
 
 end.

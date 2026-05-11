@@ -17,7 +17,8 @@ uses
   GetSysInfo.Command in 'src\Core\Command\GetSysInfo.Command.pas',
   Transporter.Dto in 'src\Application\Dtos\Transporter.Dto.pas',
   Config.Service in 'src\Application\Services\Config.Service.pas',
-  Agent.Controller in 'src\Application\Controllers\Agent.Controller.pas';
+  Agent.Controller in 'src\Application\Controllers\Agent.Controller.pas',
+  CommandParsed.Dto in 'src\Application\Dtos\CommandParsed.Dto.pas';
 
 {$R *.res}
 

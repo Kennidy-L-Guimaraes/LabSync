@@ -5,7 +5,7 @@ uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
  Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service, Path.Service, DateUtils,
   ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes,
   GetPrint.Command, GetLiveMode.Command, CommandSuggestion.Service,
-  GetSysInfo.Command, Transporter.Dto, Config.Service;
+  GetSysInfo.Command, Transporter.Dto, Config.Service, CommandParsed.Dto;
  type
   TCommandDispatcher = Class
     public
@@ -39,40 +39,38 @@ end;
 
 function TCommandDispatcher.Execute(const Command: string; AConfig: TConfig; AContext: TExecutionContext): TCommandResult;
 var
-  CmdName  : string;
-  CmdTarget: string;
+  Parsed   : TCommandParsed;
 begin
-  CmdName   := Parser.Normalize(Parser.GetCommandName(Command));
-  CmdTarget := Parser.Normalize(Parser.GetCommandTarget(Command));
+  Parsed := Parser.Parse(Command);
     if AConfig = nil then
        raise Exception.Create('Config not assigned');
-    if not SameText(Trim(CmdTarget), 'all') and
-       not SameText(Trim(CmdTarget), TId.GetID) then
+    if not SameText(Trim(Parsed.Target), 'all') and
+       not SameText(Trim(Parsed.Target), TId.GetID) then
            Exit; //Another Machine
 
-  if CmdName = '$get_print' then
+  if Parsed.Name = '$get_print' then
           begin
           if (AContext = ecRemote) and (AConfig.GetOption('Printscreen') <> osEnabled) then
-              Exit(ReturnError(CmdName, '', 'Permission denied'));
+              Exit(ReturnError(Parsed.Name, '', 'Permission denied'));
               Result := TGetPrintCommand.Run(Command);
           end
 
 
-  else if CmdName = '$get_livemode'  then
+  else if Parsed.name = '$get_livemode'  then
           begin
-          if CheckPermission('LiveMode', AConfig, AContext, CmdName) then
+          if CheckPermission('LiveMode', AConfig, AContext, Parsed.Name) then
               Result := TGetLiveModeCommand.Run(Command);
           end
 
-  else if (CmdName = '$get_sysinfo') then
+  else if Parsed.name = '$get_sysinfo' then
           begin
-          if CheckPermission('Information', AConfig, AContext, CmdName) then
+          if CheckPermission('Information', AConfig, AContext, Parsed.Name) then
              Result := TGetSysInfoCommand.Run(Command);
           end
   else
   begin
-    ReturnError(CmdName,
-    TCommandSuggestionService.Suggest(CmdName,
+    ReturnError(Parsed.Name,
+    TCommandSuggestionService.Suggest(Parsed.Name,
     ['$get_print', '$get_livemode', '$get_sysinfo', '$exec_shutdown', '']), 'Not valid!');
   end;
 end;

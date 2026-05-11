@@ -110,7 +110,7 @@
         <BRCC_IncludePath>Build\;$(BRCC_IncludePath)</BRCC_IncludePath>
         <DCC_ExeOutput>.\Build\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_DcuOutput>.\Build\$(Platform)\$(Config)\dcu</DCC_DcuOutput>
-        <Icon_MainIcon>LabSync Logo.ico</Icon_MainIcon>
+        <Icon_MainIcon>LabSync_Icon.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>..\..\..\Downloads\LabSync Logo.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>..\..\..\Downloads\LabSync Logo.png</UWP_DelphiLogo150>
     </PropertyGroup>
@@ -151,6 +151,7 @@
         <DCCReference Include="src\Application\Dtos\Transporter.Dto.pas"/>
         <DCCReference Include="src\Application\Services\Config.Service.pas"/>
         <DCCReference Include="src\Application\Controllers\Agent.Controller.pas"/>
+        <DCCReference Include="src\Application\Dtos\CommandParsed.Dto.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
