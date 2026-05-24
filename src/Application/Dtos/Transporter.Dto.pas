@@ -12,6 +12,7 @@ uses Classes;
     Success : Boolean;
     DataType: TResultTypes;
     Text    : string;
+    value   : string;
     Stream  : TStream;
     Error   : string;
   end;

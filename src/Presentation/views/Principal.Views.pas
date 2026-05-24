@@ -1,4 +1,4 @@
-unit Principal.Views;
+﻿unit Principal.Views;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service, IOUtils,
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
   Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command,
-  Agent.Controller, Vcl.Menus, CommandParsed.Dto;
+  Agent.Controller, Vcl.Menus, CommandParsed.Dto, Message.Views;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -126,6 +126,7 @@ type
     PopMenu_TryIcon: TPopupMenu;
     Close1: TMenuItem;
     Show1: TMenuItem;
+    BitBtn1: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -140,6 +141,7 @@ type
     procedure GetLogs;
     procedure Close1Click(Sender: TObject);
     procedure Show1Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
   private
     { Private declarations }
       FController : TAgentController;
@@ -170,6 +172,32 @@ begin
   begin
     AShape.Brush.Color := clRed;
     AShape.Pen.Color   := clRed;
+  end;
+end;
+
+procedure TFrm_LabSyncAgent.BitBtn1Click(Sender: TObject);
+var
+  Command      : TCommandParsed;
+  CommandConcat: string;
+  Transporter  : TCommandResult;
+  Id           : TID;
+  Dispatcher   : TCommandDispatcher;
+  Config       : TConfig;
+  Parser       : TCommandParser;
+begin
+  Config       := Tconfig.Create;
+  Dispatcher   := TCommandDispatcher.Create;
+  ID           := TId.Create;
+  try
+  Command.Name  := '$show_msg';
+  Command.Target:= ('target='+Id.GetID);
+  Command.Value := 'This is an example of a message you might receive from the other LabSync Commander. You might also receive emojis.🙂';
+  CommandConcat        := Command.Name + ' ' + 'value=' + Command.Value + ' ' + Command.Target;
+  Transporter   := Dispatcher.Execute(CommandConcat, Config, ecRemote);
+  finally
+   Config.Free;
+   Dispatcher.Free;
+   ID.Free;
   end;
 end;
 

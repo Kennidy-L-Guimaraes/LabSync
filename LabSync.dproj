@@ -152,6 +152,15 @@
         <DCCReference Include="src\Application\Services\Config.Service.pas"/>
         <DCCReference Include="src\Application\Controllers\Agent.Controller.pas"/>
         <DCCReference Include="src\Application\Dtos\CommandParsed.Dto.pas"/>
+        <DCCReference Include="src\Presentation\views\Message.Views.pas">
+            <Form>Frm_Message</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\Core\Command\showMessage.Command.pas"/>
+        <RcItem Include="LabSync_Icon.ico">
+            <ResourceType>ICON</ResourceType>
+            <ResourceId>Icon</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -188,6 +197,12 @@
                 <DeployFile LocalName="Build\Win32\Debug\LabSync.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>LabSync.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="LabSync_Icon.ico" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

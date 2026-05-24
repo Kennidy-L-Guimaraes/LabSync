@@ -5,7 +5,8 @@ uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
  Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service, Path.Service, DateUtils,
   ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes,
   GetPrint.Command, GetLiveMode.Command, CommandSuggestion.Service,
-  GetSysInfo.Command, Transporter.Dto, Config.Service, CommandParsed.Dto;
+  GetSysInfo.Command, Transporter.Dto, Config.Service, CommandParsed.Dto,
+  showMessage.Command;
  type
   TCommandDispatcher = Class
     public
@@ -52,21 +53,27 @@ begin
           begin
           if (AContext = ecRemote) and (AConfig.GetOption('Printscreen') <> osEnabled) then
               Exit(ReturnError(Parsed.Name, '', 'Permission denied'));
-              Result := TGetPrintCommand.Run(Parsed.Name);
+              Result := TGetPrintCommand.Run(Command);
           end
 
 
   else if Parsed.name = '$get_livemode'  then
           begin
           if CheckPermission('LiveMode', AConfig, AContext, Parsed.Name) then
-              Result := TGetLiveModeCommand.Run(Parsed.Name);
+              Result := TGetLiveModeCommand.Run(Command);
           end
 
   else if Parsed.name = '$get_sysinfo' then
           begin
           if CheckPermission('Information', AConfig, AContext, Parsed.Name) then
-             Result := TGetSysInfoCommand.Run(Parsed.Name);
+             Result := TGetSysInfoCommand.Run(Command);
           end
+
+  else if Parsed.name = '$show_msg' then
+          begin
+           if CheckPermission('Messages', AConfig, AContext, Parsed.Name) then
+              Result := TShowMessageCommand.Run(Command)
+           end
   else
   begin
     ReturnError(Parsed.Name,

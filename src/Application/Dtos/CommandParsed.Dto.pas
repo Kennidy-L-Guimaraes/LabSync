@@ -9,6 +9,7 @@ interface
     Name   : string;
     Target : string;
     Text   : string;
+    Value  : string;
     Options : TDictionary<string,string>;
   end;
 

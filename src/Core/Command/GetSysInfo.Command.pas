@@ -57,7 +57,7 @@ interface
 
 uses Command.Parser, Winapi.Windows,
   System.SysUtils, System.Win.Registry,WinSock, Path.Service, Transporter.Dto,
-  Command.Logs, ID.Service, DateUtils, IdStack;
+  Command.Logs, ID.Service, DateUtils, IdStack, CommandParsed.Dto;
  type
   TGetSysInfoCommand = class
     public
@@ -126,8 +126,11 @@ var
  ErrorMessage : string;
  Target       : string;
  StartTime    : TDateTime;
+ Parsed       : TCommandParsed;
+ Parser       : TCommandParser;
 begin
   //default
+  Parsed          := Parser.Parse(Command);
   Result.Success  := False;
   Result.DataType := crtNone;
   Result.Text     := '';
@@ -135,9 +138,8 @@ begin
   Result.Error    := '';
   Elapsed     := 0;
   StartTime   := Now;
-  Target      := Parser.GetCommandTarget(Command);
   TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
-  Params      := Format('Target=%s', [Target]);
+  Params      := ('target=' + Parsed.Target);
   CommandName := Parser.GetCommandName(Command);
   ID          := TId.GetID;
 

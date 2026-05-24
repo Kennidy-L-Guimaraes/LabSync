@@ -101,9 +101,9 @@ function TAgentController.GetSysInfo: TCommandResult;
  CommandConcat: string;
  Transporter  : TCommandResult;
 begin
-  Command.Name  := '$get_sysinfo ';
+  Command.Name  := '$get_sysinfo';
   Command.Target:= ('target='+FId.GetID);
-  CommandConcat        := Command.Name + Command.Target;
+  CommandConcat        := Command.Name + ' ' + Command.Target;
   Transporter   := FDispatcher.Execute(CommandConcat, FConfig, ecLocal);
   Result        := Transporter;
 end;

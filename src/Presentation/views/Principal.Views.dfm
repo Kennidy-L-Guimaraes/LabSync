@@ -2214,6 +2214,15 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           WordWrap = True
         end
       end
+      object BitBtn1: TBitBtn
+        Left = 11
+        Top = 467
+        Width = 75
+        Height = 25
+        Caption = 'BitBtn1'
+        TabOrder = 10
+        OnClick = BitBtn1Click
+      end
     end
     object Pnl_LogReceiver: TPanel
       Left = 0

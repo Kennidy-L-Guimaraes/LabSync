@@ -1,5 +1,7 @@
 program LabSync;
 
+{$R *.dres}
+
 uses
   Vcl.Forms,
   Principal.Views in 'src\Presentation\views\Principal.Views.pas' {Frm_LabSyncAgent},
@@ -18,7 +20,9 @@ uses
   Transporter.Dto in 'src\Application\Dtos\Transporter.Dto.pas',
   Config.Service in 'src\Application\Services\Config.Service.pas',
   Agent.Controller in 'src\Application\Controllers\Agent.Controller.pas',
-  CommandParsed.Dto in 'src\Application\Dtos\CommandParsed.Dto.pas';
+  CommandParsed.Dto in 'src\Application\Dtos\CommandParsed.Dto.pas',
+  Message.Views in 'src\Presentation\views\Message.Views.pas' {Frm_Message},
+  showMessage.Command in 'src\Core\Command\showMessage.Command.pas';
 
 {$R *.res}
 
@@ -26,5 +30,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrm_LabSyncAgent, Frm_LabSyncAgent);
+  Application.CreateForm(TFrm_Message, Frm_Message);
   Application.Run;
 end.
