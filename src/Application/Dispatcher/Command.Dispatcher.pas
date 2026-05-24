@@ -6,7 +6,7 @@ uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
   ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes,
   GetPrint.Command, GetLiveMode.Command, CommandSuggestion.Service,
   GetSysInfo.Command, Transporter.Dto, Config.Service, CommandParsed.Dto,
-  showMessage.Command;
+  showMessage.Command, ExecShutdown.Command;
  type
   TCommandDispatcher = Class
     public
@@ -66,7 +66,7 @@ begin
   else if Parsed.name = '$get_sysinfo' then
           begin
           if CheckPermission('Information', AConfig, AContext, Parsed.Name) then
-             Result := TGetSysInfoCommand.Run(Command);
+             Result  := TGetSysInfoCommand.Run(Command);
           end
 
   else if Parsed.name = '$show_msg' then
@@ -74,6 +74,12 @@ begin
            if CheckPermission('Messages', AConfig, AContext, Parsed.Name) then
               Result := TShowMessageCommand.Run(Command)
            end
+
+  else if Parsed.name = '$exec_shutdown' then
+          begin
+           if CheckPermission('Shutdown', AConfig, AContext, Parsed.Name) then
+              Result := TExecShutdownCommand.Run(Command);
+          end
   else
   begin
     ReturnError(Parsed.Name,

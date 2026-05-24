@@ -22,7 +22,9 @@ uses
   Agent.Controller in 'src\Application\Controllers\Agent.Controller.pas',
   CommandParsed.Dto in 'src\Application\Dtos\CommandParsed.Dto.pas',
   Message.Views in 'src\Presentation\views\Message.Views.pas' {Frm_Message},
-  showMessage.Command in 'src\Core\Command\showMessage.Command.pas';
+  showMessage.Command in 'src\Core\Command\showMessage.Command.pas',
+  ExecShutdown.Command in 'src\Core\Command\ExecShutdown.Command.pas';
+
 
 {$R *.res}
 
