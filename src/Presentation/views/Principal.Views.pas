@@ -8,7 +8,7 @@ uses
   Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service, IOUtils,
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
   Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command,
-  Agent.Controller, Vcl.Menus;
+  Agent.Controller, Vcl.Menus, CommandParsed.Dto;
 
 type
   TFrm_LabSyncAgent = class(TForm)

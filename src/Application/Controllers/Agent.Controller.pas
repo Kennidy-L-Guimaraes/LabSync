@@ -3,7 +3,7 @@ unit Agent.Controller;
 interface
 
 uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
-  Transporter.Dto;
+  Transporter.Dto, Command.Parser, CommandParsed.Dto;
  type
   TAgentController = class
     private
@@ -97,12 +97,15 @@ end;
 
 function TAgentController.GetSysInfo: TCommandResult;
  var
- Command     : string;
- Transporter : TCommandResult;
+ Command      : TCommandParsed;
+ CommandConcat: string;
+ Transporter  : TCommandResult;
 begin
-  Command     := '$get_sysinfo target='+FId.GetID;
-  Transporter := FDispatcher.Execute(Command, FConfig, ecLocal);
-  Result      := Transporter;
+  Command.Name  := '$get_sysinfo ';
+  Command.Target:= ('target='+FId.GetID);
+  CommandConcat        := Command.Name + Command.Target;
+  Transporter   := FDispatcher.Execute(CommandConcat, FConfig, ecLocal);
+  Result        := Transporter;
 end;
 
 procedure TAgentController.GetValues;

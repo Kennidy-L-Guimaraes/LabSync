@@ -52,20 +52,20 @@ begin
           begin
           if (AContext = ecRemote) and (AConfig.GetOption('Printscreen') <> osEnabled) then
               Exit(ReturnError(Parsed.Name, '', 'Permission denied'));
-              Result := TGetPrintCommand.Run(Command);
+              Result := TGetPrintCommand.Run(Parsed.Name);
           end
 
 
   else if Parsed.name = '$get_livemode'  then
           begin
           if CheckPermission('LiveMode', AConfig, AContext, Parsed.Name) then
-              Result := TGetLiveModeCommand.Run(Command);
+              Result := TGetLiveModeCommand.Run(Parsed.Name);
           end
 
   else if Parsed.name = '$get_sysinfo' then
           begin
           if CheckPermission('Information', AConfig, AContext, Parsed.Name) then
-             Result := TGetSysInfoCommand.Run(Command);
+             Result := TGetSysInfoCommand.Run(Parsed.Name);
           end
   else
   begin
