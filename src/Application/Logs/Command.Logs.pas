@@ -1,15 +1,15 @@
 unit Command.Logs;
 
 interface
- uses Windows, System.IOUtils, SysUtils;
+ uses Windows, System.IOUtils, SysUtils, Transporter.Dto;
  type
   TLog = class
   public
     {Public Declarations}
     class procedure SaveLog(const NewLog, NameOfLog: string);
     class function  ReadLogs(const NameOfLog: string): string;
-    class procedure Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string);
-    class procedure Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer);
+    class procedure Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string; Context: TExecutionContext);
+    class procedure Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; Context: TExecutionContext);
   private
     {Private Declarations}
     class function  GetLogPath(const nameOfLog: string): string;
@@ -50,18 +50,36 @@ begin
  end;
 end;
 
-class procedure TLog.Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string);
+class procedure TLog.Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string; Context: TExecutionContext);
+var
+  ContextStr: string;
 begin
+  case Context of
+    ecLocal : ContextStr := 'LOCAL';
+    ecRemote: ContextStr := 'REMOTE';
+  else
+    ContextStr := 'UNKNOWN';
+  end;
+
   TLog.SaveLog(
-        Format('FAIL | %s | %s | %s | %s | %dms | Error=%s',
-        [TimeStamp, ID, CommandName, Params, Elapsed, ErrorMessage]), 'Audit.log');
+    Format('FAIL | Time:%s | ID:%s | Context:%s | Command:%s | Target:%s | %dms | Error=%s',
+    [TimeStamp, ID, ContextStr, CommandName, Params, Elapsed, ErrorMessage]), 'Audit.log');
 end;
 
-class procedure TLog.Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer);
+class procedure TLog.Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; Context: TExecutionContext);
+var
+  ContextStr: string;
 begin
+  case Context of
+    ecLocal : ContextStr := 'LOCAL';
+    ecRemote: ContextStr := 'REMOTE';
+  else
+    ContextStr := 'UNKNOWN';
+  end;
+
   SaveLog(
-      Format('SUCCESS | %s | %s | %s | %s | %dms',
-      [TimeStamp, ID, CommandName, Params, Elapsed]), 'Audit.log');
+    Format('SUCCESS | Time:%s | ID:%s | Context:%s | Command:%s | Target:%s | %dms',
+    [TimeStamp, ID, ContextStr, CommandName, Params, Elapsed]), 'Audit.log');
 end;
 
 end.

@@ -189,10 +189,10 @@ begin
   Dispatcher   := TCommandDispatcher.Create;
   ID           := TId.Create;
   try
-  Command.Name  := '$exec_shutdown';
+  Command.Name  := '$show_msg';
   Command.Target:= ('target='+Id.GetID);
-  //Command.Value := 'This is an example of a message you might receive from the other LabSync Commander. You might also receive emojis.🙂';
-  CommandConcat        := Command.Name + ' ' + Command.Target;
+  Command.Value := 'value=This is an example of a message you might receive from the other LabSync Commander. You might also receive emojis.🙂';
+  CommandConcat        := Command.Name + ' ' + Command.Value +' ' + Command.Target;
   Transporter   := Dispatcher.Execute(CommandConcat, Config, ecRemote);
   finally
    Config.Free;

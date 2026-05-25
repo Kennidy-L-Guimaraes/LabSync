@@ -53,7 +53,7 @@ begin
           begin
           if (AContext = ecRemote) and (AConfig.GetOption('Printscreen') <> osEnabled) then
               Exit(ReturnError(Parsed.Name, '', 'Permission denied'));
-              Result := TGetPrintCommand.Run(Command);
+              Result := TGetPrintCommand.Run(Command, AContext);
           end
 
 
@@ -66,19 +66,19 @@ begin
   else if Parsed.name = '$get_sysinfo' then
           begin
           if CheckPermission('Information', AConfig, AContext, Parsed.Name) then
-             Result  := TGetSysInfoCommand.Run(Command);
+             Result  := TGetSysInfoCommand.Run(Command, Acontext);
           end
 
   else if Parsed.name = '$show_msg' then
           begin
            if CheckPermission('Messages', AConfig, AContext, Parsed.Name) then
-              Result := TShowMessageCommand.Run(Command)
+              Result := TShowMessageCommand.Run(Command, Acontext)
            end
 
   else if Parsed.name = '$exec_shutdown' then
           begin
            if CheckPermission('Shutdown', AConfig, AContext, Parsed.Name) then
-              Result := TExecShutdownCommand.Run(Command);
+              Result := TExecShutdownCommand.Run(Command,AContext);
           end
   else
   begin

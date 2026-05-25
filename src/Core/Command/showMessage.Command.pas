@@ -63,17 +63,18 @@ uses CommandParsed.Dto, Message.Views, Transporter.Dto, Command.Logs, System.Sys
      {Private Declarations}
     public
      {Public Declaration}
-       class function Run(const Command: string): TCommandResult;
+       class function Run(const Command: string; AContext: TExecutionContext): TCommandResult;
   end;
 
 implementation
 
 { TMessage }
 
-class function TShowMessageCommand.Run(const Command: string): TCommandResult;
+class function TShowMessageCommand.Run(const Command: string; AContext: TExecutionContext): TCommandResult;
 var
  Parsed      : TCommandParsed;
  Parser      : TCommandParser;
+ Params      : string;
  TimeStamp   : string;
  ID          : string;
  Elapsed     : integer;
@@ -82,7 +83,7 @@ var
 begin
   StartTime   := now;
   Parsed      := Parser.Parse(Command);
-  TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
+  Params      := Parsed.Target;
   ID          := TId.GetID;
   try
   Frm_message.Rch_Message.Clear;
@@ -90,14 +91,15 @@ begin
   Frm_Message.Show;
   Result.Success := True;
   Elapsed        := MilliSecondsBetween(Now, StartTime);
-  Tlog.Success(TimeStamp, ID, Parsed.Name, Parsed.Text, Elapsed); //For Logs
+  TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
+  Tlog.Success(TimeStamp, ID, Parsed.Name, Params, Elapsed, AContext); //For Logs
   except
     on E: Exception do
     begin
       Result.Success := False;
       Result.Error   := E.Message;
       ErrorMessage   := E.Message;
-      Tlog.Fail(TimeStamp, ID, Parsed.Name, Parsed.Text, Elapsed, ErrorMessage); //For Logs
+      Tlog.Fail(TimeStamp, ID, Parsed.Name, Params, Elapsed, ErrorMessage, Acontext); //For Logs
     end;
   end;
 end;

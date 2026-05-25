@@ -64,7 +64,7 @@ uses Command.Parser, CommandParsed.Dto, Transporter.Dto, Winapi.Windows, SysUtil
      class function EnableShutdownPrivilege: Boolean;
     public
      {Public Declarations}
-     class function Run(const Command: string): TCommandResult;
+     class function Run(const Command: string; AContext: TExecutionContext): TCommandResult;
   end;
 
 implementation
@@ -98,7 +98,7 @@ end;
 
 { TShutdownCommand }
 
-class function TExecShutdownCommand.Run(const Command: string): TCommandResult;
+class function TExecShutdownCommand.Run(const Command: string; AContext: TExecutionContext): TCommandResult;
 var
  Parser : TcommandParser;
  Parsed : TCommandParsed;
@@ -121,7 +121,7 @@ begin
     raise Exception.Create('Fail ExitWindowsEx: ' +
                             SysErrorMessage(GetLastError));
    Elapsed        := MilliSecondsBetween(Now, StartTime);
-   Tlog.Success(TimeStamp, ID, Parsed.Name, Parsed.Text, Elapsed); //For Logs
+   Tlog.Success(TimeStamp, ID, Parsed.Name, Parsed.Text, Elapsed, AContext); //For Logs
    Result.Success := True;
   except
    on E: exception do
@@ -129,7 +129,7 @@ begin
       Result.Success := False;
       Result.Error   := E.Message;
       ErrorMessage   := E.Message;
-      Tlog.Fail(TimeStamp, ID, Parsed.Name, Parsed.Text, Elapsed, ErrorMessage); //For Logs
+      Tlog.Fail(TimeStamp, ID, Parsed.Name, Parsed.Text, Elapsed, ErrorMessage, AContext); //For Logs
     end;
   end;
 

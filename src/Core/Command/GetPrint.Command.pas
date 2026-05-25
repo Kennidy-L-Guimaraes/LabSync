@@ -63,15 +63,14 @@ interface
     public
      {Public Declarations}
      class var Parser   : TCommandParser;
-     class function Run(const Command: string; const ASilent: Boolean = False; AScaled: integer = 1): TCommandResult;
+     class function Run(const Command: string; AContext: TExecutionContext; const ASilent: Boolean = False; AScaled: integer = 1): TCommandResult;
    end;
 
 implementation
 
 { TGetPrintCommand }
 
-class function TGetPrintCommand.Run(const Command: string;
-  const ASilent: Boolean; AScaled: integer): TCommandResult;
+class function TGetPrintCommand.Run(const Command: string; AContext: TExecutionContext; const ASilent: Boolean = False; AScaled: integer = 1): TCommandResult;
 var
   TimeStamp   : string;
   StartTime   : TDateTime;
@@ -107,7 +106,7 @@ begin
     Result.DataType := crtNone; //Don't return Payload here;
                                 //the queue needs management to avoid overload.
     if not ASilent then
-      TLog.Success(TimeStamp, TId.GetID, CommandName, Params, Elapsed);
+      TLog.Success(TimeStamp, TId.GetID, CommandName, Params, Elapsed, AContext);
   except
     on E: Exception do
     begin
@@ -120,7 +119,7 @@ begin
       Result.DataType := crtNone;
       Result.Error    := E.Message;
 
-      TLog.Fail(TimeStamp, TId.GetID, CommandName, Params, Elapsed, E.Message);
+      TLog.Fail(TimeStamp, TId.GetID, CommandName, Params, Elapsed, E.Message, AContext);
     end;
   end;
 end;

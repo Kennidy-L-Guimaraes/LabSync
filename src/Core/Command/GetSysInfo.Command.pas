@@ -63,7 +63,7 @@ uses Command.Parser, Winapi.Windows,
     public
      {Public Declarations}
      class var Parser   : TCommandParser;
-     class function Run(const Command: string): TCommandResult;
+     class function Run(const Command: string; AContext: TExecutionContext): TCommandResult;
      class function GetLocalIP: string;
   end;
 
@@ -98,7 +98,7 @@ begin
   end;
 end;
 
-class function TGetSysInfoCommand.Run(const Command: string): TCommandResult;
+class function TGetSysInfoCommand.Run(const Command: string; AContext: TExecutionContext): TCommandResult;
 var
  MachineName: string;
  MachineID  : string;
@@ -130,6 +130,7 @@ var
  Parser       : TCommandParser;
 begin
   //default
+  StartTime       := Now;
   Parsed          := Parser.Parse(Command);
   Result.Success  := False;
   Result.DataType := crtNone;
@@ -137,9 +138,7 @@ begin
   Result.Stream   := nil;
   Result.Error    := '';
   Elapsed     := 0;
-  StartTime   := Now;
-  TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
-  Params      := ('target=' + Parsed.Target);
+  Params      := Parsed.Target;
   CommandName := Parser.GetCommandName(Command);
   ID          := TId.GetID;
 
@@ -185,7 +184,8 @@ begin
       'Version=' + SoftwareVersion;
    Result.DataType:= crtText;
    Result.Success := True;
-   Tlog.Success(TimeStamp, ID, CommandName, Params, Elapsed); //For Logs
+   TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
+   Tlog.Success(TimeStamp, ID, CommandName, Params, Elapsed, AContext); //For Logs
   except
        on E: Exception do
      begin
@@ -193,7 +193,7 @@ begin
       Result.Success  := False;
       Result.Error    := E.Message;
       ErrorMessage    := E.Message;
-      Tlog.Fail(TimeStamp, ID, CommandName, Params, Elapsed, ErrorMessage); //For Logs
+      Tlog.Fail(TimeStamp, ID, CommandName, Params, Elapsed, ErrorMessage, Acontext); //For Logs
      end;
   end;
 end;
