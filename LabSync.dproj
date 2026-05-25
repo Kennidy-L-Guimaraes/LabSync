@@ -160,6 +160,7 @@
             <Form>$R *.res</Form>
         </DCCReference>
         <DCCReference Include="src\Core\Command\ExecShutdown.Command.pas"/>
+        <DCCReference Include="src\Application\Services\ServerConfig.Service.pas"/>
         <RcItem Include="LabSync_Icon.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon</ResourceId>

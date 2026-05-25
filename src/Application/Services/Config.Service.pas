@@ -40,7 +40,7 @@ function TConfig.GetPathConfig: string;
 var
   BasePath: string;
 begin
-  BasePath := TPathService.PathLabSync('Machine');
+   BasePath := TPathService.PathLabSync('Machine');
    ForceDirectories(BasePath);
    Result := TPath.Combine(BasePath, 'LabSync.config');
 end;

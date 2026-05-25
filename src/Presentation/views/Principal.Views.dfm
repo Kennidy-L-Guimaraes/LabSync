@@ -2406,6 +2406,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
             Font.Style = []
             ParentFont = False
             WordWrap = True
+            OnClick = Lbl_ApplyServerClick
           end
           object Edt_ConnectServer: TEdit
             Left = 52
@@ -2427,7 +2428,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
             HideSelection = False
             ParentFont = False
             TabOrder = 0
-            Text = 'https://company.com/lbsc'
+            Text = 'https://company.com'
           end
         end
       end

@@ -142,6 +142,7 @@ type
     procedure Close1Click(Sender: TObject);
     procedure Show1Click(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
+    procedure Lbl_ApplyServerClick(Sender: TObject);
   private
     { Private declarations }
       FController : TAgentController;
@@ -269,6 +270,22 @@ begin
  end;
 end;
 
+procedure TFrm_LabSyncAgent.Lbl_ApplyServerClick(Sender: TObject);
+begin
+ if MessageDlg(
+    'This Agent will now receive remote commands from:' + sLineBreak + sLineBreak +
+    Edt_ConnectServer.Text + sLineBreak + sLineBreak +
+    'You may update this server address or restrict remote access at any time through the main menu.' + sLineBreak + sLineBreak +
+    'For security purposes, all communications remain protected by end-to-end encryption.',
+    mtWarning,
+    [mbYes, mbNo],
+    0
+  ) = mrYes then
+  begin
+    FController.SetServer(Trim(Edt_ConnectServer.Text));
+  end;
+end;
+
 procedure TFrm_LabSyncAgent.LoadConfig;
 begin
   FController.GetValues;
@@ -281,6 +298,7 @@ begin
   Lbl_StateFolders.Caption    :=  FController.Folders;
   Lbl_StateCommands.Caption   :=  FController.Commands;
   Lbl_StateInformation.Caption:=  FController.Information;
+  Edt_ConnectServer.Text      :=  FController.Server;
 
   ApplyVisualState(Lbl_StateScreenShot, Shp_StateScreenshot);
   ApplyVisualState(Lbl_StateLiveMode,   Shp_StateLiveMode);
