@@ -24,7 +24,8 @@ uses
   Message.Views in 'src\Presentation\views\Message.Views.pas' {Frm_Message},
   showMessage.Command in 'src\Core\Command\showMessage.Command.pas' {$R *.res},
   ExecShutdown.Command in 'src\Core\Command\ExecShutdown.Command.pas',
-  ServerConfig.Service in 'src\Application\Services\ServerConfig.Service.pas';
+  ServerConfig.Service in 'src\Application\Services\ServerConfig.Service.pas',
+  Warning.Views in 'src\Presentation\views\Warning.Views.pas' {Frm_Warning};
 
 {$R *.res}
 
@@ -33,5 +34,6 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrm_LabSyncAgent, Frm_LabSyncAgent);
   Application.CreateForm(TFrm_Message, Frm_Message);
+  Application.CreateForm(TFrm_Warning, Frm_Warning);
   Application.Run;
 end.

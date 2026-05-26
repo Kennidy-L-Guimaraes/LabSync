@@ -159,7 +159,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 682
     object Pnl_AgentStatus: TPanel
       Left = 5
       Top = 5
@@ -169,7 +168,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
-      ExplicitHeight = 556
       DesignSize = (
         280
         558)
@@ -1143,7 +1141,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Font.Style = []
           ParentFont = False
           WordWrap = True
-          OnClick = OptionClick
+          OnClick = Lbl_StateCommandsClick
         end
       end
       object Pnl_Folders: TPanel
@@ -2215,8 +2213,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         end
       end
       object BitBtn1: TBitBtn
-        Left = 11
-        Top = 430
+        Left = 0
+        Top = 470
         Width = 75
         Height = 25
         Caption = 'BitBtn1'
@@ -2233,7 +2231,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 2
-      ExplicitTop = 566
       object Shp_LogReceiver: TShape
         Left = 0
         Top = 0
@@ -2506,7 +2503,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 3
-      ExplicitTop = 561
     end
     object Panel1: TPanel
       Left = 0
@@ -2527,7 +2523,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 5
-      ExplicitHeight = 556
     end
   end
   object Timer_AgentLiveMode: TTimer

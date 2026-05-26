@@ -12,8 +12,8 @@ type
     Pnl_Background: TPanel;
     Pnl_Close: TPanel;
     Sbtn_Close: TSpeedButton;
-    Label1: TLabel;
-    Image1: TImage;
+    Lbl_Title: TLabel;
+    Img_LabSyncIco: TImage;
     Rch_Message: TRichEdit;
     Timer_Message: TTimer;
     procedure Sbtn_CloseClick(Sender: TObject);

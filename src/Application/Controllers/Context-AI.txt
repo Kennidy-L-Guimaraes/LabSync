@@ -1,0 +1,150 @@
+# Purpose
+Acts as the orchestration layer between configuration management, command dispatching, logging, and agent runtime operations.
+
+This controller centralizes high-level agent actions, feature toggling, initialization flow, and command execution while preserving separation between infrastructure, command execution, and presentation layers.  
+Because apparently humans enjoy wiring together stateful systems and then pretending complexity is "clean architecture".
+
+---
+
+# Context
+
+`TAgentController` is not a business-domain entity.
+
+It is an application-level coordination component responsible for:
+
+- Managing agent startup state
+- Reading and updating runtime feature flags
+- Dispatching internal commands
+- Accessing audit logs
+- Providing formatted option states for presentation layers
+- Coordinating dependencies without implementing low-level behavior itself
+
+The class does NOT execute system logic directly.
+It delegates execution to specialized services.
+
+---
+
+# Responsibilities
+
+## Initialization Flow
+- Initialize application configuration
+- Detect first startup state
+- Apply default feature flags on first execution
+- Persist startup completion state
+
+## Feature Toggle Management
+- Enable or disable runtime options dynamically
+- Retrieve formatted option states for UI or external presentation
+- Synchronize cached display values
+
+## Command Orchestration
+- Build internal command payloads
+- Dispatch commands through `TCommandDispatcher`
+- Return structured command results (`TCommandResult`)
+
+## Logging Access
+- Read audit logs through logging service abstraction
+- Expose logs as raw text content
+
+## State Coordination
+- Coordinate dependencies:
+  - Configuration service
+  - Command dispatcher
+  - Logging service
+  - Agent identifier service
+
+---
+
+# Runtime Features Managed
+
+The controller manages configurable runtime capabilities:
+
+| Feature       | Description |
+|---|---|
+| Screenshot    | Screenshot capture capability |
+| LiveMode      | Real-time interaction/session mode |
+| Messages      | Message handling capability |
+| Downloads     | Download handling |
+| Shutdown      | Remote/system shutdown operations |
+| Registry      | Registry interaction support |
+| Folders       | File system folder operations |
+| Commands      | Command execution capability |
+| Information   | System information collection |
+
+These values are presentation-oriented cached states retrieved from configuration storage.
+
+---
+
+# Architecture Role
+
+Layer: `Application`
+
+Pattern Role:
+- Application Controller
+- Coordination Layer
+- Service Orchestrator
+
+This class should remain thin and procedural.
+
+Business logic, persistence, parsing, transport handling, and system execution should remain delegated to specialized services.
+
+---
+
+# Dependencies
+
+## Internal Services
+
+- `TConfig`
+  - Runtime configuration management
+  - Feature flag persistence
+  - Startup state tracking
+
+- `TCommandDispatcher`
+  - Command execution abstraction
+  - Transport routing
+  - Execution coordination
+
+- `TLog`
+  - Audit log access
+  - Log reading abstraction
+
+- `TID`
+  - Unique agent identifier provider
+
+## DTOs
+
+- `TCommandResult`
+  - Structured command execution result container
+
+---
+
+# Lifecycle
+
+## Constructor
+Creates and initializes service dependencies.
+
+## Destructor
+Releases owned dependencies and cleans allocated resources.
+
+The controller owns its dependencies directly.
+No dependency injection is used in the current implementation.
+A perfectly ordinary Delphi pattern from the ancient kingdoms of manual memory management, where developers personally escort objects to the afterlife using `.Free`.
+
+---
+
+# Execution Flow
+
+## System Information Request
+
+Flow:
+
+AgentController  
+→ Build command string  
+→ Dispatcher.Execute(...)  
+→ Transport execution  
+→ Return `TCommandResult`
+
+Example command:
+
+```text
+$get_sysinfo target=<AgentID>

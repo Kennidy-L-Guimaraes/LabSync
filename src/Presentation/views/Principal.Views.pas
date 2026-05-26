@@ -8,7 +8,7 @@ uses
   Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service, IOUtils,
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
   Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command,
-  Agent.Controller, Vcl.Menus, CommandParsed.Dto, Message.Views;
+  Agent.Controller, Vcl.Menus, CommandParsed.Dto, Message.Views, Warning.Views;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -145,6 +145,7 @@ type
     procedure Show1Click(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure Lbl_ApplyServerClick(Sender: TObject);
+    procedure Lbl_StateCommandsClick(Sender: TObject);
   private
     { Private declarations }
       FController : TAgentController;
@@ -310,19 +311,61 @@ begin
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_ApplyServerClick(Sender: TObject);
+var
+  Key: string;
+  Lbl: TLabel;
+  Warning: TFrm_Warning;
 begin
- if MessageDlg(
-    'This Agent will now receive remote commands from:' + sLineBreak + sLineBreak +
-    Edt_Server.Text + Edt_Port.Text + sLineBreak + sLineBreak +
-    'You may update this server address or restrict remote access at any time through the main menu.' + sLineBreak + sLineBreak +
-    'For security purposes, all communications remain protected by end-to-end encryption.',
-    mtWarning,
-    [mbYes, mbNo],
-    0
-  ) = mrYes then
-  begin
+  Warning := TFrm_Warning.Create(nil);
+  try
+   Warning.RchEdt_Warning.Text := 'This Agent will now receive remote commands from:'+ SlineBreak +
+   Edt_Server.Text + Edt_Port.Text + SlineBreak +
+   ' You may update this server address or restrict remote access at any time through the main menu.' +
+   ' For security purposes, all communications remain protected by end-to-end encryption.';
+   if Warning.ShowModal = mrYes then
+   begin
     FController.SetServer(Trim(Edt_Server.Text));
     FController.SetPort(Trim(Edt_Port.Text));
+   end
+   else
+   exit;
+  finally
+   Warning.free;
+  end;
+
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_StateCommandsClick(Sender: TObject);
+var
+  Key: string;
+  Lbl: TLabel;
+  Warning: TFrm_Warning;
+begin
+  if not (Sender is TLabel) then
+    Exit;
+
+  Lbl := TLabel(Sender);
+  Key := Lbl.Hint;
+
+  if FController.Commands = 'Enabled' then
+  begin
+    ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
+  end
+  else
+  begin
+    Warning := TFrm_Warning.Create(nil);
+  try
+    Warning.RchEdt_Warning.Text :=
+    'Enabling this option allows remote shell command execution on this machine. ' +
+    'This may imply partial or full system control depending on granted permissions. ' +
+    'Do you want to continue?';
+  if Warning.ShowModal = mrYes then
+   begin
+    ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
+    end;
+  finally
+    Warning.Free;
+  end;
   end;
 end;
 
@@ -416,6 +459,7 @@ var
   State: TOptionState;
 begin
   State := FController.ToggleOption(Key);
+  FController.GetValues;
   ALabel.Caption := FController.GetOptionDisplay(Key);
   ApplyVisualState(ALabel, AShape);
 end;

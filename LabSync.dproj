@@ -161,6 +161,10 @@
         </DCCReference>
         <DCCReference Include="src\Core\Command\ExecShutdown.Command.pas"/>
         <DCCReference Include="src\Application\Services\ServerConfig.Service.pas"/>
+        <DCCReference Include="src\Presentation\views\Warning.Views.pas">
+            <Form>Frm_Warning</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <RcItem Include="LabSync_Icon.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon</ResourceId>

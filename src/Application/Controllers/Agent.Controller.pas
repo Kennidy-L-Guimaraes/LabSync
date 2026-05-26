@@ -77,7 +77,7 @@ begin
     FConfig.SetOption('Shutdown',   osEnabled);
     FConfig.SetOption('Registry',   osEnabled);
     FConfig.SetOption('Folders',    osEnabled);
-    FConfig.SetOption('Commands',   osEnabled);
+    FConfig.SetOption('Commands',   osDisabled);
     FConfig.SetOption('Information', osEnabled);
     FConfig.SetStarted(True);
     //ServerConfig

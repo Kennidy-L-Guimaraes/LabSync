@@ -51,7 +51,7 @@ object Frm_Message: TFrm_Message
         ParentFont = False
         OnClick = Sbtn_CloseClick
       end
-      object Label1: TLabel
+      object Lbl_Title: TLabel
         Left = 16
         Top = 9
         Width = 91
@@ -64,7 +64,7 @@ object Frm_Message: TFrm_Message
         Font.Style = [fsBold]
         ParentFont = False
       end
-      object Image1: TImage
+      object Img_LabSyncIco: TImage
         Left = 110
         Top = 2
         Width = 33
@@ -237,7 +237,7 @@ object Frm_Message: TFrm_Message
     Enabled = False
     Interval = 500
     OnTimer = Timer_MessageTimer
-    Left = 24
-    Top = 96
+    Left = 32
+    Top = 88
   end
 end
