@@ -26,14 +26,15 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       Commands    : string;
       Information : string;
       Server      : string;
-
+      Port        : string; 
       constructor Create;
       destructor Destroy; override;
 
       function  GetSysInfo: TCommandResult;
       function  GetLogs: string;
       function  ToggleOption(const Key: string):TOptionState;
-      function  SetServer(const Key: string): string;
+      function  SetServer(const Server: string): string;
+      function  SetPort(const Port: string): string; 
       function  GetOptionDisplay(const Key: string): string;
       procedure InitializeIfNeeded;
       procedure GetValues;
@@ -80,7 +81,8 @@ begin
     FConfig.SetOption('Information', osEnabled);
     FConfig.SetStarted(True);
     //ServerConfig
-    FServerConfig.SetServerOption('Server', 'https://company.com:5555');
+    FServerConfig.SetServerOption('Server', 'https://company.com');
+    FServerConfig.SetPortOption('Port', ':5555'); //Default
    end
    else
    begin
@@ -88,9 +90,14 @@ begin
    end;
 end;
 
-function TAgentController.SetServer(const Key: string): string;
+function TAgentController.SetPort(const Port: string): string;
 begin
-  FServerConfig.SetServerOption('Server', key);
+   FServerConfig.SetPortOption('Port', Port);
+end;
+
+function TAgentController.SetServer(const Server: string): string;
+begin
+  FServerConfig.SetServerOption('Server', Server);
 end;
 
 function TAgentController.GetLogs: string;
@@ -133,6 +140,7 @@ begin
   Commands   :=  FConfig.GetOptionAsDisplay('Commands');
   Information:=  FConfig.GetOptionAsDisplay('Information');
   Server     :=  FServerConfig.GetServerOption('Server');
+  Port       :=  FServerConfig.GetPortOption('Port'); 
 end;
 
 function TAgentController.ToggleOption(const Key: string): TOptionState;

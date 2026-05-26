@@ -10,6 +10,7 @@ interface
     class function  ReadLogs(const NameOfLog: string): string;
     class procedure Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string; Context: TExecutionContext);
     class procedure Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; Context: TExecutionContext);
+    class procedure ConfigLog(const TimeStamp, ID, ConfigName: string);
   private
     {Private Declarations}
     class function  GetLogPath(const nameOfLog: string): string;
@@ -48,6 +49,11 @@ begin
  except
   raise Exception.Create('The log could not be saved to the local system.');
  end;
+end;
+
+class procedure TLog.ConfigLog(const TimeStamp, ID, ConfigName: string);
+begin
+  Tlog.SaveLog(Format('NEWCONFIG | Time:%s | ID:%s Config:%s', [TimeStamp, ID, ConfigName]), 'Audit.log');
 end;
 
 class procedure TLog.Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string; Context: TExecutionContext);

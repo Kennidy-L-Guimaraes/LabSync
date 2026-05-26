@@ -2216,7 +2216,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       end
       object BitBtn1: TBitBtn
         Left = 11
-        Top = 467
+        Top = 430
         Width = 75
         Height = 25
         Caption = 'BitBtn1'
@@ -2243,9 +2243,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Brush.Color = 1776411
         Pen.Color = 2697513
         Pen.Width = 2
-        ExplicitTop = 200
-        ExplicitWidth = 280
-        ExplicitHeight = 435
+        ExplicitTop = 1
       end
       object Pnl_Log: TPanel
         Left = 8
@@ -2322,28 +2320,27 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           ParentFont = False
         end
         object Pnl_Connection: TPanel
-          Left = 442
+          Left = 429
           Top = 0
-          Width = 355
+          Width = 368
           Height = 43
-          Align = alRight
           BevelOuter = bvNone
           Caption = 'Pnl_Connection'
           Color = 1776411
           ParentBackground = False
           TabOrder = 0
           object Shp_ConnectServer: TShape
-            Left = 9
+            Left = 35
             Top = 1
-            Width = 339
+            Width = 328
             Height = 37
             Brush.Color = 1776411
             Pen.Color = 2697513
             Shape = stRoundRect
           end
           object Img_Server: TImage
-            Left = 20
-            Top = 5
+            Left = 46
+            Top = 6
             Width = 25
             Height = 25
             Picture.Data = {
@@ -2387,7 +2384,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           end
           object Lbl_ApplyServer: TLabel
             AlignWithMargins = True
-            Left = 280
+            Left = 296
             Top = 8
             Width = 61
             Height = 18
@@ -2408,10 +2405,35 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
             WordWrap = True
             OnClick = Lbl_ApplyServerClick
           end
-          object Edt_ConnectServer: TEdit
-            Left = 52
-            Top = 11
-            Width = 230
+          object Img_port: TImage
+            Left = 217
+            Top = 6
+            Width = 25
+            Height = 25
+            Picture.Data = {
+              0954506E67496D61676589504E470D0A1A0A0000000D49484452000000320000
+              003208060000001E3F88B1000000097048597300000B1300000B1301009A9C18
+              000001BF4944415478DAEDDABD4EC2501407F073FAA1835F8B062FEA6BE820C4
+              A0A3BC81BE8426B2088BB2188D6FC113A8A318051D7C0D8D85E8042EA61FC70B
+              8946414A81C245386729BD97B6FF5F6F538603C28814AA0EC090B183D8779124
+              A2B647086BF24B532A4312C03B123C92E69D9BEBE5ABC010BB20B28870A832BC
+              0F2A6BC6AC4C5B487D2534ED82803EE45D48EB9E93C38D374B69F8DB79E16AC6
+              8E7C3AB2083849E8251B57A609E214445E8E2680E8C08897CE54029AB215454A
+              6E4EE4B2E48DB8B5E50BB18BA22A07A775DB1198782DA90EFFB3E86661D1350D
+              8B08AA66DC9AF5854835D5B646CC1ACA375AAB7C0C61C83040BEE606557E1918
+              D26E2ECCEA2603431AF7C3FACC10863084210C199FDF11863084217FCF3556AF
+              B04ECECB902001C282F472CD502041EE6418C731A4DD49BB3DB61FD7E80B2468
+              31A4DF9041144386ADC60F62174405116674D78EAA6EB935163D2C2FB99EFB4C
+              0415336ECDF9429C82B896A39B005ECA88954F5587FF95ADA3D6DB7D641B49BB
+              AC374381323A4CE430F6F4A21240C595A80BCEAECC7414B8195AC714C5B19C48
+              AB0CDF1215B43DFD8DA9AD8CA7ED13C26AAD39AA387C777F18F88FC59061AB91
+              817C02E0C7FD511213B36C0000000049454E44AE426082}
+            Stretch = True
+          end
+          object Edt_Server: TEdit
+            Left = 77
+            Top = 12
+            Width = 134
             Height = 23
             AutoSelect = False
             AutoSize = False
@@ -2430,6 +2452,28 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
             TabOrder = 0
             Text = 'https://company.com'
           end
+          object Edt_Port: TEdit
+            Left = 248
+            Top = 12
+            Width = 35
+            Height = 23
+            AutoSelect = False
+            AutoSize = False
+            BevelInner = bvNone
+            BevelOuter = bvNone
+            BorderStyle = bsNone
+            CharCase = ecLowerCase
+            Color = 1776411
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 5131854
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsItalic, fsUnderline]
+            HideSelection = False
+            ParentFont = False
+            TabOrder = 1
+            Text = ':5555'
+          end
         end
       end
       object Rch_LogReceiver: TRichEdit
@@ -2439,7 +2483,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Height = 48
         BevelInner = bvNone
         BorderStyle = bsNone
-        Color = clBlack
+        Color = 1776411
         Ctl3D = False
         EnableURLs = True
         Font.Charset = ANSI_CHARSET
@@ -2451,7 +2495,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         ParentFont = False
         ReadOnly = True
         TabOrder = 1
-        Transparent = True
       end
     end
     object Pnl_Separator: TPanel
@@ -2491,15 +2534,15 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     Enabled = False
     Interval = 60
     OnTimer = Timer_AgentLiveModeTimer
-    Left = 136
-    Top = 560
+    Left = 528
+    Top = 504
   end
   object Timer_LogReceiver: TTimer
     Enabled = False
-    Interval = 800
+    Interval = 500
     OnTimer = Timer_LogReceiverTimer
-    Left = 22
-    Top = 560
+    Left = 414
+    Top = 504
   end
   object TryIcon_LabSyncAgent: TTrayIcon
     Animate = True
@@ -2643,12 +2686,12 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     PopupMenu = PopMenu_TryIcon
     Visible = True
-    Left = 262
-    Top = 560
+    Left = 654
+    Top = 504
   end
   object PopMenu_TryIcon: TPopupMenu
-    Left = 376
-    Top = 560
+    Left = 768
+    Top = 504
     object Close1: TMenuItem
       Caption = 'Close'
       OnClick = Close1Click

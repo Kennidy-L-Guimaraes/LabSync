@@ -2,21 +2,27 @@ unit ServerConfig.Service;
 
 interface
 
-uses System.Classes, System.SysUtils, System.IOUtils, Winapi.ShlObj, Path.Service;
+uses System.Classes, System.SysUtils, System.IOUtils, Winapi.ShlObj, Path.Service,
+  Command.Logs, ID.Service;
 type
  TServerConfig = class
    private
     {Private Declarations}
     FFilePath: string;
+    FLog      : Tlog;
+    FID       : TID;
     function GetPathConfig: string;
     function LoadFile: TStringList;
     procedure SaveFile(const SL: TStringList);
    public
     {Public Declarations}
     constructor Create;
+    destructor Destroy;
     procedure Initialize;
-    function  GetServerOption(const Key: string): string;
-    procedure SetServerOption(const Key, value: string);
+    function  GetServerOption(const Server: string): string;
+    procedure SetServerOption(const Server, ServerValue: string);
+    function  GetPortOption(const Port: string): string;
+    procedure SetPortOption(const Port, PortValue: string);
  end;
 
 implementation
@@ -26,6 +32,15 @@ implementation
 constructor TServerConfig.Create;
 begin
   FFilePath := GetPathConfig;
+  FLog       := TLog.Create;
+  FID        := TID.Create;
+end;
+
+destructor TServerConfig.Destroy;
+begin
+ Flog.Free;
+ FId.Free;
+ inherited;
 end;
 
 function TServerConfig.GetPathConfig: string;
@@ -37,13 +52,25 @@ begin
    Result := TPath.Combine(BasePath, 'LabSync-HostNode.config');
 end;
 
-function TServerConfig.GetServerOption(const Key: string): string;
+function TServerConfig.GetPortOption(const Port: string): string;
 var
   SL: TStringList;
 begin
   SL := LoadFile;
   try
-    Result := SL.Values[Key];
+    Result := SL.Values[Port];
+  finally
+    SL.Free;
+  end;
+end;
+
+function TServerConfig.GetServerOption(const Server: string): string;
+var
+  SL: TStringList;
+begin
+  SL := LoadFile;
+  try
+    Result := SL.Values[Server];
   finally
     SL.Free;
   end;
@@ -76,16 +103,42 @@ begin
  SL.SaveToFile(FFilePath);
 end;
 
-procedure TServerConfig.SetServerOption(const Key, value: string);
+procedure TServerConfig.SetPortOption(const Port, PortValue: string);
 var
-  SL: TStringList;
+  SL       : TStringList;
+  TimeStamp: string;
+  StartTime: TDateTime;
+  Config   : string;
 begin
-  SL := LoadFile;
+  StartTime := now;
+  SL        := LoadFile;
+  Config    := ('New Port: '+ PortValue);
   try
-   SL.Values[Key] := value;
+   SL.Values[Port] := PortValue;
    SaveFile(SL);
+   TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
+   Flog.ConfigLog(TimeStamp, FID.GetID, Config); //Make a good log :)
   finally
-  SL.Free;
+  end;
+end;
+
+procedure TServerConfig.SetServerOption(const Server, ServerValue: string);
+var
+  SL       : TStringList;
+  TimeStamp: string;
+  StartTime: TDateTime;
+  Config   : string;
+begin
+  StartTime := now;
+  FID        := TID.Create;
+  SL        := LoadFile;
+  Config    := ('New Server: '+ ServerValue);
+  try
+   SL.Values[Server] := ServerValue;
+   SaveFile(SL);
+   TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
+   Flog.ConfigLog(TimeStamp, FID.GetID, Config);
+  finally
   end;
 end;
 

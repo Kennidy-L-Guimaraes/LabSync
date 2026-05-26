@@ -118,7 +118,7 @@ type
     Shp_ConnectServer: TShape;
     Img_Server: TImage;
     Lbl_ApplyServer: TLabel;
-    Edt_ConnectServer: TEdit;
+    Edt_Server: TEdit;
     Panel1: TPanel;
     Panel2: TPanel;
     TryIcon_LabSyncAgent: TTrayIcon;
@@ -126,6 +126,8 @@ type
     PopMenu_TryIcon: TPopupMenu;
     Close1: TMenuItem;
     Show1: TMenuItem;
+    Img_port: TImage;
+    Edt_Port: TEdit;
     BitBtn1: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
@@ -161,7 +163,6 @@ implementation
  It is not hidden, and although it performs actions in the background, they are not malicious.
 }
 {$R *.dfm}
-
 procedure TFrm_LabSyncAgent.ApplyVisualState(ALabel: TLabel; AShape: TShape);
 begin
   if SameText(ALabel.Caption, 'Enabled') then
@@ -237,15 +238,53 @@ begin
 end;
 
 procedure TFrm_LabSyncAgent.GetLogs;
+var
+  Logs: TStringList;
+  i: Integer;
+  Line: string;
 begin
-  Rch_LogReceiver.Lines.BeginUpdate;
+  Logs := TStringList.Create;
   try
-    Rch_LogReceiver.Text := FController.GetLogs;
+    Logs.Text := FController.GetLogs;
+
+    Rch_LogReceiver.Lines.BeginUpdate;
+    try
+      Rch_LogReceiver.Clear;
+
+      for i := 0 to Logs.Count - 1 do
+      begin
+        Line := Logs[i];
+
+        //SUCCESS = Green
+        if Pos('SUCCESS', Line) > 0 then
+          Rch_LogReceiver.SelAttributes.Color := clLime
+
+        //ERROR = Red
+        else if Pos('ERROR', Line) > 0 then
+          Rch_LogReceiver.SelAttributes.Color := clRed
+
+        //CONFIG = Blue
+        else if Pos('CONFIG', Line) > 0 then
+          Rch_LogReceiver.SelAttributes.Color := clAqua
+
+        //Default
+        else
+          Rch_LogReceiver.SelAttributes.Color := clSilver;
+          Rch_LogReceiver.SelText := Line + sLineBreak;
+
+      end;
+
+    finally
+      Rch_LogReceiver.Lines.EndUpdate;
+    end;
+
+    Rch_LogReceiver.SelStart := Rch_LogReceiver.GetTextLen;
+    Rch_LogReceiver.SelLength := 0;
+    Rch_LogReceiver.Perform(WM_VSCROLL, SB_BOTTOM, 0);
+
   finally
-    Rch_LogReceiver.Lines.EndUpdate;
+    Logs.Free;
   end;
-  Rch_LogReceiver.SelStart := Length(Rch_LogReceiver.Text);
-  Rch_LogReceiver.Perform(EM_SCROLLCARET, 0, 0);
 end;
 
 procedure TFrm_LabSyncAgent.GetSysData;
@@ -274,7 +313,7 @@ procedure TFrm_LabSyncAgent.Lbl_ApplyServerClick(Sender: TObject);
 begin
  if MessageDlg(
     'This Agent will now receive remote commands from:' + sLineBreak + sLineBreak +
-    Edt_ConnectServer.Text + sLineBreak + sLineBreak +
+    Edt_Server.Text + Edt_Port.Text + sLineBreak + sLineBreak +
     'You may update this server address or restrict remote access at any time through the main menu.' + sLineBreak + sLineBreak +
     'For security purposes, all communications remain protected by end-to-end encryption.',
     mtWarning,
@@ -282,7 +321,8 @@ begin
     0
   ) = mrYes then
   begin
-    FController.SetServer(Trim(Edt_ConnectServer.Text));
+    FController.SetServer(Trim(Edt_Server.Text));
+    FController.SetPort(Trim(Edt_Port.Text));
   end;
 end;
 
@@ -298,7 +338,8 @@ begin
   Lbl_StateFolders.Caption    :=  FController.Folders;
   Lbl_StateCommands.Caption   :=  FController.Commands;
   Lbl_StateInformation.Caption:=  FController.Information;
-  Edt_ConnectServer.Text      :=  FController.Server;
+  Edt_Server.Text             :=  FController.Server;
+  Edt_Port.Text               :=  FController.Port;
 
   ApplyVisualState(Lbl_StateScreenShot, Shp_StateScreenshot);
   ApplyVisualState(Lbl_StateLiveMode,   Shp_StateLiveMode);
@@ -367,7 +408,7 @@ end;
 
 procedure TFrm_LabSyncAgent.Timer_LogReceiverTimer(Sender: TObject);
 begin
- GetLogs;
+  getlogs;
 end;
 
 procedure TFrm_LabSyncAgent.ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);
