@@ -12,6 +12,7 @@ interface
     class procedure Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; Context: TExecutionContext);
     class procedure ConfigLog(const TimeStamp, ID, ConfigName: string);
     class procedure ShellState(const TimeStamp, ID, Status : string);
+    class procedure StartAndOver(const Status, TimeStamp, ID, Version, User, IP: string);
   private
     {Private Declarations}
     class function  GetLogPath(const nameOfLog: string): string;
@@ -54,10 +55,22 @@ end;
 
 class procedure TLog.ShellState(const TimeStamp, ID, Status: string);
 begin
-  If Status = 'Enabled'  then 
-     Tlog.SaveLog(Format('SHELL-ENABLED | Time:%s | ID:%s | Status:%s', [TimeStamp, ID, Status]), 'Audit.log') 
-  else if Status = 'Disabled' then
+  trim(Status);
+  If SameText(Status, 'Enabled')  then
+     Tlog.SaveLog(Format('SHELL-ENABLED | Time:%s | ID:%s | Status:%s', [TimeStamp, ID, Status]), 'Audit.log')
+
+  else if SameText(Status, 'Disabled') then
      Tlog.SaveLog(Format('SHELL-DISABLE | Time:%s | ID:%s | Status:%s', [TimeStamp, ID, Status]), 'Audit.log');
+end;
+
+class procedure TLog.StartAndOver(const Status, TimeStamp, ID, Version, User,
+  IP: string);
+begin
+  trim(Status);
+  If SameText(Status, 'Start')  then
+     Tlog.SaveLog(Format('START SYSTEM ##### | Time:%s | ID:%s | Version:%s | User:%s LocalIP:%s', [TimeStamp, ID, Version, User, IP]), 'Audit.log')
+  else if SameText(Status, 'Over') then
+     Tlog.SaveLog(Format('OVER SYSTEM  ##### | Time:%s | ID:%s | Version:%s | User:%s LocalIP:%s', [TimeStamp, ID, Version, User, IP]), 'Audit.log')
 end;
 
 class procedure TLog.ConfigLog(const TimeStamp, ID, ConfigName: string);

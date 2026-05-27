@@ -3,7 +3,7 @@ unit Agent.Controller;
 interface
 
 uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
-  Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service, DateUtils, SysUtils;
+  Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service, DateUtils, SysUtils, Generics.Collections, Classes;
  type
   TAgentController = class
     private
@@ -13,6 +13,7 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       FDispatcher: TCommandDispatcher;
       FLog: TLog;
       FID: TID;
+      FSysInfo: TStringlist;
     public
      {Public Declarations}
       var
@@ -27,6 +28,19 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       Information : string;
       Server      : string;
       Port        : string; 
+
+      //VAR SYSTEM
+      var
+      name     : string; 
+      cpu      : string; 
+      ram      : string; 
+      Id       : string; 
+      ip       : string; 
+      status   : string; 
+      username : string;
+      version  : string;   
+      Receiver : string;   
+      
       constructor Create;
       destructor Destroy; override;
 
@@ -36,9 +50,13 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       function  SetServer(const Server: string): string;
       function  SetPort(const Port: string): string;
       function  GetOptionDisplay(const Key: string): string;
+      function  GetID: string; 
+      
+      procedure SysInfo; 
       procedure ShellSecurity;
       procedure InitializeIfNeeded;
       procedure GetValues;
+      procedure LogStartAndOver(const Value: string); 
 
   end;
 
@@ -53,6 +71,7 @@ begin
  FDispatcher   := TCommandDispatcher.Create;
  FLog          := Tlog.create;
  FID           := TID.Create;
+ FSysInfo      := TStringList.Create;
 end;
 
 destructor TAgentController.Destroy;
@@ -91,12 +110,35 @@ begin
    end;
 end;
 
+procedure TAgentController.LogStartAndOver(const Value: string);
+begin
+ if SameText(Value, 'Start') then
+    FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, Version, username, IP)  
+ else if SameText(Value, 'Over') then
+     FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, Version, username, IP);
+end;
+
 procedure TAgentController.ShellSecurity;
 begin
  If FConfig.GetOption('Commands') = osEnabled then
     begin
      FConfig.SetOption('Commands', osDisabled);
     end;
+end;
+
+procedure TAgentController.SysInfo;
+begin
+  FSysinfo.Text := GetSysInfo.Text; 
+  FSysInfo.NameValueSeparator    := '=';
+  name   := FSysInfo.Values['Name'];
+  cpu    := FSysInfo.Values['CPU'];
+  ram    := FSysInfo.Values['RAM'];
+  id     := FSysInfo.Values['ID'];
+  ip     := FSysInfo.Values['IP'];
+  Status := FSysInfo.Values['Status'];
+  Username := FSysInfo.Values['UserName'];
+  version  := FSysInfo.Values['Version'];
+  receiver := FSysInfo.Values['ID'] + ' ' + FSysInfo.Values['UserName'];
 end;
 
 function TAgentController.SetPort(const Port: string): string;
@@ -107,6 +149,11 @@ end;
 function TAgentController.SetServer(const Server: string): string;
 begin
   FServerConfig.SetServerOption('Server', Server);
+end;
+
+function TAgentController.GetID: string;
+begin
+ Result := FID.GetID; 
 end;
 
 function TAgentController.GetLogs: string;

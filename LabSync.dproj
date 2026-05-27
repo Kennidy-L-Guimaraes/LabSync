@@ -163,7 +163,9 @@
         <DCCReference Include="src\Application\Services\ServerConfig.Service.pas"/>
         <DCCReference Include="src\Presentation\views\Warning.Views.pas">
             <Form>Frm_Warning</Form>
-            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\Presentation\views\LogViewer.Views.pas">
+            <Form>Frm_LogViewer</Form>
         </DCCReference>
         <RcItem Include="LabSync_Icon.ico">
             <ResourceType>ICON</ResourceType>

@@ -142,24 +142,36 @@ type
     procedure OptionClick(Sender: TObject);
     function  FindShapeForLabel(ALabel: TLabel): TShape;
     procedure GetSysData;
-    procedure GetLogs;
+
     procedure Close1Click(Sender: TObject);
     procedure Show1Click(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure Lbl_ApplyServerClick(Sender: TObject);
     procedure Lbl_StateCommandsClick(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure Timer_ShellSecurityTimer(Sender: TObject);
+    procedure Label1Click(Sender: TObject);
   private
     { Private declarations }
       FController : TAgentController;
       FShellEnabledUntil : TDateTime;
+      FLastLogCount : Integer; //Log lines controll
+      //FViewerLogs      : TStringList;
+      //FViewerIndex     : Integer;
+      //FViewerBatchSize : Integer;
   public
     { Public declarations }
+    procedure AppendLogLine(ARichEdit: TRichEdit; const Line: string);
+    procedure GetLogs;
+    procedure StartViewerLoad;
+     var
+     FViewerIndex     : Integer;
+     FViewerBatchSize : Integer;
+     FViewerLogs      : TStringList;
   end;
 
   var
   Frm_LabSyncAgent    : TFrm_LabSyncAgent;
+
 
 implementation
 {
@@ -168,7 +180,41 @@ implementation
   such as shutdowns, updates, and compliance checks according to company policy.
  It is not hidden, and although it performs actions in the background, they are not malicious.
 }
+
+uses LogViewer.Views;
+var
+  FlogViewer: TFrm_LogViewer;
 {$R *.dfm}
+procedure TFrm_LabSyncAgent.AppendLogLine(ARichEdit: TRichEdit; const Line: string);
+begin
+
+  if Pos('SUCCESS', Line) > 0 then
+    ARichEdit.SelAttributes.Color := clLime
+
+  else if Pos('ERROR', Line) > 0 then
+    ARichEdit.SelAttributes.Color := clRed
+
+  else if Pos('CONFIG', Line) > 0 then
+    ARichEdit.SelAttributes.Color := clAqua
+
+  else if Pos('SHELL-ENABLED', Line) > 0 then
+    ARichEdit.SelAttributes.Color := clYellow
+
+  else if Pos('SHELL-DISABLE', Line) > 0 then
+    ARichEdit.SelAttributes.Color := $004080FF
+
+  else if Pos('START SYSTEM', Line) > 0 then
+    ARichEdit.SelAttributes.Color := clMoneyGreen
+
+  else if Pos('OVER SYSTEM', Line) > 0 then
+    ARichEdit.SelAttributes.Color := clMedGray
+
+  else
+    ARichEdit.SelAttributes.Color := clSilver;
+
+  ARichEdit.SelText := Line + sLineBreak;
+end;
+
 procedure TFrm_LabSyncAgent.ApplyVisualState(ALabel: TLabel; AShape: TShape);
 begin
   if SameText(ALabel.Caption, 'Enabled') then
@@ -215,6 +261,7 @@ begin
  Frm_LabSyncAgent.Close;
 end;
 
+
 function TFrm_LabSyncAgent.FindShapeForLabel(ALabel: TLabel): TShape;
 begin
   if ALabel = Lbl_StateDownloads     then Result    := Shp_StateDownloads
@@ -232,76 +279,74 @@ end;
 procedure TFrm_LabSyncAgent.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
  FController.ShellSecurity;
+ FController.LogStartAndOver('Over');
  FController.Free;
+ FlogViewer.Free;
 end;
 
 procedure TFrm_LabSyncAgent.FormCreate(Sender: TObject);
 begin
- FController   := TAgentController.Create;
- Timer_LogReceiver.Enabled := True;
- FController.InitializeIfNeeded;
- //FController.ShellSecurity;
- LoadConfig;
- GetSysData;
- GetLogs;
-end;
-
-procedure TFrm_LabSyncAgent.FormDestroy(Sender: TObject);
-begin
- FController.ShellSecurity;
+  FViewerBatchSize := 250;
+  FlogViewer := TFrm_LogViewer.Create(nil);
+  FController := TAgentController.Create;
+  FController.InitializeIfNeeded;
+  GetSysData;
+  FController.LogStartAndOver('Start');
+  LoadConfig;
+  FController.ShellSecurity;
+  GetLogs;
+  Timer_LogReceiver.Enabled := True;
 end;
 
 procedure TFrm_LabSyncAgent.GetLogs;
+const
+  MAX_INITIAL_LINES = 250;
+
 var
-  Logs: TStringList;
-  i: Integer;
-  Line: string;
+  Logs      : TStringList;
+  i         : Integer;
+  StartLine : Integer;
+
 begin
   Logs := TStringList.Create;
   try
     Logs.Text := FController.GetLogs;
+    Rch_LogReceiver.Perform(WM_SETREDRAW, 0, 0);
 
-    Rch_LogReceiver.Lines.BeginUpdate;
     try
-      Rch_LogReceiver.Clear;
-
-      for i := 0 to Logs.Count - 1 do
+      // FIRST LOAD
+      if FLastLogCount = 0 then
       begin
-        Line := Logs[i];
+        Rch_LogReceiver.Clear;
+        StartLine := Logs.Count - MAX_INITIAL_LINES;
 
-        //SUCCESS = Green
-        if Pos('SUCCESS', Line) > 0 then
-          Rch_LogReceiver.SelAttributes.Color := clLime
+        if StartLine < 0 then
+          StartLine := 0;
 
-        //ERROR = Red
-        else if Pos('ERROR', Line) > 0 then
-          Rch_LogReceiver.SelAttributes.Color := clRed
-
-        //CONFIG = Blue
-        else if Pos('CONFIG', Line) > 0 then
-          Rch_LogReceiver.SelAttributes.Color := clAqua
-
-       //SHELL-ENABLED
-       else if Pos('SHELL-ENABLED', line) > 0 then
-          Rch_LogReceiver.SelAttributes.Color := clyellow
-
-       //SHELL-DISABLE
-       else if Pos('SHELL-DISABLE', line) > 0 then
-          Rch_LogReceiver.SelAttributes.Color := clred
-
-        //Default
-        else
-          Rch_LogReceiver.SelAttributes.Color := clSilver;
-          Rch_LogReceiver.SelText := Line + sLineBreak;
-
+        for i := StartLine to Logs.Count - 1 do
+        begin
+          AppendLogLine(Rch_LogReceiver, Logs[i]);
+        end;
+      end
+      // APPEND ONLY NEW LINES
+      else
+      begin
+        for i := FLastLogCount to Logs.Count - 1 do
+        begin
+          AppendLogLine(Rch_LogReceiver, Logs[i]);
+        end;
       end;
 
-    finally
-      Rch_LogReceiver.Lines.EndUpdate;
-    end;
+      FLastLogCount := Logs.Count;
 
+    finally
+      // MAIN RICHEDIT
+      Rch_LogReceiver.Perform(WM_SETREDRAW, 1, 0);
+      Rch_LogReceiver.Invalidate;
+
+    end;
+    // AUTO SCROLL MAIN
     Rch_LogReceiver.SelStart := Rch_LogReceiver.GetTextLen;
-    Rch_LogReceiver.SelLength := 0;
     Rch_LogReceiver.Perform(WM_VSCROLL, SB_BOTTOM, 0);
 
   finally
@@ -310,25 +355,24 @@ begin
 end;
 
 procedure TFrm_LabSyncAgent.GetSysData;
- var
- SysInfo  : Tstringlist;
 begin
- SysInfo  := TStringList.Create;
- try
-  SysInfo.Text := FController.GetSysInfo.Text;
-  SysInfo.NameValueSeparator    := '=';
-  Lbl_ReturnName.Caption        := SysInfo.Values['Name'];
-  Lbl_ReturCPU.Caption          := SysInfo.Values['CPU'];
-  Lbl_ReturnRAM.Caption         := SysInfo.Values['RAM'];
-  Lbl_ReturnID.Caption          := SysInfo.Values['ID'];
-  Lbl_ReturnIP.Caption          := SysInfo.Values['IP'];
-  Lbl_ReturnStatus.Caption      := SysInfo.Values['Status'];
-  Lbl_ReturnMachineUser.Caption := SysInfo.Values['UserName'];
-  Lbl_ReturnVersion.Caption     := SysInfo.Values['Version'];
-  Lbl_CommandReceiver.Caption   := SysInfo.Values['ID'] + ' ' + SysInfo.Values['UserName'];
- finally
-  SysInfo.Free;
- end;
+  FController.SysInfo;
+  Lbl_ReturnName.Caption        := FController.name;
+  Lbl_ReturCPU.Caption          := FController.cpu;
+  Lbl_ReturnRAM.Caption         := FController.ram;
+  Lbl_ReturnID.Caption          := FController.id;
+  Lbl_ReturnIP.Caption          := FController.ip;
+  Lbl_ReturnStatus.Caption      := FController.status;
+  Lbl_ReturnMachineUser.Caption := FController.Username;
+  Lbl_ReturnVersion.Caption     := FController.version;
+  Lbl_CommandReceiver.Caption   := FController.Receiver;
+end;
+
+procedure TFrm_LabSyncAgent.Label1Click(Sender: TObject);
+begin
+  StartViewerLoad;
+  FLogViewer.Show;
+  FLogViewer.BringToFront;
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_ApplyServerClick(Sender: TObject);
@@ -393,9 +437,9 @@ begin
     StartTime := now;
     ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
     TimeStamp := FormatDateTime('yyyymmdd_hhnnss', Now);
-    TLog.ShellState(FormatDateTime('yyyymmdd_hhnnss', Now), TID.GetID, 'Enabled');
+    TLog.ShellState(FormatDateTime('yyyymmdd_hhnnss', Now), FController.GetID, 'Enabled');
     //50 minutes
-    FShellEnabledUntil := Now + EncodeTime(0, 50, 0, 0);
+    FShellEnabledUntil := Now + EncodeTime(0, 0, 5, 0);
     Timer_ShellSecurity.Enabled := True;
     end;
   finally
@@ -453,6 +497,15 @@ begin
  Frm_LabSyncAgent.Close;
 end;
 
+procedure TFrm_LabSyncAgent.StartViewerLoad;
+begin
+  FreeAndNil(FViewerLogs);
+  FViewerLogs := TStringList.Create;
+  FViewerLogs.Text := FController.GetLogs;
+  FViewerIndex := 0;
+  FLogViewer.RichText_Logs.Clear;
+  FLogViewer.Timer_LoadLogs.Enabled := True;
+end;
 procedure TFrm_LabSyncAgent.Timer_AgentLiveModeTimer(Sender: TObject);
 //var
   //Stream : TMemoryStream;
@@ -501,7 +554,7 @@ begin
     FController.ShellSecurity;
     Timer_ShellSecurity.Enabled := False;
     Timestamp := FormatDateTime('yyyymmdd_hhnnss', Now);
-    TLog.ShellState(Timestamp, TID.GetID, FController.GetOptionDisplay('Commands'));;
+    TLog.ShellState(Timestamp, FController.GetID, FController.GetOptionDisplay('Commands'));;
    end;
 end;
 
