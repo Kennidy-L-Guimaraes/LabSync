@@ -129,6 +129,8 @@ type
     Img_port: TImage;
     Edt_Port: TEdit;
     BitBtn1: TBitBtn;
+    Timer_ShellSecurity: TTimer;
+    Label1: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -146,9 +148,12 @@ type
     procedure BitBtn1Click(Sender: TObject);
     procedure Lbl_ApplyServerClick(Sender: TObject);
     procedure Lbl_StateCommandsClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure Timer_ShellSecurityTimer(Sender: TObject);
   private
     { Private declarations }
       FController : TAgentController;
+      FShellEnabledUntil : TDateTime;
   public
     { Public declarations }
   end;
@@ -176,6 +181,7 @@ begin
     AShape.Brush.Color := clRed;
     AShape.Pen.Color   := clRed;
   end;
+
 end;
 
 procedure TFrm_LabSyncAgent.BitBtn1Click(Sender: TObject);
@@ -225,6 +231,7 @@ end;
 
 procedure TFrm_LabSyncAgent.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+ FController.ShellSecurity;
  FController.Free;
 end;
 
@@ -233,9 +240,15 @@ begin
  FController   := TAgentController.Create;
  Timer_LogReceiver.Enabled := True;
  FController.InitializeIfNeeded;
+ //FController.ShellSecurity;
  LoadConfig;
  GetSysData;
  GetLogs;
+end;
+
+procedure TFrm_LabSyncAgent.FormDestroy(Sender: TObject);
+begin
+ FController.ShellSecurity;
 end;
 
 procedure TFrm_LabSyncAgent.GetLogs;
@@ -267,6 +280,14 @@ begin
         //CONFIG = Blue
         else if Pos('CONFIG', Line) > 0 then
           Rch_LogReceiver.SelAttributes.Color := clAqua
+
+       //SHELL-ENABLED
+       else if Pos('SHELL-ENABLED', line) > 0 then
+          Rch_LogReceiver.SelAttributes.Color := clyellow
+
+       //SHELL-DISABLE
+       else if Pos('SHELL-DISABLE', line) > 0 then
+          Rch_LogReceiver.SelAttributes.Color := clred
 
         //Default
         else
@@ -340,6 +361,8 @@ var
   Key: string;
   Lbl: TLabel;
   Warning: TFrm_Warning;
+  Timestamp: string;
+  StartTime: TDateTime;
 begin
   if not (Sender is TLabel) then
     Exit;
@@ -355,13 +378,25 @@ begin
   begin
     Warning := TFrm_Warning.Create(nil);
   try
-    Warning.RchEdt_Warning.Text :=
-    'Enabling this option allows remote shell command execution on this machine. ' +
-    'This may imply partial or full system control depending on granted permissions. ' +
-    'Do you want to continue?';
+   Warning.RchEdt_Warning.Text :=
+  'Shell command execution is a powerful feature that grants the Commander ' +
+  'the ability to run any command on this machine, including system-level operations.' +
+    #13#10#13#10 +
+  'For security reasons, this option will automatically be disabled after 50 minutes. ' +
+  'It will also be immediately disabled if the computer is shut down or LabSync Agent is closed.' +
+    #13#10#13#10 +
+  'Shell commands received while this option is disabled will be refused.' +
+    #13#10#13#10 +
+  'Do you want to enable Shell execution?';
   if Warning.ShowModal = mrYes then
    begin
+    StartTime := now;
     ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
+    TimeStamp := FormatDateTime('yyyymmdd_hhnnss', Now);
+    TLog.ShellState(FormatDateTime('yyyymmdd_hhnnss', Now), TID.GetID, 'Enabled');
+    //50 minutes
+    FShellEnabledUntil := Now + EncodeTime(0, 50, 0, 0);
+    Timer_ShellSecurity.Enabled := True;
     end;
   finally
     Warning.Free;
@@ -452,6 +487,22 @@ end;
 procedure TFrm_LabSyncAgent.Timer_LogReceiverTimer(Sender: TObject);
 begin
   getlogs;
+end;
+
+procedure TFrm_LabSyncAgent.Timer_ShellSecurityTimer(Sender: TObject);
+var
+ Timestamp: string;
+ StartTime: TDateTime;
+begin
+ if Now >= FShellEnabledUntil then
+   begin
+    StartTime := now;
+    ToggleAndUpdateUI(Lbl_StateCommands.hint, Lbl_StateCommands, FindShapeForLabel(Lbl_StateCommands));
+    FController.ShellSecurity;
+    Timer_ShellSecurity.Enabled := False;
+    Timestamp := FormatDateTime('yyyymmdd_hhnnss', Now);
+    TLog.ShellState(Timestamp, TID.GetID, FController.GetOptionDisplay('Commands'));;
+   end;
 end;
 
 procedure TFrm_LabSyncAgent.ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);

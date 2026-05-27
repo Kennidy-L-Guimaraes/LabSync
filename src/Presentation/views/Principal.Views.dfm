@@ -2,7 +2,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
   Left = 0
   Top = 0
   Caption = 'LabSync Agent'
-  ClientHeight = 684
+  ClientHeight = 686
   ClientWidth = 839
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -148,34 +148,37 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
   Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   TextHeight = 15
   object Pnl_Background: TPanel
     Left = 0
     Top = 0
     Width = 839
-    Height = 684
+    Height = 686
     Align = alClient
     BevelOuter = bvNone
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 682
     object Pnl_AgentStatus: TPanel
       Left = 5
       Top = 5
       Width = 280
-      Height = 558
+      Height = 560
       Align = alLeft
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
+      ExplicitHeight = 556
       DesignSize = (
         280
-        558)
+        560)
       object Shp_AgentStatus: TShape
         Left = 0
         Top = 0
         Width = 280
-        Height = 558
+        Height = 560
         Align = alClient
         Brush.Color = 1776411
         Pen.Color = 2697513
@@ -186,7 +189,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_MachineInformation: TLabel
         AlignWithMargins = True
         Left = -1
-        Top = 128
+        Top = 129
         Width = 280
         Height = 19
         Margins.Left = 15
@@ -203,6 +206,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
         ParentFont = False
+        ExplicitTop = 128
       end
       object Lbl_MachineName: TLabel
         AlignWithMargins = True
@@ -396,7 +400,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       end
       object Lbl_NetworkLab: TLabel
         Left = -1
-        Top = 358
+        Top = 360
         Width = 280
         Height = 19
         Margins.Left = 15
@@ -413,6 +417,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
         ParentFont = False
+        ExplicitTop = 358
       end
       object Shp_Separator: TShape
         Left = 23
@@ -543,7 +548,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_LabSyncAgent: TLabel
         AlignWithMargins = True
         Left = 3
-        Top = 70
+        Top = 71
         Width = 276
         Height = 28
         Margins.Left = 15
@@ -560,6 +565,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Font.Name = '@Microsoft YaHei'
         Font.Style = [fsBold]
         ParentFont = False
+        ExplicitTop = 70
       end
       object Image1: TImage
         Left = 111
@@ -2214,7 +2220,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       end
       object BitBtn1: TBitBtn
         Left = 0
-        Top = 470
+        Top = 410
         Width = 75
         Height = 25
         Caption = 'BitBtn1'
@@ -2224,13 +2230,14 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     end
     object Pnl_LogReceiver: TPanel
       Left = 0
-      Top = 568
+      Top = 570
       Width = 839
       Height = 116
       Align = alBottom
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 2
+      ExplicitTop = 566
       object Shp_LogReceiver: TShape
         Left = 0
         Top = 0
@@ -2241,6 +2248,29 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Pen.Color = 2697513
         Pen.Width = 2
         ExplicitTop = 1
+      end
+      object Label1: TLabel
+        AlignWithMargins = True
+        Left = 744
+        Top = 92
+        Width = 77
+        Height = 18
+        Cursor = crHandPoint
+        Margins.Left = 10
+        Margins.Top = 10
+        Margins.Right = 10
+        Margins.Bottom = 10
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'View All Logs'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 9211020
+        Font.Height = -12
+        Font.Name = '@Microsoft YaHei'
+        Font.Style = [fsItalic, fsUnderline]
+        ParentFont = False
+        WordWrap = True
+        OnClick = Lbl_ApplyServerClick
       end
       object Pnl_Log: TPanel
         Left = 8
@@ -2476,8 +2506,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Rch_LogReceiver: TRichEdit
         Left = 23
         Top = 55
-        Width = 782
-        Height = 48
+        Width = 708
+        Height = 58
         BevelInner = bvNone
         BorderStyle = bsNone
         Color = 1776411
@@ -2496,13 +2526,14 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     end
     object Pnl_Separator: TPanel
       Left = 0
-      Top = 563
+      Top = 565
       Width = 839
       Height = 5
       Align = alBottom
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 3
+      ExplicitTop = 561
     end
     object Panel1: TPanel
       Left = 0
@@ -2518,11 +2549,12 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       Left = 0
       Top = 5
       Width = 5
-      Height = 558
+      Height = 560
       Align = alLeft
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 5
+      ExplicitHeight = 556
     end
   end
   object Timer_AgentLiveMode: TTimer
@@ -2695,5 +2727,11 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       Caption = 'Show'
       OnClick = Show1Click
     end
+  end
+  object Timer_ShellSecurity: TTimer
+    Enabled = False
+    OnTimer = Timer_ShellSecurityTimer
+    Left = 306
+    Top = 504
   end
 end

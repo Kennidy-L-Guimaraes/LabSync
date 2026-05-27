@@ -3,7 +3,7 @@ unit Agent.Controller;
 interface
 
 uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
-  Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service;
+  Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service, DateUtils, SysUtils;
  type
   TAgentController = class
     private
@@ -34,8 +34,9 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       function  GetLogs: string;
       function  ToggleOption(const Key: string):TOptionState;
       function  SetServer(const Server: string): string;
-      function  SetPort(const Port: string): string; 
+      function  SetPort(const Port: string): string;
       function  GetOptionDisplay(const Key: string): string;
+      procedure ShellSecurity;
       procedure InitializeIfNeeded;
       procedure GetValues;
 
@@ -88,6 +89,14 @@ begin
    begin
     Exit;
    end;
+end;
+
+procedure TAgentController.ShellSecurity;
+begin
+ If FConfig.GetOption('Commands') = osEnabled then
+    begin
+     FConfig.SetOption('Commands', osDisabled);
+    end;
 end;
 
 function TAgentController.SetPort(const Port: string): string;

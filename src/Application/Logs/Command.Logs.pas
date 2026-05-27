@@ -1,7 +1,7 @@
 unit Command.Logs;
 
 interface
- uses Windows, System.IOUtils, SysUtils, Transporter.Dto;
+ uses Windows, System.IOUtils, SysUtils, Transporter.Dto, Dialogs;
  type
   TLog = class
   public
@@ -11,6 +11,7 @@ interface
     class procedure Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string; Context: TExecutionContext);
     class procedure Success(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; Context: TExecutionContext);
     class procedure ConfigLog(const TimeStamp, ID, ConfigName: string);
+    class procedure ShellState(const TimeStamp, ID, Status : string);
   private
     {Private Declarations}
     class function  GetLogPath(const nameOfLog: string): string;
@@ -51,9 +52,17 @@ begin
  end;
 end;
 
+class procedure TLog.ShellState(const TimeStamp, ID, Status: string);
+begin
+  If Status = 'Enabled'  then 
+     Tlog.SaveLog(Format('SHELL-ENABLED | Time:%s | ID:%s | Status:%s', [TimeStamp, ID, Status]), 'Audit.log') 
+  else if Status = 'Disabled' then
+     Tlog.SaveLog(Format('SHELL-DISABLE | Time:%s | ID:%s | Status:%s', [TimeStamp, ID, Status]), 'Audit.log');
+end;
+
 class procedure TLog.ConfigLog(const TimeStamp, ID, ConfigName: string);
 begin
-  Tlog.SaveLog(Format('NEWCONFIG | Time:%s | ID:%s Config:%s', [TimeStamp, ID, ConfigName]), 'Audit.log');
+  Tlog.SaveLog(Format('CONFIG | Time:%s | ID:%s Config:%s', [TimeStamp, ID, ConfigName]), 'Audit.log');
 end;
 
 class procedure TLog.Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string; Context: TExecutionContext);
