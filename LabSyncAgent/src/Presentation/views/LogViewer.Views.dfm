@@ -24,7 +24,6 @@ object Frm_LogViewer: TFrm_LogViewer
     Color = 1776411
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 296
     object RichText_Logs: TRichEdit
       AlignWithMargins = True
       Left = 15
@@ -48,10 +47,6 @@ object Frm_LogViewer: TFrm_LogViewer
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
-      ExplicitLeft = 8
-      ExplicitTop = 41
-      ExplicitWidth = 744
-      ExplicitHeight = 281
     end
     object Pnl_ComputerInfo: TPanel
       Left = 0
@@ -79,15 +74,13 @@ object Frm_LogViewer: TFrm_LogViewer
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        ExplicitLeft = 11
-        ExplicitTop = 4
         ExplicitHeight = 17
       end
     end
   end
   object Timer_LoadLogs: TTimer
     Enabled = False
-    Interval = 700
+    Interval = 10
     OnTimer = Timer_LoadLogsTimer
     Left = 34
     Top = 249
