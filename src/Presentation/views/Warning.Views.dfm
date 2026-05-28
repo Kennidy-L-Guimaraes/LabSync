@@ -3,7 +3,7 @@ object Frm_Warning: TFrm_Warning
   Top = 0
   BorderStyle = bsNone
   Caption = 'Frm_Warning'
-  ClientHeight = 200
+  ClientHeight = 231
   ClientWidth = 376
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,14 +17,13 @@ object Frm_Warning: TFrm_Warning
     Left = 0
     Top = 0
     Width = 376
-    Height = 200
+    Height = 231
     Align = alClient
     BevelOuter = bvNone
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
-    ExplicitWidth = 369
-    ExplicitHeight = 145
+    ExplicitHeight = 200
     object Pnl_Close: TPanel
       Left = 0
       Top = 0
@@ -35,7 +34,6 @@ object Frm_Warning: TFrm_Warning
       Color = 1184274
       ParentBackground = False
       TabOrder = 0
-      ExplicitWidth = 369
       object Sbtn_Close: TSpeedButton
         Left = 343
         Top = 0
@@ -125,13 +123,13 @@ object Frm_Warning: TFrm_Warning
       Left = 16
       Top = 39
       Width = 345
-      Height = 117
+      Height = 145
       TabStop = False
       BorderStyle = bsNone
       Color = 1184274
       Font.Charset = ANSI_CHARSET
       Font.Color = clAliceblue
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Segoe UI'
       Font.Style = []
       HideSelection = False
@@ -147,16 +145,14 @@ object Frm_Warning: TFrm_Warning
     end
     object Pnl_Btns: TPanel
       Left = 0
-      Top = 159
+      Top = 190
       Width = 376
       Height = 41
       Align = alBottom
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 2
-      ExplicitLeft = 88
-      ExplicitTop = 176
-      ExplicitWidth = 185
+      ExplicitTop = 159
       object Pnl_BtnNo: TPanel
         AlignWithMargins = True
         Left = 190
@@ -173,7 +169,6 @@ object Frm_Warning: TFrm_Warning
         Color = 1776411
         ParentBackground = False
         TabOrder = 0
-        ExplicitLeft = 195
         object Spbtn_No: TSpeedButton
           Left = 0
           Top = 0
@@ -185,7 +180,7 @@ object Frm_Warning: TFrm_Warning
           Flat = True
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWhite
-          Font.Height = -16
+          Font.Height = -12
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
@@ -222,7 +217,7 @@ object Frm_Warning: TFrm_Warning
           Flat = True
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWhite
-          Font.Height = -16
+          Font.Height = -12
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False

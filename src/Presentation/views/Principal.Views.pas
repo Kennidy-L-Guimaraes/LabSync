@@ -8,7 +8,8 @@ uses
   Command.Dispatcher, Command.Logs, Vcl.ExtCtrls, ID.Service, IOUtils,
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
   Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command,
-  Agent.Controller, Vcl.Menus, CommandParsed.Dto, Message.Views, Warning.Views;
+  Agent.Controller, Vcl.Menus, CommandParsed.Dto, Message.Views, Warning.Views,
+  LogViewer.Views, Controller.Dto;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -130,43 +131,50 @@ type
     Edt_Port: TEdit;
     BitBtn1: TBitBtn;
     Timer_ShellSecurity: TTimer;
-    Label1: TLabel;
+    Lbl_ViewAllLogs: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);
     procedure Timer_LogReceiverTimer(Sender: TObject);
-    procedure LoadConfig;
     procedure ApplyVisualState(ALabel: TLabel; AShape: TShape);
     procedure SpeedButton1Click(Sender: TObject);
     procedure OptionClick(Sender: TObject);
-    function  FindShapeForLabel(ALabel: TLabel): TShape;
-    procedure GetSysData;
-
     procedure Close1Click(Sender: TObject);
     procedure Show1Click(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure Lbl_ApplyServerClick(Sender: TObject);
     procedure Lbl_StateCommandsClick(Sender: TObject);
     procedure Timer_ShellSecurityTimer(Sender: TObject);
-    procedure Label1Click(Sender: TObject);
+    procedure Lbl_ViewAllLogsClick(Sender: TObject);
   private
     { Private declarations }
       FController : TAgentController;
+      FControllerDto: TControllerDto;
       FShellEnabledUntil : TDateTime;
       FLastLogCount : Integer; //Log lines controll
-      //FViewerLogs      : TStringList;
-      //FViewerIndex     : Integer;
-      //FViewerBatchSize : Integer;
+      FViewerLogs      : TStringList;
+      FViewerIndex     : Integer;
+      FViewerBatchSize : Integer;
+      FWarning         : TFrm_Warning;
+      FlogViewer       : TFrm_LogViewer;
   public
     { Public declarations }
     procedure AppendLogLine(ARichEdit: TRichEdit; const Line: string);
     procedure GetLogs;
     procedure StartViewerLoad;
-     var
-     FViewerIndex     : Integer;
-     FViewerBatchSize : Integer;
-     FViewerLogs      : TStringList;
+    procedure GetSysData;
+    procedure LoadConfig;
+    procedure ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);
+    procedure CreateObjects;
+    procedure DestroyObjects;
+    procedure StartServices;
+    function  FindShapeForLabel(ALabel: TLabel): TShape;
+
+    function GetViewerLogs: TStringList;
+    function GetViewerIndex: Integer;
+    procedure SetViewerIndex(const Value: Integer);
+    function GetViewerBatchSize: Integer;
+    function GetControllerDto: TControllerDto;
   end;
 
   var
@@ -181,9 +189,6 @@ implementation
  It is not hidden, and although it performs actions in the background, they are not malicious.
 }
 
-uses LogViewer.Views;
-var
-  FlogViewer: TFrm_LogViewer;
 {$R *.dfm}
 procedure TFrm_LabSyncAgent.AppendLogLine(ARichEdit: TRichEdit; const Line: string);
 begin
@@ -238,7 +243,6 @@ var
   Id           : TID;
   Dispatcher   : TCommandDispatcher;
   Config       : TConfig;
-  Parser       : TCommandParser;
 begin
   Config       := Tconfig.Create;
   Dispatcher   := TCommandDispatcher.Create;
@@ -262,6 +266,15 @@ begin
 end;
 
 
+procedure TFrm_LabSyncAgent.CreateObjects;
+begin
+ FController := TAgentController.Create;
+ FController.InitializeIfNeeded;
+ FControllerDto := FController.GetDtoValues;
+ FlogViewer  := TFrm_LogViewer.Create(nil);
+ FWarning    := TFrm_Warning.Create(nil);
+end;
+
 function TFrm_LabSyncAgent.FindShapeForLabel(ALabel: TLabel): TShape;
 begin
   if ALabel = Lbl_StateDownloads     then Result    := Shp_StateDownloads
@@ -280,22 +293,31 @@ procedure TFrm_LabSyncAgent.FormClose(Sender: TObject; var Action: TCloseAction)
 begin
  FController.ShellSecurity;
  FController.LogStartAndOver('Over');
- FController.Free;
- FlogViewer.Free;
+ DestroyObjects;
 end;
 
 procedure TFrm_LabSyncAgent.FormCreate(Sender: TObject);
 begin
   FViewerBatchSize := 250;
-  FlogViewer := TFrm_LogViewer.Create(nil);
-  FController := TAgentController.Create;
-  FController.InitializeIfNeeded;
+  CreateObjects;
   GetSysData;
   FController.LogStartAndOver('Start');
   LoadConfig;
   FController.ShellSecurity;
   GetLogs;
   Timer_LogReceiver.Enabled := True;
+end;
+
+procedure TFrm_LabSyncAgent.DestroyObjects;
+begin
+ FController.Free;
+ Freeandnil(FlogViewer);
+ Freeandnil(FWarning);
+end;
+
+function TFrm_LabSyncAgent.GetControllerDto: TControllerDto;
+begin
+ Result := FControllerDto;
 end;
 
 procedure TFrm_LabSyncAgent.GetLogs;
@@ -356,19 +378,33 @@ end;
 
 procedure TFrm_LabSyncAgent.GetSysData;
 begin
-  FController.SysInfo;
-  Lbl_ReturnName.Caption        := FController.name;
-  Lbl_ReturCPU.Caption          := FController.cpu;
-  Lbl_ReturnRAM.Caption         := FController.ram;
-  Lbl_ReturnID.Caption          := FController.id;
-  Lbl_ReturnIP.Caption          := FController.ip;
-  Lbl_ReturnStatus.Caption      := FController.status;
-  Lbl_ReturnMachineUser.Caption := FController.Username;
-  Lbl_ReturnVersion.Caption     := FController.version;
-  Lbl_CommandReceiver.Caption   := FController.Receiver;
+  Lbl_ReturnName.Caption        := FControllerDto.name;
+  Lbl_ReturCPU.Caption          := FControllerDto.cpu;
+  Lbl_ReturnRAM.Caption         := FControllerDto.ram;
+  Lbl_ReturnID.Caption          := FControllerDto.id;
+  Lbl_ReturnIP.Caption          := FControllerDto.ip;
+  Lbl_ReturnStatus.Caption      := FControllerDto.status;
+  Lbl_ReturnMachineUser.Caption := FControllerDto.Username;
+  Lbl_ReturnVersion.Caption     := FControllerDto.version;
+  Lbl_CommandReceiver.Caption   := FControllerDto.Receiver;
 end;
 
-procedure TFrm_LabSyncAgent.Label1Click(Sender: TObject);
+function TFrm_LabSyncAgent.GetViewerBatchSize: Integer;
+begin
+ Result := FViewerBatchSize;
+end;
+
+function TFrm_LabSyncAgent.GetViewerIndex: Integer;
+begin
+ Result := FViewerIndex;
+end;
+
+function TFrm_LabSyncAgent.GetViewerLogs: TStringList;
+begin
+ Result := FViewerLogs;
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_ViewAllLogsClick(Sender: TObject);
 begin
   StartViewerLoad;
   FLogViewer.Show;
@@ -376,37 +412,26 @@ begin
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_ApplyServerClick(Sender: TObject);
-var
-  Key: string;
-  Lbl: TLabel;
-  Warning: TFrm_Warning;
 begin
-  Warning := TFrm_Warning.Create(nil);
-  try
-   Warning.RchEdt_Warning.Text := 'This Agent will now receive remote commands from:'+ SlineBreak +
+   FWarning.RchEdt_Warning.Clear;
+   FWarning.RchEdt_Warning.Text := 'This Agent will now receive remote commands from:'+ SlineBreak +
    Edt_Server.Text + Edt_Port.Text + SlineBreak +
    ' You may update this server address or restrict remote access at any time through the main menu.' +
    ' For security purposes, all communications remain protected by end-to-end encryption.';
-   if Warning.ShowModal = mrYes then
+   if FWarning.ShowModal = mrYes then
    begin
     FController.SetServer(Trim(Edt_Server.Text));
     FController.SetPort(Trim(Edt_Port.Text));
    end
    else
    exit;
-  finally
-   Warning.free;
-  end;
-
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateCommandsClick(Sender: TObject);
 var
   Key: string;
   Lbl: TLabel;
-  Warning: TFrm_Warning;
   Timestamp: string;
-  StartTime: TDateTime;
 begin
   if not (Sender is TLabel) then
     Exit;
@@ -414,27 +439,24 @@ begin
   Lbl := TLabel(Sender);
   Key := Lbl.Hint;
 
-  if FController.Commands = 'Enabled' then
+  if FControllerDto.Commands = 'Enabled' then
   begin
     ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
   end
   else
   begin
-    Warning := TFrm_Warning.Create(nil);
-  try
-   Warning.RchEdt_Warning.Text :=
+   FWarning.RchEdt_Warning.Clear;
+   FWarning.RchEdt_Warning.Text :=
   'Shell command execution is a powerful feature that grants the Commander ' +
   'the ability to run any command on this machine, including system-level operations.' +
-    #13#10#13#10 +
+    sLineBreak +
   'For security reasons, this option will automatically be disabled after 50 minutes. ' +
   'It will also be immediately disabled if the computer is shut down or LabSync Agent is closed.' +
-    #13#10#13#10 +
   'Shell commands received while this option is disabled will be refused.' +
-    #13#10#13#10 +
+    sLineBreak +
   'Do you want to enable Shell execution?';
-  if Warning.ShowModal = mrYes then
+  if FWarning.ShowModal = mrYes then
    begin
-    StartTime := now;
     ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
     TimeStamp := FormatDateTime('yyyymmdd_hhnnss', Now);
     TLog.ShellState(FormatDateTime('yyyymmdd_hhnnss', Now), FController.GetID, 'Enabled');
@@ -442,26 +464,22 @@ begin
     FShellEnabledUntil := Now + EncodeTime(0, 0, 5, 0);
     Timer_ShellSecurity.Enabled := True;
     end;
-  finally
-    Warning.Free;
-  end;
   end;
 end;
 
 procedure TFrm_LabSyncAgent.LoadConfig;
 begin
-  FController.GetValues;
-  Lbl_StateScreenShot.Caption :=  FController.Screenshot;
-  Lbl_StateLiveMode.Caption   :=  FController.LiveMode;
-  Lbl_StateMessages.Caption   :=  FController.Messages;
-  Lbl_StateDownloads.Caption  :=  FController.Downloads;
-  Lbl_StateShutdown.Caption   :=  FController.Shutdown;
-  Lbl_StateRegistry.Caption   :=  FController.Registry;
-  Lbl_StateFolders.Caption    :=  FController.Folders;
-  Lbl_StateCommands.Caption   :=  FController.Commands;
-  Lbl_StateInformation.Caption:=  FController.Information;
-  Edt_Server.Text             :=  FController.Server;
-  Edt_Port.Text               :=  FController.Port;
+  Lbl_StateScreenShot.Caption :=  FControllerDto.Screenshot;
+  Lbl_StateLiveMode.Caption   :=  FControllerDto.LiveMode;
+  Lbl_StateMessages.Caption   :=  FControllerDto.Messages;
+  Lbl_StateDownloads.Caption  :=  FControllerDto.Downloads;
+  Lbl_StateShutdown.Caption   :=  FControllerDto.Shutdown;
+  Lbl_StateRegistry.Caption   :=  FControllerDto.Registry;
+  Lbl_StateFolders.Caption    :=  FControllerDto.Folders;
+  Lbl_StateCommands.Caption   :=  FControllerDto.Commands;
+  Lbl_StateInformation.Caption:=  FControllerDto.Information;
+  Edt_Server.Text             :=  FControllerDto.Server;
+  Edt_Port.Text               :=  FControllerDto.Port;
 
   ApplyVisualState(Lbl_StateScreenShot, Shp_StateScreenshot);
   ApplyVisualState(Lbl_StateLiveMode,   Shp_StateLiveMode);
@@ -487,6 +505,11 @@ begin
   ToggleAndUpdateUI(Key, Lbl, FindShapeForLabel(Lbl));
 end;
 
+procedure TFrm_LabSyncAgent.SetViewerIndex(const Value: Integer);
+begin
+  FViewerIndex := Value;
+end;
+
 procedure TFrm_LabSyncAgent.Show1Click(Sender: TObject);
 begin
  Frm_LabSyncAgent.Show;
@@ -497,13 +520,18 @@ begin
  Frm_LabSyncAgent.Close;
 end;
 
+procedure TFrm_LabSyncAgent.StartServices;
+begin
+
+end;
+
 procedure TFrm_LabSyncAgent.StartViewerLoad;
 begin
   FreeAndNil(FViewerLogs);
   FViewerLogs := TStringList.Create;
   FViewerLogs.Text := FController.GetLogs;
   FViewerIndex := 0;
-  FLogViewer.RichText_Logs.Clear;
+  //FLogViewer.RichText_Logs.Clear;
   FLogViewer.Timer_LoadLogs.Enabled := True;
 end;
 procedure TFrm_LabSyncAgent.Timer_AgentLiveModeTimer(Sender: TObject);
@@ -545,11 +573,9 @@ end;
 procedure TFrm_LabSyncAgent.Timer_ShellSecurityTimer(Sender: TObject);
 var
  Timestamp: string;
- StartTime: TDateTime;
 begin
  if Now >= FShellEnabledUntil then
    begin
-    StartTime := now;
     ToggleAndUpdateUI(Lbl_StateCommands.hint, Lbl_StateCommands, FindShapeForLabel(Lbl_StateCommands));
     FController.ShellSecurity;
     Timer_ShellSecurity.Enabled := False;
@@ -563,7 +589,6 @@ var
   State: TOptionState;
 begin
   State := FController.ToggleOption(Key);
-  FController.GetValues;
   ALabel.Caption := FController.GetOptionDisplay(Key);
   ApplyVisualState(ALabel, AShape);
 end;

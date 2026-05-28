@@ -167,6 +167,7 @@
         <DCCReference Include="src\Presentation\views\LogViewer.Views.pas">
             <Form>Frm_LogViewer</Form>
         </DCCReference>
+        <DCCReference Include="src\Application\Dtos\Controller.Dto.pas"/>
         <RcItem Include="LabSync_Icon.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon</ResourceId>
@@ -1171,6 +1172,7 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
+            <ModelSupport>True</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>

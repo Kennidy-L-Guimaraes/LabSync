@@ -159,6 +159,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 684
     object Pnl_AgentStatus: TPanel
       Left = 5
       Top = 5
@@ -168,6 +169,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
+      ExplicitHeight = 558
       DesignSize = (
         280
         560)
@@ -2235,6 +2237,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 2
+      ExplicitTop = 568
       object Shp_LogReceiver: TShape
         Left = 0
         Top = 0
@@ -2246,7 +2249,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Pen.Width = 2
         ExplicitTop = 1
       end
-      object Label1: TLabel
+      object Lbl_ViewAllLogs: TLabel
         AlignWithMargins = True
         Left = 744
         Top = 92
@@ -2267,7 +2270,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Font.Style = [fsItalic, fsUnderline]
         ParentFont = False
         WordWrap = True
-        OnClick = Label1Click
+        OnClick = Lbl_ViewAllLogsClick
       end
       object Pnl_Log: TPanel
         Left = 8
@@ -2530,6 +2533,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 3
+      ExplicitTop = 563
     end
     object Panel1: TPanel
       Left = 0
@@ -2550,6 +2554,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 5
+      ExplicitHeight = 558
     end
   end
   object Timer_AgentLiveMode: TTimer

@@ -26,7 +26,8 @@ uses
   ExecShutdown.Command in 'src\Core\Command\ExecShutdown.Command.pas',
   ServerConfig.Service in 'src\Application\Services\ServerConfig.Service.pas',
   Warning.Views in 'src\Presentation\views\Warning.Views.pas' {Frm_Warning},
-  LogViewer.Views in 'src\Presentation\views\LogViewer.Views.pas' {Frm_LogViewer};
+  LogViewer.Views in 'src\Presentation\views\LogViewer.Views.pas' {Frm_LogViewer},
+  Controller.Dto in 'src\Application\Dtos\Controller.Dto.pas';
 
 {$R *.res}
 

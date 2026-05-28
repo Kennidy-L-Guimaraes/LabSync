@@ -3,7 +3,8 @@ unit Agent.Controller;
 interface
 
 uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
-  Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service, DateUtils, SysUtils, Generics.Collections, Classes;
+  Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service, DateUtils, SysUtils, Generics.Collections, Classes,
+  Controller.Dto;
  type
   TAgentController = class
     private
@@ -14,33 +15,8 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       FLog: TLog;
       FID: TID;
       FSysInfo: TStringlist;
+      ControllerDto: TControllerDto;
     public
-     {Public Declarations}
-      var
-      Screenshot  : string;
-      LiveMode    : string;
-      Messages    : string;
-      Downloads   : string;
-      Shutdown    : string;
-      Registry    : string;
-      Folders     : string;
-      Commands    : string;
-      Information : string;
-      Server      : string;
-      Port        : string; 
-
-      //VAR SYSTEM
-      var
-      name     : string; 
-      cpu      : string; 
-      ram      : string; 
-      Id       : string; 
-      ip       : string; 
-      status   : string; 
-      username : string;
-      version  : string;   
-      Receiver : string;   
-      
       constructor Create;
       destructor Destroy; override;
 
@@ -50,13 +26,12 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       function  SetServer(const Server: string): string;
       function  SetPort(const Port: string): string;
       function  GetOptionDisplay(const Key: string): string;
-      function  GetID: string; 
-      
-      procedure SysInfo; 
+      function  GetID: string;
+
       procedure ShellSecurity;
       procedure InitializeIfNeeded;
-      procedure GetValues;
-      procedure LogStartAndOver(const Value: string); 
+      procedure LogStartAndOver(const Value: string);
+      function  GetDtoValues : TControllerDto;
 
   end;
 
@@ -113,9 +88,9 @@ end;
 procedure TAgentController.LogStartAndOver(const Value: string);
 begin
  if SameText(Value, 'Start') then
-    FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, Version, username, IP)  
+    FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, ControllerDto.Version, ControllerDto.username, ControllerDto.IP)
  else if SameText(Value, 'Over') then
-     FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, Version, username, IP);
+     FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, ControllerDto.Version, ControllerDto.username, ControllerDto.IP);
 end;
 
 procedure TAgentController.ShellSecurity;
@@ -126,19 +101,31 @@ begin
     end;
 end;
 
-procedure TAgentController.SysInfo;
+function TAgentController.GetDtoValues : TControllerDto;
 begin
-  FSysinfo.Text := GetSysInfo.Text; 
+  Result.Screenshot :=  FConfig.GetOptionAsDisplay('Screenshot');
+  Result.LiveMode   :=  FConfig.GetOptionAsDisplay('LiveMode');
+  Result.Messages   :=  FConfig.GetOptionAsDisplay('Messages');
+  Result.Downloads  :=  FConfig.GetOptionAsDisplay('Downloads');
+  Result.Shutdown   :=  FConfig.GetOptionAsDisplay('Shutdown');
+  Result.Registry   :=  FConfig.GetOptionAsDisplay('Registry');
+  Result.Folders    :=  FConfig.GetOptionAsDisplay('Folders');
+  Result.Commands   :=  FConfig.GetOptionAsDisplay('Commands');
+  Result.Information:=  FConfig.GetOptionAsDisplay('Information');
+  Result.Server     :=  FServerConfig.GetServerOption('Server');
+  Result.Port       :=  FServerConfig.GetPortOption('Port');
+
+  FSysinfo.Text := GetSysInfo.Text;
   FSysInfo.NameValueSeparator    := '=';
-  name   := FSysInfo.Values['Name'];
-  cpu    := FSysInfo.Values['CPU'];
-  ram    := FSysInfo.Values['RAM'];
-  id     := FSysInfo.Values['ID'];
-  ip     := FSysInfo.Values['IP'];
-  Status := FSysInfo.Values['Status'];
-  Username := FSysInfo.Values['UserName'];
-  version  := FSysInfo.Values['Version'];
-  receiver := FSysInfo.Values['ID'] + ' ' + FSysInfo.Values['UserName'];
+  Result.name     := FSysInfo.Values['Name'];
+  Result.cpu      := FSysInfo.Values['CPU'];
+  Result.ram      := FSysInfo.Values['RAM'];
+  Result.id       := FSysInfo.Values['ID'];
+  Result.ip       := FSysInfo.Values['IP'];
+  Result.Status   := FSysInfo.Values['Status'];
+  Result.Username := FSysInfo.Values['UserName'];
+  Result.version  := FSysInfo.Values['Version'];
+  Result.receiver := FSysInfo.Values['ID'] + ' ' + FSysInfo.Values['UserName'];
 end;
 
 function TAgentController.SetPort(const Port: string): string;
@@ -182,21 +169,6 @@ begin
   CommandConcat        := Command.Name + ' ' + Command.Target;
   Transporter   := FDispatcher.Execute(CommandConcat, FConfig, ecLocal);
   Result        := Transporter;
-end;
-
-procedure TAgentController.GetValues;
-begin
-  Screenshot :=  FConfig.GetOptionAsDisplay('Screenshot');
-  LiveMode   :=  FConfig.GetOptionAsDisplay('LiveMode');
-  Messages   :=  FConfig.GetOptionAsDisplay('Messages');
-  Downloads  :=  FConfig.GetOptionAsDisplay('Downloads');
-  Shutdown   :=  FConfig.GetOptionAsDisplay('Shutdown');
-  Registry   :=  FConfig.GetOptionAsDisplay('Registry');
-  Folders    :=  FConfig.GetOptionAsDisplay('Folders');
-  Commands   :=  FConfig.GetOptionAsDisplay('Commands');
-  Information:=  FConfig.GetOptionAsDisplay('Information');
-  Server     :=  FServerConfig.GetServerOption('Server');
-  Port       :=  FServerConfig.GetPortOption('Port'); 
 end;
 
 function TAgentController.ToggleOption(const Key: string): TOptionState;
