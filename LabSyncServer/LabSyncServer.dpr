@@ -1,0 +1,14 @@
+program LabSyncServer;
+
+uses
+  Vcl.Forms,
+  Principal.Views in 'src\Presentation\Views\Principal.Views.pas' {Frm_LabSyncServer};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFrm_LabSyncServer, Frm_LabSyncServer);
+  Application.Run;
+end.

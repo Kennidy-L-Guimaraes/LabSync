@@ -1,15 +1,15 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{E39E8868-E6CE-4703-AB36-6722209BC1E1}</ProjectGuid>
+        <ProjectGuid>{AFCEBBAD-2924-4DD0-BDD9-DE7E7DB944E8}</ProjectGuid>
         <ProjectVersion>20.1</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
-        <ProjectName Condition="'$(ProjectName)'==''">LabSync</ProjectName>
+        <ProjectName Condition="'$(ProjectName)'==''">LabSyncServer</ProjectName>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
-        <MainSource>LabSync.dpr</MainSource>
+        <MainSource>LabSyncServer.dpr</MainSource>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -70,7 +70,7 @@
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
-        <SanitizedProjectName>LabSync</SanitizedProjectName>
+        <SanitizedProjectName>LabSyncServer</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>vclwinx;fmx;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;FireDACCommonODBC;FireDACCommonDriver;appanalytics;IndyProtocols;vclx;Skia.Package.RTL;IndyIPClient;dbxcds;vcledge;bindcompvclwinx;FmxTeeUI;bindcompfmx;inetdb;ibmonitor;FireDACSqliteDriver;DbxClientDriver;Tee;soapmidas;vclactnband;TeeUI;fmxFireDAC;dbexpress;DBXMySQLDriver;VclSmp;inet;vcltouch;fmxase;dbrtl;Skia.Package.FMX;fmxdae;TeeDB;FireDACMSAccDriver;CustomIPTransport;vcldsnap;DBXInterBaseDriver;IndySystem;Skia.Package.VCL;vcldb;ibxbindings;vclFireDAC;bindcomp;FireDACCommon;IndyCore;RESTBackendComponents;bindcompdbx;rtl;FireDACMySQLDriver;FireDACADSDriver;frce;RESTComponents;DBXSqliteDriver;vcl;IndyIPServer;dsnapxml;dsnapcon;adortl;vclimg;FireDACPgDriver;FireDAC;inetdbxpress;xmlrtl;tethering;ibxpress;bindcompvcl;dsnap;CloudService;vclib;fmxobj;bindcompvclsmp;FMXTee;soaprtl;soapserver;FireDACIBDriver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -103,16 +103,13 @@
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <BRCC_OutputDir>Build\</BRCC_OutputDir>
-        <BRCC_Defines>$(PROJECTDIR)\build;$(BRCC_Defines)</BRCC_Defines>
+        <DCC_ExeOutput>.\build\$(Config)</DCC_ExeOutput>
+        <DCC_DcuOutput>.\build\\$(Config)</DCC_DcuOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <BRCC_IncludePath>Build\;$(BRCC_IncludePath)</BRCC_IncludePath>
-        <DCC_ExeOutput>.\Build\$(Platform)\$(Config)</DCC_ExeOutput>
-        <DCC_DcuOutput>.\Build\$(Platform)\$(Config)\dcu</DCC_DcuOutput>
-        <Icon_MainIcon>..\shared\imgs\LabSync_Icon.ico</Icon_MainIcon>
-        <UWP_DelphiLogo44>..\shared\imgs\LabSync.ico</UWP_DelphiLogo44>
-        <UWP_DelphiLogo150>..\shared\imgs\LabSync.ico</UWP_DelphiLogo150>
+        <Icon_MainIcon>..\shared\imgs\LabSync.ico</Icon_MainIcon>
+        <UWP_DelphiLogo44>..\shared\imgs\LabSync_Icon.ico</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>..\shared\imgs\LabSync_Icon.ico</UWP_DelphiLogo150>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
@@ -133,45 +130,9 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="src\Presentation\views\Principal.Views.pas">
-            <Form>Frm_LabSyncAgent</Form>
+        <DCCReference Include="src\Presentation\Views\Principal.Views.pas">
+            <Form>Frm_LabSyncServer</Form>
         </DCCReference>
-        <DCCReference Include="src\Application\Parser\Command.Parser.pas"/>
-        <DCCReference Include="src\Application\Dispatcher\Command.Dispatcher.pas"/>
-        <DCCReference Include="src\Application\Services\ID.Service.pas"/>
-        <DCCReference Include="src\Application\Services\Path.Service.pas"/>
-        <DCCReference Include="src\Application\Services\Screen.Service.pas"/>
-        <DCCReference Include="src\Application\Logs\Command.Logs.pas"/>
-        <DCCReference Include="src\Application\Services\Loop.Service.pas"/>
-        <DCCReference Include="src\Application\Queue\Screenshot.Queue.pas"/>
-        <DCCReference Include="src\Core\Command\GetPrint.Command.pas"/>
-        <DCCReference Include="src\Core\Command\GetLiveMode.Command.pas"/>
-        <DCCReference Include="src\Application\Services\CommandSuggestion.Service.pas"/>
-        <DCCReference Include="src\Core\Command\GetSysInfo.Command.pas"/>
-        <DCCReference Include="src\Application\Dtos\Transporter.Dto.pas"/>
-        <DCCReference Include="src\Application\Services\Config.Service.pas"/>
-        <DCCReference Include="src\Application\Controllers\Agent.Controller.pas"/>
-        <DCCReference Include="src\Application\Dtos\CommandParsed.Dto.pas"/>
-        <DCCReference Include="src\Presentation\views\Message.Views.pas">
-            <Form>Frm_Message</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="src\Core\Command\showMessage.Command.pas">
-            <Form>$R *.res</Form>
-        </DCCReference>
-        <DCCReference Include="src\Core\Command\ExecShutdown.Command.pas"/>
-        <DCCReference Include="src\Application\Services\ServerConfig.Service.pas"/>
-        <DCCReference Include="src\Presentation\views\Warning.Views.pas">
-            <Form>Frm_Warning</Form>
-        </DCCReference>
-        <DCCReference Include="src\Presentation\views\LogViewer.Views.pas">
-            <Form>Frm_LogViewer</Form>
-        </DCCReference>
-        <DCCReference Include="src\Application\Dtos\Controller.Dto.pas"/>
-        <RcItem Include="LabSync_Icon.ico">
-            <ResourceType>ICON</ResourceType>
-            <ResourceId>Icon</ResourceId>
-        </RcItem>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -189,31 +150,25 @@
         <Borland.ProjectType>Application</Borland.ProjectType>
         <BorlandProject>
             <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">LabSyncServer.dpr</Source>
+                </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k290.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp290.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
-                <Source>
-                    <Source Name="MainSource">LabSync.dpr</Source>
-                </Source>
             </Delphi.Personality>
             <Deployment Version="4">
-                <DeployFile LocalName="..\shared\imgs\LabSync.ico" Configuration="Debug" Class="UWP_DelphiLogo44">
+                <DeployFile LocalName="..\shared\imgs\LabSync_Icon.ico" Configuration="Debug" Class="UWP_DelphiLogo44">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo44x44.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Build\Win32\Debug\LabSync.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Win32\Debug\LabSyncServer.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>LabSync.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="LabSync_Icon.ico" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
+                        <RemoteName>LabSyncServer.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -1172,7 +1127,6 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
-            <ModelSupport>False</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>

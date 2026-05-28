@@ -565,7 +565,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         ExplicitTop = 70
       end
       object Image1: TImage
-        Left = 111
+        Left = 112
         Top = 19
         Width = 50
         Height = 50
