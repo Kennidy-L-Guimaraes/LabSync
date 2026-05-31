@@ -16,16 +16,34 @@
 *.bak
 *.tmp
 *.log
-
-# =========================
-# Build Output
-# =========================
-build/
-__history/
+*.o
 
 # =========================
 # Delphi IDE Files
 # =========================
 *.identcache
 *.stat
+*.local
 *.dproj.local
+*.groupproj.local
+*.tvsconfig
+
+# =========================
+# Build Output
+# =========================
+build/
+Build/
+Debug/
+Release/
+Win32/
+Win64/
+
+# =========================
+# Delphi History
+# =========================
+__history/
+
+# =========================
+# Backup Files
+# =========================
+*~

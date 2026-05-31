@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{9E96E59F-BDA8-470F-A97E-732703E2A7A3}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="..\LabSyncAgent\LabSync.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\LabSyncServer\LabSyncServer.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="LabSync">
+        <MSBuild Projects="..\LabSyncAgent\LabSync.dproj"/>
+    </Target>
+    <Target Name="LabSync:Clean">
+        <MSBuild Projects="..\LabSyncAgent\LabSync.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LabSync:Make">
+        <MSBuild Projects="..\LabSyncAgent\LabSync.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LabSyncServer">
+        <MSBuild Projects="..\LabSyncServer\LabSyncServer.dproj"/>
+    </Target>
+    <Target Name="LabSyncServer:Clean">
+        <MSBuild Projects="..\LabSyncServer\LabSyncServer.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LabSyncServer:Make">
+        <MSBuild Projects="..\LabSyncServer\LabSyncServer.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="LabSync;LabSyncServer"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="LabSync:Clean;LabSyncServer:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="LabSync:Make;LabSyncServer:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
