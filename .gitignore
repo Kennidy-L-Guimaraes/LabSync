@@ -29,3 +29,5 @@ __history/
 *.identcache
 *.stat
 *.dproj.local
+*.tvsconfig
+*.groupproj.local
