@@ -1,8 +1,8 @@
 unit Path.Service;
 
 interface
-uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
- Types, Vcl.Imaging.jpeg, Vcl.Graphics, Screen.Service;
+uses SysUtils, Windows, Dialogs, System.IOUtils,
+ Types, Vcl.Imaging.jpeg, Vcl.Graphics;
  Type
   TPathService = class
     Public

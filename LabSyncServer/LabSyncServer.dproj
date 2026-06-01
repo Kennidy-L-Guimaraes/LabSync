@@ -133,6 +133,13 @@
         <DCCReference Include="src\Presentation\Views\Principal.Views.pas">
             <Form>Frm_LabSyncServer</Form>
         </DCCReference>
+        <DCCReference Include="src\Application\Controllers\Server.Controller.pas"/>
+        <DCCReference Include="src\Application\Services\Config.Service.pas"/>
+        <DCCReference Include="..\shared\Application\src\services\Path.Service.pas"/>
+        <DCCReference Include="src\Application\Services\ServerConfig.Service.pas"/>
+        <DCCReference Include="src\Application\logs\Command.Logs.pas"/>
+        <DCCReference Include="..\shared\Application\src\Dtos\Transporter.Dto.pas"/>
+        <DCCReference Include="src\Application\Services\ID.Service.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -166,7 +173,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win32\Debug\LabSyncServer.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="build\Debug\LabSyncServer.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>LabSyncServer.exe</RemoteName>
                         <Overwrite>true</Overwrite>

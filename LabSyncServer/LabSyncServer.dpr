@@ -2,7 +2,14 @@ program LabSyncServer;
 
 uses
   Vcl.Forms,
-  Principal.Views in 'src\Presentation\Views\Principal.Views.pas' {Frm_LabSyncServer};
+  Principal.Views in 'src\Presentation\Views\Principal.Views.pas' {Frm_LabSyncServer},
+  Server.Controller in 'src\Application\Controllers\Server.Controller.pas',
+  Config.Service in 'src\Application\Services\Config.Service.pas',
+  Path.Service in '..\shared\Application\src\services\Path.Service.pas',
+  ServerConfig.Service in 'src\Application\Services\ServerConfig.Service.pas',
+  Command.Logs in 'src\Application\logs\Command.Logs.pas',
+  Transporter.Dto in '..\shared\Application\src\Dtos\Transporter.Dto.pas',
+  ID.Service in 'src\Application\Services\ID.Service.pas';
 
 {$R *.res}
 

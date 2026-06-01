@@ -139,7 +139,7 @@
         <DCCReference Include="src\Application\Parser\Command.Parser.pas"/>
         <DCCReference Include="src\Application\Dispatcher\Command.Dispatcher.pas"/>
         <DCCReference Include="src\Application\Services\ID.Service.pas"/>
-        <DCCReference Include="src\Application\Services\Path.Service.pas"/>
+        <DCCReference Include="..\shared\Application\src\services\Path.Service.pas"/>
         <DCCReference Include="src\Application\Services\Screen.Service.pas"/>
         <DCCReference Include="src\Application\Logs\Command.Logs.pas"/>
         <DCCReference Include="src\Application\Services\Loop.Service.pas"/>
@@ -148,13 +148,12 @@
         <DCCReference Include="src\Core\Command\GetLiveMode.Command.pas"/>
         <DCCReference Include="src\Application\Services\CommandSuggestion.Service.pas"/>
         <DCCReference Include="src\Core\Command\GetSysInfo.Command.pas"/>
-        <DCCReference Include="src\Application\Dtos\Transporter.Dto.pas"/>
+        <DCCReference Include="..\shared\Application\src\Dtos\Transporter.Dto.pas"/>
         <DCCReference Include="src\Application\Services\Config.Service.pas"/>
         <DCCReference Include="src\Application\Controllers\Agent.Controller.pas"/>
         <DCCReference Include="src\Application\Dtos\CommandParsed.Dto.pas"/>
         <DCCReference Include="src\Presentation\views\Message.Views.pas">
             <Form>Frm_Message</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\Core\Command\showMessage.Command.pas">
             <Form>$R *.res</Form>

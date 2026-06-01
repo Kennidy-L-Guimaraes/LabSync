@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.Buttons, Vcl.ComCtrls;
+  Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.Buttons, Vcl.ComCtrls,
+  Server.Controller;
 
 type
   TFrm_LabSyncServer = class(TForm)
@@ -119,12 +120,16 @@ type
     procedure SBtn_FileTransferMouseEnter(Sender: TObject);
     procedure Sbtn_AgentExampleMouseEnter(Sender: TObject);
     procedure Sbtn_AgentExampleMouseLeave(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
+    FController : TServerControll;
   public
     { Public declarations }
-    procedure ApplyColor(const AShape: TShape; ALabel: TLabel; Acolor: string);
-    procedure RemoveColor(const AShape: TShape; ALabel: TLabel; Acolor: string);
+    procedure ApplyColor(const AShape: TShape);
+    procedure RemoveColor(const AShape: TShape);
+    procedure ApplyData;
   end;
 
 var
@@ -136,81 +141,98 @@ implementation
 
 { TFrm_LabSyncServer }
 
-procedure TFrm_LabSyncServer.ApplyColor(const AShape: TShape; ALabel: TLabel; Acolor: string);
+procedure TFrm_LabSyncServer.FormCreate(Sender: TObject);
+begin
+ FController := TServerControll.Create;
+ FController.InitializeIfNeeded;
+ ApplyData;
+end;
+
+procedure TFrm_LabSyncServer.ApplyColor(const AShape: TShape);
 begin
  AShape.Brush.Color := ClRed;
- ALabel.Font.Color  := StringToColor(Acolor);
+end;
+
+procedure TFrm_LabSyncServer.ApplyData;
+begin
+ Lbl_ServerNameExample.Caption           := FController.GetID;
+ Lbl_ServerDateConnectionExample.Caption := FController.GetDate;
+end;
+
+procedure TFrm_LabSyncServer.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+ FController.Free;
 end;
 
 procedure TFrm_LabSyncServer.Pnl_BtnSettingsMouseEnter(Sender: TObject);
 begin
- ApplyColor(Shp_MenuSettings, Lbl_BtnSettings, 'ClWhite');
+ ApplyColor(Shp_MenuSettings);
 end;
 
-procedure TFrm_LabSyncServer.RemoveColor(const AShape: TShape; ALabel: TLabel; Acolor: string);
+procedure TFrm_LabSyncServer.RemoveColor(const AShape: TShape);
 begin
  AShape.Brush.Color := Shp_panelMenu.Brush.Color;
- ALabel.Font.Color  := StringToColor(Acolor);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_SettingsMouseEnter(Sender: TObject);
 begin
- ApplyColor(Shp_MenuSettings, Lbl_BtnSettings, 'clWhite');
+ ApplyColor(Shp_MenuSettings);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_SettingsMouseLeave(Sender: TObject);
 begin
- RemoveColor(Shp_MenuSettings, Lbl_BtnSettings, 'clWhite');
+ RemoveColor(Shp_MenuSettings);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_LogsMouseEnter(Sender: TObject);
 begin
- ApplyColor(Shp_MenuLogs, Lbl_BtnLogs, 'ClWhite');
+ ApplyColor(Shp_MenuLogs);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_LogsMouseLeave(Sender: TObject);
 begin
- RemoveColor(Shp_MenuLogs, Lbl_BtnLogs, 'ClWhite');
+ RemoveColor(Shp_MenuLogs);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_AgentListMouseEnter(Sender: TObject);
 begin
- ApplyColor(Shp_MenuAgentList, Lbl_BtnAgentList, 'ClWhite');
+ ApplyColor(Shp_MenuAgentList);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_AgentListMouseLeave(Sender: TObject);
 begin
- RemoveColor(Shp_MenuAgentList, Lbl_BtnAgentList, 'ClWhite');
+ RemoveColor(Shp_MenuAgentList);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_AgentExampleMouseEnter(Sender: TObject);
 begin
-  ApplyColor(Shp_btnAgentExample, Lbl_StatusAgentExample, 'ClWhite');
+  ApplyColor(Shp_btnAgentExample);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_AgentExampleMouseLeave(Sender: TObject);
 begin
-  RemoveColor(Shp_btnAgentExample, Lbl_StatusAgentExample, '$008080FF');
+  RemoveColor(Shp_btnAgentExample);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_SendCommandMouseEnter(Sender: TObject);
 begin
-  ApplyColor(Shp_BtnSendCommand, Lbl_BtnAgentList, 'ClWhite');
+  ApplyColor(Shp_BtnSendCommand);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_SendCommandMouseLeave(Sender: TObject);
 begin
- RemoveColor(Shp_BtnSendCommand, Lbl_BtnAgentList, 'ClWhite');
+ RemoveColor(Shp_BtnSendCommand);
 end;
 
 procedure TFrm_LabSyncServer.SBtn_FileTransferMouseEnter(Sender: TObject);
 begin
- ApplyColor(Shp_BtnFileTransfer, Lbl_BtnFileTransfer, 'ClWhite');
+ ApplyColor(Shp_BtnFileTransfer);
 end;
 
 procedure TFrm_LabSyncServer.SBtn_FileTransferMouseLeave(Sender: TObject);
 begin
-  RemoveColor(Shp_BtnFileTransfer, Lbl_BtnFileTransfer, 'ClWhite');
+  RemoveColor(Shp_BtnFileTransfer);
 end;
 
 end.

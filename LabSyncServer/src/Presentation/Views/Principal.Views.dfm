@@ -146,6 +146,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     1F8FF8F83F8FF8FE400FF87F000FF87F001FFC0007FFFC0007FFFC0007FFFFFF
     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
   TextHeight = 15
   object Pnl_Background: TPanel
     Left = 0
@@ -157,7 +159,6 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 719
     object Pnl_ComputerInfo: TPanel
       AlignWithMargins = True
       Left = 195
@@ -2790,8 +2791,6 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             BevelOuter = bvNone
             ParentColor = True
             TabOrder = 0
-            ExplicitTop = 267
-            ExplicitWidth = 191
             object Shp_btnAgentExample: TShape
               Left = 0
               Top = 0
