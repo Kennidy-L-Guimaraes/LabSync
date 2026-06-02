@@ -11,8 +11,11 @@ type
     FID     : TID;
   public
    {Public Declarations}
-    function GetID: string;
-    function GetDate: string;
+    function GetID      : string;
+    function GetDate    : string;
+    function GetServer  : string;
+    function GetPort    : string;
+    function GetVersion : string;
 
     procedure InitializeIfNeeded;
     constructor Create;
@@ -46,6 +49,21 @@ end;
 function TServerControll.GetID: string;
 begin
   Result := FID.GetID;
+end;
+
+function TServerControll.GetPort: string;
+begin
+  Result := FServerConfig.GetPortOption('Port');
+end;
+
+function TServerControll.GetServer: string;
+begin
+  Result := FServerConfig.GetServerOption('Server');
+end;
+
+function TServerControll.GetVersion: string;
+begin
+ Result := FID.getVersion;
 end;
 
 procedure TServerControll.InitializeIfNeeded;

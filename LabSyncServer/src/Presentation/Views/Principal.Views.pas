@@ -67,10 +67,10 @@ type
     Lbl_BtnAgentList: TLabel;
     Sbtn_AgentList: TSpeedButton;
     Lbl_NetworkLab: TLabel;
-    Lbl_ReturnIP: TLabel;
-    Lbl_ReturnStatus: TLabel;
-    Lbl_MachineStatus: TLabel;
-    Lbl_LocalIP: TLabel;
+    Lbl_serverAddressExample: TLabel;
+    Lbl_ServerPortExample: TLabel;
+    Lbl_ServerPort: TLabel;
+    Lbl_serverAddress: TLabel;
     Lbl_MachineID: TLabel;
     Lbl_ReturnID: TLabel;
     Lbl_ReturnVersion: TLabel;
@@ -156,7 +156,12 @@ end;
 procedure TFrm_LabSyncServer.ApplyData;
 begin
  Lbl_ServerNameExample.Caption           := FController.GetID;
+ Lbl_ReturnID.Caption                    := Fcontroller.GetID;
+ Lbl_ReturnVersion.caption               := FController.GetVersion;
  Lbl_ServerDateConnectionExample.Caption := FController.GetDate;
+ Lbl_serverAddressExample.Caption        := FController.GetServer;
+ Lbl_serverAddressExample.Hint           := FController.GetServer;
+ Lbl_ServerPortExample.Caption           := FController.GetPort;
 end;
 
 procedure TFrm_LabSyncServer.FormClose(Sender: TObject;

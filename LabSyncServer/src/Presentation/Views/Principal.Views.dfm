@@ -159,6 +159,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 719
     object Pnl_ComputerInfo: TPanel
       AlignWithMargins = True
       Left = 195
@@ -232,16 +233,16 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         end
       end
       object Pnl_AgentScreen: TPanel
-        Left = 0
+        Left = 2
         Top = 2
-        Width = 647
+        Width = 645
         Height = 404
         ParentColor = True
         TabOrder = 1
         object Img_AgentScreen: TImage
           Left = 1
           Top = 1
-          Width = 645
+          Width = 643
           Height = 402
           Cursor = crHandPoint
           Align = alClient
@@ -898,11 +899,11 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         Font.Style = []
         ParentFont = False
       end
-      object Lbl_ReturnIP: TLabel
+      object Lbl_serverAddressExample: TLabel
         AlignWithMargins = True
-        Left = 74
+        Left = 66
         Top = 389
-        Width = 97
+        Width = 100
         Height = 17
         Margins.Left = 5
         Margins.Top = 10
@@ -916,11 +917,12 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
         ParentFont = False
-        WordWrap = True
+        ParentShowHint = False
+        ShowHint = True
       end
-      object Lbl_ReturnStatus: TLabel
+      object Lbl_ServerPortExample: TLabel
         AlignWithMargins = True
-        Left = 74
+        Left = 53
         Top = 426
         Width = 74
         Height = 17
@@ -938,17 +940,17 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         ParentFont = False
         WordWrap = True
       end
-      object Lbl_MachineStatus: TLabel
+      object Lbl_ServerPort: TLabel
         AlignWithMargins = True
         Left = 16
         Top = 426
-        Width = 38
+        Width = 27
         Height = 17
         Margins.Left = 5
         Margins.Top = 10
         Margins.Right = 5
         Margins.Bottom = 10
-        Caption = 'Status:'
+        Caption = 'Port:'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 14671839
         Font.Height = -12
@@ -956,17 +958,17 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         Font.Style = []
         ParentFont = False
       end
-      object Lbl_LocalIP: TLabel
+      object Lbl_serverAddress: TLabel
         AlignWithMargins = True
         Left = 16
         Top = 389
-        Width = 48
+        Width = 40
         Height = 17
         Margins.Left = 5
         Margins.Top = 10
         Margins.Right = 5
         Margins.Bottom = 10
-        Caption = 'Local IP:'
+        Caption = 'Server:'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 14671839
         Font.Height = -12
@@ -1014,7 +1016,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
       end
       object Lbl_ReturnVersion: TLabel
         AlignWithMargins = True
-        Left = 129
+        Left = 124
         Top = 500
         Width = 44
         Height = 17
