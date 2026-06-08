@@ -145,6 +145,7 @@ procedure TFrm_LabSyncServer.FormCreate(Sender: TObject);
 begin
  FController := TServerControll.Create;
  FController.InitializeIfNeeded;
+ FController.ConnectServer;
  ApplyData;
 end;
 
@@ -163,6 +164,12 @@ begin
  Lbl_serverAddressExample.Hint           := FController.GetServer;
  Lbl_ServerPortExample.Caption           := FController.GetPort;
  Lbl_ServerIPExample.Caption             := FController.GetIp;
+ Lbl_ServerStatus.Caption                := FController.IsTheServerActive;
+ if FController.IsTheServerActive = 'Active' then
+ begin
+  Lbl_ServerStatus.Font.Color := Cllime;
+ end;
+
 end;
 
 procedure TFrm_LabSyncServer.FormClose(Sender: TObject;

@@ -9,7 +9,9 @@ uses
   ServerConfig.Service in 'src\Application\Services\ServerConfig.Service.pas',
   Command.Logs in 'src\Application\logs\Command.Logs.pas',
   Transporter.Dto in '..\shared\Application\src\Dtos\Transporter.Dto.pas',
-  ID.Service in 'src\Application\Services\ID.Service.pas';
+  ID.Service in 'src\Application\Services\ID.Service.pas',
+  LocalIP.Service in 'src\Application\Services\LocalIP.Service.pas',
+  Server.Service in 'src\Application\Services\Server.Service.pas';
 
 {$R *.res}
 

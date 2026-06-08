@@ -2,7 +2,7 @@ unit Server.Controller;
 
 interface
 uses Config.Service, ID.Service, ServerConfig.Service, SysUtils, DateUtils, Classes,
-  LocalIP.Service;
+  LocalIP.Service, Server.Service;
 type
  TServerControll = class
   private
@@ -11,6 +11,7 @@ type
     FServerConfig : TServerConfig;
     FID           : TID;
     IPService     : TLocalIPService;
+    FServer       : TServerService;
   public
    {Public Declarations}
     function GetID      : string;
@@ -20,6 +21,9 @@ type
     function GetVersion : string;
     function GetIp      : string;
 
+    procedure ConnectServer;
+    procedure DisconnectServer;
+    function IsTheServerActive: string;
     procedure InitializeIfNeeded;
     constructor Create;
     destructor Destroy;
@@ -29,12 +33,18 @@ implementation
 
 { TServerControll }
 
+procedure TServerControll.ConnectServer;
+begin
+ FServer.Start(StrToInt(GetPort));
+end;
+
 constructor TServerControll.Create;
 begin
   FID           := TID.Create;
   FConfig       := TConfig.Create;
   IPService     := TLocalIPService.Create;
   FServerConfig := TserverConfig.Create;
+  FServer       := TServerService.Create;
 end;
 
 destructor TServerControll.Destroy;
@@ -43,7 +53,13 @@ begin
   FConfig.Free;
   FServerConfig.Free;
   IPService.Free;
+  FServer.Free;
   inherited Destroy;
+end;
+
+procedure TServerControll.DisconnectServer;
+begin
+  Fserver.Stop;
 end;
 
 function TServerControll.GetDate: string;
@@ -83,9 +99,14 @@ begin
   if FConfig.AlreadyStarted = False then
    begin
     FServerConfig.SetServerOption('Server', 'https://company.com');
-    FServerConfig.SetPortOption('Port', ':5555'); //Default
+    FServerConfig.SetPortOption('Port', '5555'); //Default
    end;
    exit;
+end;
+
+function TServerControll.IsTheServerActive: string;
+begin
+ Result := FServer.IsTheServerActive;
 end;
 
 end.

@@ -140,6 +140,8 @@
         <DCCReference Include="src\Application\logs\Command.Logs.pas"/>
         <DCCReference Include="..\shared\Application\src\Dtos\Transporter.Dto.pas"/>
         <DCCReference Include="src\Application\Services\ID.Service.pas"/>
+        <DCCReference Include="src\Application\Services\LocalIP.Service.pas"/>
+        <DCCReference Include="src\Application\Services\Server.Service.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
