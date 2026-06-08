@@ -162,6 +162,7 @@ begin
  Lbl_serverAddressExample.Caption        := FController.GetServer;
  Lbl_serverAddressExample.Hint           := FController.GetServer;
  Lbl_ServerPortExample.Caption           := FController.GetPort;
+ Lbl_ServerIPExample.Caption             := FController.GetIp;
 end;
 
 procedure TFrm_LabSyncServer.FormClose(Sender: TObject;

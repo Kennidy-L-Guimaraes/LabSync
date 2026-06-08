@@ -1,14 +1,16 @@
 unit Server.Controller;
 
 interface
-uses Config.Service, ID.Service, ServerConfig.Service, SysUtils, DateUtils, Classes;
+uses Config.Service, ID.Service, ServerConfig.Service, SysUtils, DateUtils, Classes,
+  LocalIP.Service;
 type
  TServerControll = class
   private
    {Private Declarations}
     FConfig       : TConfig;
     FServerConfig : TServerConfig;
-    FID     : TID;
+    FID           : TID;
+    IPService     : TLocalIPService;
   public
    {Public Declarations}
     function GetID      : string;
@@ -16,6 +18,7 @@ type
     function GetServer  : string;
     function GetPort    : string;
     function GetVersion : string;
+    function GetIp      : string;
 
     procedure InitializeIfNeeded;
     constructor Create;
@@ -28,8 +31,9 @@ implementation
 
 constructor TServerControll.Create;
 begin
-  FID := TID.Create;
-  FConfig := TConfig.Create;
+  FID           := TID.Create;
+  FConfig       := TConfig.Create;
+  IPService     := TLocalIPService.Create;
   FServerConfig := TserverConfig.Create;
 end;
 
@@ -38,6 +42,7 @@ begin
   FID.Free;
   FConfig.Free;
   FServerConfig.Free;
+  IPService.Free;
   inherited Destroy;
 end;
 
@@ -49,6 +54,11 @@ end;
 function TServerControll.GetID: string;
 begin
   Result := FID.GetID;
+end;
+
+function TServerControll.GetIp: string;
+begin
+ Result := IPService.GetServerIp;
 end;
 
 function TServerControll.GetPort: string;
