@@ -159,6 +159,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 719
     object Pnl_ComputerInfo: TPanel
       AlignWithMargins = True
       Left = 195
@@ -2424,7 +2425,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           Height = 17
           Caption = '192.168.000.000'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clLime
+          Font.Color = 8421631
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -2621,9 +2622,9 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           AlignWithMargins = True
           Left = 181
           Top = 10
-          Width = 100
+          Width = 48
           Height = 17
-          Caption = 'Time Connection:'
+          Caption = '00:00:00'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 8355711
           Font.Height = -12
@@ -2649,9 +2650,9 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           AlignWithMargins = True
           Left = 159
           Top = 56
-          Width = 100
+          Width = 48
           Height = 17
-          Caption = 'Time Connection:'
+          Caption = '00:00:00'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 8355711
           Font.Height = -12
@@ -3019,5 +3020,11 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         end
       end
     end
+  end
+  object Timer_ElapsedTime: TTimer
+    Enabled = False
+    OnTimer = Timer_ElapsedTimeTimer
+    Left = 813
+    Top = 7
   end
 end

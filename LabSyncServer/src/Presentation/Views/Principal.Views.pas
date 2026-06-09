@@ -107,6 +107,7 @@ type
     Lbl_IPAgentExample: TLabel;
     Shp_btnAgentExample: TShape;
     Sbtn_AgentExample: TSpeedButton;
+    Timer_ElapsedTime: TTimer;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);
@@ -122,9 +123,11 @@ type
     procedure Sbtn_AgentExampleMouseLeave(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Timer_ElapsedTimeTimer(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
+    FSeconds    : integer;
   public
     { Public declarations }
     procedure ApplyColor(const AShape: TShape);
@@ -167,7 +170,10 @@ begin
  Lbl_ServerStatus.Caption                := FController.IsTheServerActive;
  if FController.IsTheServerActive = 'Active' then
  begin
-  Lbl_ServerStatus.Font.Color := Cllime;
+  Lbl_ServerStatus.Font.Color          := Cllime;
+  Lbl_ServerIPExample.Font.Color       := ClLime;
+  Timer_ElapsedTime.Enabled := True;
+  Lbl_ServerTimeConnectionExample.Caption := FormatDateTime('hh:mm:ss', now);
  end;
 
 end;
@@ -196,6 +202,20 @@ end;
 procedure TFrm_LabSyncServer.Sbtn_SettingsMouseLeave(Sender: TObject);
 begin
  RemoveColor(Shp_MenuSettings);
+end;
+
+procedure TFrm_LabSyncServer.Timer_ElapsedTimeTimer(Sender: TObject);
+var
+  Hour, Minute, Second: Integer;
+begin
+  Inc(FSeconds);
+
+  Hour   := FSeconds div 3600;
+  Minute := (FSeconds mod 3600) div 60;
+  Second := FSeconds mod 60;
+
+  Lbl_ServerTimeElapsedExample.Caption :=
+    Format('%.2d:%.2d:%.2d', [Hour, Minute, Second]);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_LogsMouseEnter(Sender: TObject);
