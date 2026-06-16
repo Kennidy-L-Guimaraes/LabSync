@@ -77,7 +77,7 @@ begin
     FConfig.SetStarted(True);
     //ServerConfig
     FServerConfig.SetServerOption('Server', 'https://company.com');
-    FServerConfig.SetPortOption('Port', ':5555'); //Default
+    FServerConfig.SetPortOption('Port', '5555'); //Default
    end
    else
    begin

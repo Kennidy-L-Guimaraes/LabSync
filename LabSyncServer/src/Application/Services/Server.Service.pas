@@ -2,7 +2,7 @@ unit Server.Service;
 interface
 uses
   IdTCPServer,
-  IdContext, Classes, Windows, types, System.IOUtils, System.SysUtils;
+  IdContext, Classes, Windows, types, System.IOUtils, System.SysUtils, dialogs;
  type
   TServerService = class
     private
@@ -16,6 +16,8 @@ uses
      procedure Start(const Aport: integer);
      function  IsTheServerActive: string;
      procedure Stop;
+
+     function PingPongMessage(AContext: TIdContext; const Msg: string): string; //test remove it later
   end;
 
 implementation
@@ -45,9 +47,31 @@ begin
  Result := 'Inactive';
 end;
 
+
+function TServerService.PingPongMessage(AContext: TIdContext;
+  const Msg: string): string;
+begin
+   if SameText(Msg, 'PING') then
+    AContext.Connection.IOHandler.WriteLn('PONG');
+
+  Result := Msg;
+end;
+
 procedure TServerService.ServerExecute(AContext: TIdContext);
+var
+ Msg : string;
 begin
  Sleep(100);
+
+  Msg := AContext.Connection.IOHandler.ReadLn;
+
+  Msg := PingPongMessage(AContext, Msg);
+
+  TThread.Queue(nil,
+    procedure
+    begin
+      ShowMessage('Recebido: ' + Msg);
+    end);
 end;
 
 procedure TServerService.Start(const Aport: integer);

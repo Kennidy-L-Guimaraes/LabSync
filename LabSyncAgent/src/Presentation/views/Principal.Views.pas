@@ -9,7 +9,7 @@ uses
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
   Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command,
   Agent.Controller, Vcl.Menus, CommandParsed.Dto, Message.Views, Warning.Views,
-  LogViewer.Views, Controller.Dto;
+  LogViewer.Views, Controller.Dto, IdTCPClient;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -157,6 +157,7 @@ type
       FViewerBatchSize : Integer;
       FWarning         : TFrm_Warning;
       FlogViewer       : TFrm_LogViewer;
+      FIdTCPClient     : TIdTCPClient;
   public
     { Public declarations }
     procedure AppendLogLine(ARichEdit: TRichEdit; const Line: string);
@@ -243,8 +244,27 @@ var
   Id           : TID;
   Dispatcher   : TCommandDispatcher;
   Config       : TConfig;
+  response : string;
 begin
-  Config       := Tconfig.Create;
+
+    FIdTCPClient := TIdTCPClient.Create(Self);
+    try
+      FIdTCPClient.Host := '192.168.0.121';
+      FIdTCPClient.Port := 5555;
+      FIdTCPClient.Connect;
+
+    FIdTCPClient.IOHandler.WriteLn('PING');
+    Response := FIdTCPClient.IOHandler.ReadLn;
+
+    Showmessage(response);
+
+    finally
+    if FIdTCPClient.Connected then
+      FIdTCPClient.Disconnect;
+    FIdTCPClient.Free;
+    end;
+
+  {Config       := Tconfig.Create;
   Dispatcher   := TCommandDispatcher.Create;
   ID           := TId.Create;
   try
@@ -257,7 +277,7 @@ begin
    Config.Free;
    Dispatcher.Free;
    ID.Free;
-  end;
+  end;}
 end;
 
 procedure TFrm_LabSyncAgent.Close1Click(Sender: TObject);

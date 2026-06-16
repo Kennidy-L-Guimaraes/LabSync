@@ -159,7 +159,6 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 719
     object Pnl_ComputerInfo: TPanel
       AlignWithMargins = True
       Left = 195
@@ -2653,11 +2652,13 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           Width = 48
           Height = 17
           Caption = '00:00:00'
+          Color = 33023
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 8355711
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
+          ParentColor = False
           ParentFont = False
         end
       end
@@ -3026,5 +3027,10 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     OnTimer = Timer_ElapsedTimeTimer
     Left = 813
     Top = 7
+  end
+  object Timer_TestServer: TTimer
+    Interval = 800
+    Left = 126
+    Top = 564
   end
 end
