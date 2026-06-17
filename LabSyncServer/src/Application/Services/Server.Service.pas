@@ -51,9 +51,7 @@ end;
 function TServerService.PingPongMessage(AContext: TIdContext;
   const Msg: string): string;
 begin
-   if SameText(Msg, 'PING') then
-    AContext.Connection.IOHandler.WriteLn('PONG');
-
+  AContext.Connection.IOHandler.WriteLn('SUCESS');
   Result := Msg;
 end;
 

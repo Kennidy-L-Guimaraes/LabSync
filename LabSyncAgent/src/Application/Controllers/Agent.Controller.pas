@@ -31,8 +31,7 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       procedure ShellSecurity;
       procedure InitializeIfNeeded;
       procedure LogStartAndOver(const Value: string);
-      function  GetDtoValues : TControllerDto;
-
+      function  GetDtoValues : TControllerDto;      
   end;
 
 implementation

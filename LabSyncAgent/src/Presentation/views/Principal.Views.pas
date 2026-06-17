@@ -245,18 +245,22 @@ var
   Dispatcher   : TCommandDispatcher;
   Config       : TConfig;
   response : string;
+  machine  : string;
 begin
 
     FIdTCPClient := TIdTCPClient.Create(Self);
     try
-      FIdTCPClient.Host := '192.168.0.121';
-      FIdTCPClient.Port := 5555;
+      FIdTCPClient.Host := FcontrollerDto.Server;
+      FIdTCPClient.Port := strtoInt(FControllerDto.Port);
       FIdTCPClient.Connect;
 
-    FIdTCPClient.IOHandler.WriteLn('PING');
-    Response := FIdTCPClient.IOHandler.ReadLn;
-
-    Showmessage(response);
+      if FIdTCPClient.Connected then
+      begin
+       Machine := ' ID: ' + FcontrollerDto.Id + ' IP: ' + FcontrollerDto.ip;
+       FIdTCPClient.IOHandler.WriteLn(machine);
+       Response := FIdTCPClient.IOHandler.ReadLn;
+       Showmessage(response);
+      end;
 
     finally
     if FIdTCPClient.Connected then
