@@ -11,7 +11,8 @@ uses
   Transporter.Dto in '..\shared\Application\src\Dtos\Transporter.Dto.pas',
   ID.Service in 'src\Application\Services\ID.Service.pas',
   LocalIP.Service in 'src\Application\Services\LocalIP.Service.pas',
-  Server.Service in 'src\Application\Services\Server.Service.pas';
+  Server.Service in 'src\Application\Services\Server.Service.pas',
+  AgentCard.Service in 'src\Application\Services\AgentCard.Service.pas';
 
 {$R *.res}
 
