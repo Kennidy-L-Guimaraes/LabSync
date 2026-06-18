@@ -12,7 +12,9 @@ uses
   ID.Service in 'src\Application\Services\ID.Service.pas',
   LocalIP.Service in 'src\Application\Services\LocalIP.Service.pas',
   Server.Service in 'src\Application\Services\Server.Service.pas',
-  AgentCard.Component in 'src\Application\Components\AgentCard.Component.pas';
+  AgentCard.Component in 'src\Application\Components\AgentCard.Component.pas',
+  AgentCard.Manager in 'src\Application\Managers\AgentCard.Manager.pas',
+  AgentInfo.Service in 'src\Application\Services\AgentInfo.Service.pas';
 
 {$R *.res}
 

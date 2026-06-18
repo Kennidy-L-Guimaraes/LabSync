@@ -143,6 +143,8 @@
         <DCCReference Include="src\Application\Services\LocalIP.Service.pas"/>
         <DCCReference Include="src\Application\Services\Server.Service.pas"/>
         <DCCReference Include="src\Application\Components\AgentCard.Component.pas"/>
+        <DCCReference Include="src\Application\Managers\AgentCard.Manager.pas"/>
+        <DCCReference Include="src\Application\Services\AgentInfo.Service.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
