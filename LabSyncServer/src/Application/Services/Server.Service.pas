@@ -2,7 +2,8 @@ unit Server.Service;
 interface
 uses
   IdTCPServer,
-  IdContext, Classes, Windows, types, System.IOUtils, System.SysUtils, dialogs;
+  IdContext, Classes, Windows, types, System.IOUtils, System.SysUtils, dialogs,
+  AgentCard.Manager;
  type
   TServerService = class
     private
@@ -11,6 +12,8 @@ uses
      procedure ServerExecute(AContext: TIdContext);
     public
      {Public Declarations}
+     var
+     AgentCardManager : TAgentCardManager;
      constructor Create;
      destructor Destroy;
      procedure Start(const Aport: integer);
@@ -21,6 +24,7 @@ uses
   end;
 
 implementation
+uses Server.Controller;
 
 { TServerControll }
 
@@ -34,6 +38,7 @@ end;
 destructor TServerService.Destroy;
 begin
  FServer.Free;
+ AgentCardManager.Free;
  inherited;
 end;
 
@@ -51,25 +56,31 @@ end;
 function TServerService.PingPongMessage(AContext: TIdContext;
   const Msg: string): string;
 begin
-  AContext.Connection.IOHandler.WriteLn('SUCESS');
-  Result := Msg;
+   AContext.Connection.IOHandler.WriteLn('Trying to connect to: ');
+   Result := Msg;
 end;
 
 procedure TServerService.ServerExecute(AContext: TIdContext);
 var
- Msg : string;
+  Msg: string;
+  Parts: TArray<string>;
+  AgentID: string;
+  AgentIP: string;
 begin
- Sleep(100);
-
   Msg := AContext.Connection.IOHandler.ReadLn;
+  Parts := Msg.Split(['|']);
 
-  Msg := PingPongMessage(AContext, Msg);
-
-  TThread.Queue(nil,
-    procedure
-    begin
-      ShowMessage('Recebido: ' + Msg);
-    end);
+  if (Length(Parts) = 3) and (Parts[0] = 'REGISTER') then
+  begin
+    AgentID := Parts[1];
+    AgentIP := Parts[2];
+    AContext.Connection.IOHandler.WriteLn('REGISTER_OK');
+    TThread.Queue(nil,
+      procedure
+      begin
+       AgentCardManager.RegisterAgent(AgentID, AgentIP);
+      end);
+  end;
 end;
 
 procedure TServerService.Start(const Aport: integer);

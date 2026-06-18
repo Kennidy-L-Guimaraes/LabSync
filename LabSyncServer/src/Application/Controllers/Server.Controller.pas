@@ -2,7 +2,7 @@ unit Server.Controller;
 
 interface
 uses Config.Service, ID.Service, ServerConfig.Service, SysUtils, DateUtils, Classes,
-  LocalIP.Service, Server.Service;
+  LocalIP.Service, Server.Service, AgentCard.Manager, Vcl.Graphics, Vcl.Forms;
 type
  TServerControll = class
   private
@@ -12,6 +12,7 @@ type
     FID           : TID;
     IPService     : TLocalIPService;
     FServer       : TServerService;
+    FAgentCardManager : TAgentCardManager;
   public
    {Public Declarations}
     function GetID      : string;
@@ -25,7 +26,7 @@ type
     procedure DisconnectServer;
     function IsTheServerActive: string;
     procedure InitializeIfNeeded;
-    constructor Create;
+    constructor Create(AOwner: TComponent; AContainer: TScrollBox; APicture: TPicture);
     destructor Destroy;
  end;
 
@@ -33,18 +34,22 @@ implementation
 
 { TServerControll }
 
+uses Principal.Views;
+
 procedure TServerControll.ConnectServer;
 begin
  FServer.Start(StrToInt(GetPort));
+ FServer.AgentCardManager := FAgentCardManager;
 end;
 
-constructor TServerControll.Create;
+constructor TServerControll.Create(AOwner: TComponent; AContainer: TScrollBox; APicture: TPicture);
 begin
   FID           := TID.Create;
   FConfig       := TConfig.Create;
   IPService     := TLocalIPService.Create;
   FServerConfig := TserverConfig.Create;
   FServer       := TServerService.Create;
+  FAgentCardManager := TAgentCardManager.Create(AOwner, AContainer, APicture);
 end;
 
 destructor TServerControll.Destroy;

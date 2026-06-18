@@ -256,7 +256,7 @@ begin
 
       if FIdTCPClient.Connected then
       begin
-       Machine := ' ID: ' + FcontrollerDto.Id + ' IP: ' + FcontrollerDto.ip;
+       Machine := 'REGISTER|'+FControllerDto.ID+'|'+FControllerdto.Ip; //Language
        FIdTCPClient.IOHandler.WriteLn(machine);
        Response := FIdTCPClient.IOHandler.ReadLn;
        Showmessage(response);

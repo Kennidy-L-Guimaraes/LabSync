@@ -126,7 +126,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_ElapsedTimeTimer(Sender: TObject);
-    procedure Btn_TestClick(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
@@ -149,7 +148,7 @@ implementation
 
 procedure TFrm_LabSyncServer.FormCreate(Sender: TObject);
 begin
- FController := TServerControll.Create;
+ FController := TServerControll.Create(self, ScBox_Agents, Img_AgentExample.Picture);
  FController.InitializeIfNeeded;
  FController.ConnectServer;
  ApplyData;
@@ -184,13 +183,6 @@ begin
   Lbl_ServerTimeConnectionExample.Caption := FormatDateTime('hh:mm:ss', now);
  end;
 
-end;
-
-procedure TFrm_LabSyncServer.Btn_TestClick(Sender: TObject);
-var
- Component : TAgentCard;
-begin
- Component := TAgentCard.CreateComponent(Self, ScBox_Agents, Img_AgentExample.Picture, Sbtn_AgentExampleMouseEnter, Sbtn_AgentExampleMouseLeave);
 end;
 
 procedure TFrm_LabSyncServer.FormClose(Sender: TObject;

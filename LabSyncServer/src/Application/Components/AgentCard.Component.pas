@@ -1,7 +1,7 @@
 unit AgentCard.Component;
 
 interface
-uses Vcl.Graphics, Vcl.ExtCtrls, Vcl.ActnCtrls, Vcl.StdCtrls, Vcl.Buttons, Classes, Vcl.Controls;
+uses Vcl.Graphics, Vcl.ExtCtrls, Vcl.ActnCtrls, Vcl.StdCtrls, Vcl.Buttons, Classes, Vcl.Controls, SysUtils;
  type
  TAgentCard = class(TPanel)
    private
@@ -10,21 +10,25 @@ uses Vcl.Graphics, Vcl.ExtCtrls, Vcl.ActnCtrls, Vcl.StdCtrls, Vcl.Buttons, Class
     FImage       : TImage;
     FLabel       : TLabel;
     FSpeedButton : TSpeedbutton;
-    procedure CreatePanel;
+    FLabelStatus : string;
+    FColorLabel  : TColor;
     procedure CreateShape;
     procedure CreateImage(const Apicture: TPicture);
-    procedure CreateLabel;
-    procedure CreateSpeedButton(const AEventEnter: TNotifyEvent; const AEventLeave: TNotifyEvent);
+    procedure CreateLabels(const AName: string; const AIp: string; const AStatus: string);
+    procedure CreateSpeedButton;
+    function CreateLabel(const ACaption: string; const Atop, Aleft, Awidth, Aheight: integer; const Acolor: TColor):TLabel;
+    procedure EventEnter(Sender: TObject);
+    procedure EventLeave(Sender: TObject);
    public
     {Public Declarations}
-    constructor CreateComponent(AOwner: TComponent; AParent: TWinControl; APicture: TPicture; AEventEnter: TNotifyEvent; const AEventLeave: TNotifyEvent);
+    constructor CreateComponent(AOwner: TComponent; AParent: TWinControl; APicture: TPicture; const AName: string; const AIp: string; const AStatus: string);
  end;
 
 implementation
 
 { TCardFactory }
 
-constructor TAgentCard.CreateComponent(AOwner: TComponent; AParent: TWinControl; Apicture: TPicture; AEventEnter: TNotifyEvent; const AEventLeave: TNotifyEvent);
+constructor TAgentCard.CreateComponent(AOwner: TComponent; AParent: TWinControl; Apicture: TPicture; const AName: string; const AIp: string; const AStatus: string);
 begin
   inherited Create(AOwner);
   Width := 210;
@@ -36,8 +40,8 @@ begin
 
   CreateShape;
   CreateImage(Apicture); //Necessary Data
-  CreateLabel;
-  CreateSpeedButton(AEventEnter, AEventLeave);
+  CreateLabels(AName, AIp, AStatus);
+  CreateSpeedButton;
 end;
 
 procedure TAgentCard.CreateImage(const Apicture: TPicture);
@@ -46,8 +50,8 @@ begin
  try
   FImage.Parent := self;
   FImage.Top    := 11;
-  FImage.Width  := 42;
-  FImage.Height := 63;
+  FImage.Width  := 35;
+  FImage.Height := 60;
   FImage.Proportional := True;
   Fimage.Picture := Apicture;
  finally
@@ -55,14 +59,48 @@ begin
  end;
 end;
 
-procedure TAgentCard.CreateLabel;
+function TAgentCard.CreateLabel(const ACaption: string; const Atop, Aleft,
+  Awidth, Aheight: integer; const Acolor: TColor): TLabel;
+var
+ MyLabel : Tlabel;
 begin
+ MyLabel := TLabel.Create(Self);
+ try
+  MyLabel.Parent      := Self;
+  MyLabel.Font.Height := -12;
+  MyLabel.Left        := Aleft;
+  MyLabel.Top         := Atop;
+  MyLabel.Width       := Awidth;
+  MyLabel.Height     := Aheight;
+  MyLabel.Caption    := ACaption;
+  Mylabel.Font.Color := AColor;
 
+ finally
+
+ end;
 end;
 
-procedure TAgentCard.CreatePanel;
+procedure TAgentCard.CreateLabels(const AName: string; const AIp: string; const AStatus: string);
+var
+ ColorLabel: TColor;
+ Status    : string;
 begin
-
+  ColorLabel := $00DFDFDF;
+  Status     := trim(AStatus);
+  CreateLabel('Server Status: ', 57, 46, 79, 17, ColorLabel);
+  CreateLabel('Agent: ', 11, 46, 37, 17, ColorLabel);
+  CreateLabel('Agent IP: ', 34, 46, 52, 17, ColorLabel);
+  createLabel(AName, 11, 91, 79, 17, ColorLabel);
+  if sametext(status, 'active') then
+   begin
+    CreateLabel(AIp, 34, 104, 93, 17, TColor(ClLime));
+    CreateLabel(AStatus, 57, 131, 44, 17, TColor(ClLime))
+   end
+  else
+   begin
+    CreateLabel(AIp, 34, 104, 93, 17, TColor($008080FF));
+    CreateLabel(AStatus, 57, 131, 44, 17, TColor($008080FF))
+   end;
 end;
 
 procedure TAgentCard.CreateShape;
@@ -78,8 +116,7 @@ begin
  end;
 end;
 
-procedure TAgentCard.CreateSpeedButton(const AEventEnter: TNotifyEvent;
-  const AEventLeave: TNotifyEvent);
+procedure TAgentCard.CreateSpeedButton;
 begin
   FSpeedButton := TSpeedButton.Create(self);
   try
@@ -87,11 +124,21 @@ begin
    FSpeedButton.Cursor  := crHandPoint;
    FSpeedButton.Align   := alClient;
    FSpeedButton.Flat    := True;
-   FSpeedButton.OnMouseEnter := AEventEnter;
-   FSpeedButton.OnMouseEnter := AEventLeave;
+   FSpeedButton.OnMouseEnter := EventEnter;
+   FSpeedButton.OnMouseLeave := EventLeave;
   finally
 
   end;
+end;
+
+procedure TAgentCard.EventEnter(Sender: TObject);
+begin
+ FShape.Brush.Color := clred;
+end;
+
+procedure TAgentCard.EventLeave(Sender: TObject);
+begin
+ FShape.Brush.Color := $001B1B1B;
 end;
 
 end.
