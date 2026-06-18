@@ -159,6 +159,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 719
     object Pnl_ComputerInfo: TPanel
       AlignWithMargins = True
       Left = 195
@@ -835,6 +836,15 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           Font.Style = [fsBold]
           ParentFont = False
         end
+      end
+      object Btn_Test: TButton
+        Left = 357
+        Top = 422
+        Width = 75
+        Height = 29
+        Caption = 'TEST'
+        TabOrder = 4
+        OnClick = Btn_TestClick
       end
     end
     object Pnl_ComputerList: TPanel
@@ -2794,6 +2804,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             BevelOuter = bvNone
             ParentColor = True
             TabOrder = 0
+            Visible = False
             object Shp_btnAgentExample: TShape
               Left = 0
               Top = 0

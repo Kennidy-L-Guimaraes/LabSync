@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.Buttons, Vcl.ComCtrls,
-  Server.Controller, IdContext;
+  Server.Controller, IdContext, AgentCard.Component;
 
 type
   TFrm_LabSyncServer = class(TForm)
@@ -109,6 +109,7 @@ type
     Sbtn_AgentExample: TSpeedButton;
     Timer_ElapsedTime: TTimer;
     Timer_TestServer: TTimer;
+    Btn_Test: TButton;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);
@@ -125,6 +126,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_ElapsedTimeTimer(Sender: TObject);
+    procedure Btn_TestClick(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
@@ -182,6 +184,13 @@ begin
   Lbl_ServerTimeConnectionExample.Caption := FormatDateTime('hh:mm:ss', now);
  end;
 
+end;
+
+procedure TFrm_LabSyncServer.Btn_TestClick(Sender: TObject);
+var
+ Component : TAgentCard;
+begin
+ Component := TAgentCard.CreateComponent(Self, ScBox_Agents, Img_AgentExample.Picture, Sbtn_AgentExampleMouseEnter, Sbtn_AgentExampleMouseLeave);
 end;
 
 procedure TFrm_LabSyncServer.FormClose(Sender: TObject;
