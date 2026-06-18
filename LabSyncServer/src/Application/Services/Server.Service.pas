@@ -3,13 +3,14 @@ interface
 uses
   IdTCPServer,
   IdContext, Classes, Windows, types, System.IOUtils, System.SysUtils, dialogs,
-  AgentCard.Manager;
+  AgentCard.Manager, AgentInfo.Service;
  type
   TServerService = class
     private
      {Private Declarations}
      FServer : TIdTCPServer;
      procedure ServerExecute(AContext: TIdContext);
+     procedure ServerDisconnect(AContext: TIdContext);
     public
      {Public Declarations}
      var
@@ -33,6 +34,7 @@ begin
    inherited;
    FServer := TIdTCPServer.Create(nil);
    FServer.OnExecute := ServerExecute;
+   FServer.OnDisconnect := ServerDisconnect;
 end;
 
 destructor TServerService.Destroy;
@@ -60,26 +62,50 @@ begin
    Result := Msg;
 end;
 
+procedure TServerService.ServerDisconnect(AContext: TIdContext);
+var
+  Agent: TAgentInfo;
+  AgentID: string;
+begin
+  Agent := TAgentInfo(AContext.Data);
+  if Assigned(Agent) then
+  begin
+    AgentID := Agent.ID;
+    Agent.Free;
+    AContext.Data := nil;
+    TThread.Queue(nil,
+      procedure
+      begin
+        AgentCardManager.RemoveAgent(AgentID);
+      end);
+  end;
+end;
+
 procedure TServerService.ServerExecute(AContext: TIdContext);
 var
   Msg: string;
   Parts: TArray<string>;
   AgentID: string;
   AgentIP: string;
+  Agent: TAgentInfo;
 begin
   Msg := AContext.Connection.IOHandler.ReadLn;
   Parts := Msg.Split(['|']);
-
   if (Length(Parts) = 3) and (Parts[0] = 'REGISTER') then
   begin
     AgentID := Parts[1];
     AgentIP := Parts[2];
+    Agent := TAgentInfo.Create;
+    Agent.ID := AgentID;
+    Agent.IP := AgentIP;
+    AContext.Data := Agent;
     AContext.Connection.IOHandler.WriteLn('REGISTER_OK');
     TThread.Queue(nil,
       procedure
       begin
        AgentCardManager.RegisterAgent(AgentID, AgentIP);
       end);
+
   end;
 end;
 

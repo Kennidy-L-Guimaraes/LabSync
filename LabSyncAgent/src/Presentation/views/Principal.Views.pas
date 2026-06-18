@@ -263,9 +263,9 @@ begin
       end;
 
     finally
-    if FIdTCPClient.Connected then
-      FIdTCPClient.Disconnect;
-    FIdTCPClient.Free;
+    //if FIdTCPClient.Connected then
+      //FIdTCPClient.Disconnect;
+    //FIdTCPClient.Free;
     end;
 
   {Config       := Tconfig.Create;
