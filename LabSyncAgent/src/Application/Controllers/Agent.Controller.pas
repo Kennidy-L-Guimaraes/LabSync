@@ -4,22 +4,24 @@ interface
 
 uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
   Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service, DateUtils, SysUtils, Generics.Collections, Classes,
-  Controller.Dto;
+  Controller.Dto, AgentConnect.Service;
  type
   TAgentController = class
     private
      {Private Declarations}
-      FConfig: TConfig;
-      FServerConfig: TServerConfig;
-      FDispatcher: TCommandDispatcher;
-      FLog: TLog;
-      FID: TID;
-      FSysInfo: TStringlist;
-      ControllerDto: TControllerDto;
+      FConfig       : TConfig;
+      FServerConfig : TServerConfig;
+      FDispatcher   : TCommandDispatcher;
+      FLog          : TLog;
+      FID           : TID;
+      FSysInfo      : TStringlist;
+      FControllerDto: TControllerDto;
+      FServerAgent  : TAgentConnect;
     public
       constructor Create;
       destructor Destroy; override;
 
+      {FUNCTIONS}
       function  GetSysInfo: TCommandResult;
       function  GetLogs: string;
       function  ToggleOption(const Key: string):TOptionState;
@@ -27,18 +29,42 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       function  SetPort(const Port: string): string;
       function  GetOptionDisplay(const Key: string): string;
       function  GetID: string;
+      function  GetServerStatus: string;
+      function  GetDTO: TControllerDto;
+      function  GetDtoValues : TControllerDto;     
 
+      {PROCEDURES}
       procedure ShellSecurity;
       procedure InitializeIfNeeded;
       procedure LogStartAndOver(const Value: string);
-      function  GetDtoValues : TControllerDto;      
+      procedure ConnectServer;   
+      procedure CreateObjs;
+      procedure BuildDTO;  
   end;
 
 implementation
 
 { TAgentController }
 
+procedure TAgentController.BuildDTO;
+begin
+ FControllerdto:= GetDtoValues;
+end;
+
+procedure TAgentController.ConnectServer;
+begin
+ FServerAgent.Connect;
+end;
+
 constructor TAgentController.Create;
+begin
+ CreateObjs; 
+ BuildDTO;
+ //ServerStatus  
+ FServerAgent  := TAgentConnect.Create(FControllerDto);
+end;
+
+procedure TAgentController.CreateObjs;
 begin
  Fconfig       := TConfig.Create;
  FServerConfig := TServerConfig.Create; 
@@ -55,6 +81,7 @@ begin
   FLog.Free;
   FID.Free;
   FServerConfig.Free;
+  FServerAgent.Free;
   inherited;
 end;
 
@@ -87,9 +114,9 @@ end;
 procedure TAgentController.LogStartAndOver(const Value: string);
 begin
  if SameText(Value, 'Start') then
-    FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, ControllerDto.Version, ControllerDto.username, ControllerDto.IP)
+    FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, FControllerDto.Version, FControllerDto.username, FControllerDto.IP)
  else if SameText(Value, 'Over') then
-     FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, ControllerDto.Version, ControllerDto.username, ControllerDto.IP);
+     FLog.StartAndOver(Value, FormatDateTime('yyyymmdd_hhnnss', Now), GetID, FControllerDto.Version, FControllerDto.username, FControllerDto.IP);
 end;
 
 procedure TAgentController.ShellSecurity;
@@ -98,6 +125,11 @@ begin
     begin
      FConfig.SetOption('Commands', osDisabled);
     end;
+end;
+
+function TAgentController.GetDTO: TControllerDto;
+begin
+ Result := FControllerDto;
 end;
 
 function TAgentController.GetDtoValues : TControllerDto;
@@ -155,6 +187,11 @@ end;
 function TAgentController.GetOptionDisplay(const Key: string): string;
 begin
  Result := FConfig.GetOptionAsDisplay(Key);
+end;
+
+function TAgentController.GetServerStatus: string;
+begin
+  Result := FServerAgent.Isconnected;
 end;
 
 function TAgentController.GetSysInfo: TCommandResult;

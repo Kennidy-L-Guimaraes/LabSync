@@ -108,8 +108,7 @@ type
     Shp_btnAgentExample: TShape;
     Sbtn_AgentExample: TSpeedButton;
     Timer_ElapsedTime: TTimer;
-    Timer_TestServer: TTimer;
-    Btn_Test: TButton;
+    Timer_UpDateLiveMode: TTimer;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);

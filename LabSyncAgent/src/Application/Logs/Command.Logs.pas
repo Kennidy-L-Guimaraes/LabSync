@@ -13,6 +13,8 @@ interface
     class procedure ConfigLog(const TimeStamp, ID, ConfigName: string);
     class procedure ShellState(const TimeStamp, ID, Status : string);
     class procedure StartAndOver(const Status, TimeStamp, ID, Version, User, IP: string);
+    class procedure ConnectServer(const TimeStamp, Server, Port, messages: string);
+    class procedure DisconnectServer(const TimeStamp, Server, Port, messages: string);
   private
     {Private Declarations}
     class function  GetLogPath(const nameOfLog: string): string;
@@ -76,6 +78,20 @@ end;
 class procedure TLog.ConfigLog(const TimeStamp, ID, ConfigName: string);
 begin
   Tlog.SaveLog(Format('CONFIG | Time:%s | ID:%s Config:%s', [TimeStamp, ID, ConfigName]), 'Audit.log');
+end;
+
+class procedure TLog.ConnectServer(const TimeStamp, Server, Port,
+  messages: string);
+begin
+ //Use For Connect
+ TLog.SaveLog(Format('SERVER - CONNECT | Time: %s | %s | IP: %s | PORT: %s ', [TimeStamp, messages, server, port]), 'Audit.log');
+end;
+
+class procedure TLog.DisconnectServer(const TimeStamp, Server, Port,
+  messages: string);
+begin
+  //Use for Disconnect
+  TLog.SaveLog(Format('SERVER - DISCONNECT | Time: %s | %s | IP: %s | PORT: %s ', [TimeStamp, messages, server, port]), 'Audit.log');
 end;
 
 class procedure TLog.Fail(const TimeStamp, ID, CommandName, Params: string; Elapsed: integer; ErrorMessage: string; Context: TExecutionContext);

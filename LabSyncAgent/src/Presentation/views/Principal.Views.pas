@@ -123,15 +123,21 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     TryIcon_LabSyncAgent: TTrayIcon;
-    Image1: TImage;
+    Image_Logo: TImage;
     PopMenu_TryIcon: TPopupMenu;
     Close1: TMenuItem;
     Show1: TMenuItem;
     Img_port: TImage;
     Edt_Port: TEdit;
-    BitBtn1: TBitBtn;
     Timer_ShellSecurity: TTimer;
     Lbl_ViewAllLogs: TLabel;
+    Button1: TButton;
+    BitBtn1: TBitBtn;
+    image1: TImage;
+    Button2: TButton;
+    Lbl_ServerStatus: TLabel;
+    Lbl_ServerStatusResponse: TLabel;
+    Timer_UpdateServer: TTimer;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -146,36 +152,44 @@ type
     procedure Lbl_StateCommandsClick(Sender: TObject);
     procedure Timer_ShellSecurityTimer(Sender: TObject);
     procedure Lbl_ViewAllLogsClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Timer_UpdateServerTimer(Sender: TObject);
   private
     { Private declarations }
-      FController : TAgentController;
-      FControllerDto: TControllerDto;
+      FController      : TAgentController;
+      FControllerDto   : TControllerDto;
       FShellEnabledUntil : TDateTime;
-      FLastLogCount : Integer; //Log lines controll
+      FLastLogCount    : Integer; //Log lines controll
       FViewerLogs      : TStringList;
       FViewerIndex     : Integer;
       FViewerBatchSize : Integer;
       FWarning         : TFrm_Warning;
       FlogViewer       : TFrm_LogViewer;
       FIdTCPClient     : TIdTCPClient;
+      FScreenBusy      : Boolean;
   public
     { Public declarations }
+    {PROCEDURES}
     procedure AppendLogLine(ARichEdit: TRichEdit; const Line: string);
     procedure GetLogs;
     procedure StartViewerLoad;
     procedure GetSysData;
     procedure LoadConfig;
     procedure ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);
+    procedure SetViewerIndex(const Value: Integer);
     procedure CreateObjects;
     procedure DestroyObjects;
     procedure StartServices;
-    function  FindShapeForLabel(ALabel: TLabel): TShape;
 
-    function GetViewerLogs: TStringList;
-    function GetViewerIndex: Integer;
-    procedure SetViewerIndex(const Value: Integer);
-    function GetViewerBatchSize: Integer;
-    function GetControllerDto: TControllerDto;
+    {FUNCTIONS}
+    function  FindShapeForLabel(ALabel: TLabel): TShape;
+    function  GetViewerLogs: TStringList;
+    function  GetViewerIndex: Integer;
+    function  GetViewerBatchSize: Integer;
+    function  GetControllerDto: TControllerDto;
+
+    procedure TestScreen; //Test Remove Later
   end;
 
   var
@@ -215,6 +229,12 @@ begin
   else if Pos('OVER SYSTEM', Line) > 0 then
     ARichEdit.SelAttributes.Color := clMedGray
 
+  else if Pos('SERVER - CONNECT', line) > 0 then
+    ARichEdit.SelAttributes.Color := TColor($00FF379B)
+
+  else if Pos('SERVER - DISCONNECT', line) > 0 then
+    ARichEdit.SelAttributes.Color := TColor($00FF80FF)
+
   else
     ARichEdit.SelAttributes.Color := clSilver;
 
@@ -244,30 +264,7 @@ var
   Id           : TID;
   Dispatcher   : TCommandDispatcher;
   Config       : TConfig;
-  response : string;
-  machine  : string;
 begin
-
-    FIdTCPClient := TIdTCPClient.Create(Self);
-    try
-      FIdTCPClient.Host := FcontrollerDto.Server;
-      FIdTCPClient.Port := strtoInt(FControllerDto.Port);
-      FIdTCPClient.Connect;
-
-      if FIdTCPClient.Connected then
-      begin
-       Machine := 'REGISTER|'+FControllerDto.ID+'|'+FControllerdto.Ip; //Language
-       FIdTCPClient.IOHandler.WriteLn(machine);
-       Response := FIdTCPClient.IOHandler.ReadLn;
-       Showmessage(response);
-      end;
-
-    finally
-    //if FIdTCPClient.Connected then
-      //FIdTCPClient.Disconnect;
-    //FIdTCPClient.Free;
-    end;
-
   {Config       := Tconfig.Create;
   Dispatcher   := TCommandDispatcher.Create;
   ID           := TId.Create;
@@ -284,6 +281,16 @@ begin
   end;}
 end;
 
+procedure TFrm_LabSyncAgent.Button1Click(Sender: TObject);
+begin
+ Timer_AgentLiveMode.Enabled := True;
+end;
+
+procedure TFrm_LabSyncAgent.Button2Click(Sender: TObject);
+begin
+ Timer_AgentLiveMode.Enabled := False;
+end;
+
 procedure TFrm_LabSyncAgent.Close1Click(Sender: TObject);
 begin
  Frm_LabSyncAgent.Close;
@@ -292,11 +299,11 @@ end;
 
 procedure TFrm_LabSyncAgent.CreateObjects;
 begin
- FController := TAgentController.Create;
+ FController    := TAgentController.Create;
  FController.InitializeIfNeeded;
- FControllerDto := FController.GetDtoValues;
- FlogViewer  := TFrm_LogViewer.Create(nil);
- FWarning    := TFrm_Warning.Create(nil);
+ FControllerDto := FController.GetDTO;
+ FlogViewer     := TFrm_LogViewer.Create(nil);
+ FWarning       := TFrm_Warning.Create(nil);
 end;
 
 function TFrm_LabSyncAgent.FindShapeForLabel(ALabel: TLabel): TShape;
@@ -330,6 +337,7 @@ begin
   FController.ShellSecurity;
   GetLogs;
   Timer_LogReceiver.Enabled := True;
+  FController.ConnectServer;
 end;
 
 procedure TFrm_LabSyncAgent.DestroyObjects;
@@ -558,35 +566,80 @@ begin
   //FLogViewer.RichText_Logs.Clear;
   FLogViewer.Timer_LoadLogs.Enabled := True;
 end;
+procedure TFrm_LabSyncAgent.TestScreen;
+begin
+  if FScreenBusy then
+    Exit; // já tem uma captura em andamento, ignora esse tick do timer
+
+  FScreenBusy := True;
+
+  TThread.CreateAnonymousThread(
+    procedure
+    var
+      Stream      : TMemoryStream;
+      Jpg         : TJPEGImage;
+      Transporter : TCommandResult;
+      Command     : string;
+      Dispatcher  : TCommandDispatcher;
+      Config      : TConfig;
+      Bmp         : TBitmap;
+    begin
+      try
+        Command := '$get_print quality=100 target=' + TId.GetID;
+        Config  := TConfig.Create;
+        try
+          Dispatcher := TCommandDispatcher.Create; // ajuste se já existir instância
+          try
+            Transporter := Dispatcher.Execute(Command, Config, ecLocal);
+
+            if TScreenshotStreamQueue.Dequeue(Stream) then
+            try
+              Stream.Position := 0;
+              Jpg := TJPEGImage.Create;
+              try
+                Jpg.LoadFromStream(Stream);
+
+                // Converte pro bitmap fora da main thread, só o Assign final entra na UI
+                Bmp := TBitmap.Create;
+                try
+                  Bmp.Assign(Jpg);
+
+                  TThread.Queue(nil,
+                    procedure
+                    begin
+                      try
+                        Image1.Picture.Bitmap.Assign(Bmp);
+                      finally
+                        Bmp.Free;
+                      end;
+                    end);
+                except
+                  Bmp.Free;
+                  raise;
+                end;
+
+              finally
+                Jpg.Free;
+              end;
+            finally
+              Stream.Free;
+            end;
+
+          finally
+            Dispatcher.Free;
+          end;
+        finally
+          Config.Free;
+        end;
+      finally
+        FScreenBusy := False;
+      end;
+    end).Start;
+end;
+
 procedure TFrm_LabSyncAgent.Timer_AgentLiveModeTimer(Sender: TObject);
-//var
-  //Stream : TMemoryStream;
-  //Jpg    : TJPEGImage;
 begin
-  {var
-  Stream : TMemoryStream;
-  Jpg    : TJPEGImage;
-  Transporter : TCommandResult;
-  Command     : string;
-begin
-  Command := '$get_print quality=100 target='+TId.GetID;
-  Transporter := Dispatcher.Execute(Command, Config, ecLocal);
-  if TScreenshotStreamQueue.Dequeue(Stream) then
-  try
-    Stream.Position := 0;
-
-    Jpg := TJPEGImage.Create;
-    try
-      Jpg.LoadFromStream(Stream);
-      Image1.Picture.Bitmap.Assign(Jpg);
-    finally
-      Jpg.Free;
-    end;
-
-  finally
-    Stream.Free;
-  end;
-end;}
+ TestScreen;
 end;
 
 procedure TFrm_LabSyncAgent.Timer_LogReceiverTimer(Sender: TObject);
@@ -606,6 +659,11 @@ begin
     Timestamp := FormatDateTime('yyyymmdd_hhnnss', Now);
     TLog.ShellState(Timestamp, FController.GetID, FController.GetOptionDisplay('Commands'));;
    end;
+end;
+
+procedure TFrm_LabSyncAgent.Timer_UpdateServerTimer(Sender: TObject);
+begin
+  Lbl_ServerStatusResponse.Caption := FController.GetServerStatus;
 end;
 
 procedure TFrm_LabSyncAgent.ToggleAndUpdateUI(const Key: string; ALabel: TLabel; AShape: TShape);

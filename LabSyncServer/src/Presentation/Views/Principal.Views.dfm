@@ -159,6 +159,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 719
     object Pnl_ComputerInfo: TPanel
       AlignWithMargins = True
       Left = 195
@@ -835,14 +836,6 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           Font.Style = [fsBold]
           ParentFont = False
         end
-      end
-      object Btn_Test: TButton
-        Left = 357
-        Top = 422
-        Width = 75
-        Height = 29
-        Caption = 'TEST'
-        TabOrder = 4
       end
     end
     object Pnl_ComputerList: TPanel
@@ -2795,6 +2788,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           ParentBackground = True
           TabOrder = 0
           UseWheelForScrolling = True
+          ExplicitTop = 28
           object Pnl_AgentCS000: TPanel
             Left = 0
             Top = 0
@@ -2813,16 +2807,13 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               Align = alClient
               Brush.Color = 1776411
               Pen.Color = 2697513
-              ExplicitLeft = 2
-              ExplicitTop = 2
-              ExplicitWidth = 204
-              ExplicitHeight = 87
+              ExplicitTop = 3
             end
             object Img_AgentExample: TImage
-              Left = 1
-              Top = 11
+              Left = 5
+              Top = 18
               Width = 35
-              Height = 63
+              Height = 50
               Picture.Data = {
                 0954506E67496D61676589504E470D0A1A0A0000000D49484452000000640000
                 0064080600000070E29554000000097048597300000B1300000B1301009A9C18
@@ -2889,6 +2880,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               Top = 11
               Width = 37
               Height = 17
+              Margins.Top = 5
+              Margins.Right = 5
               Caption = 'Agent:'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 14671839
@@ -2903,6 +2896,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               Top = 11
               Width = 79
               Height = 17
+              Margins.Top = 5
+              Margins.Right = 5
               Caption = 'Server Name:'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 8355711
@@ -2917,6 +2912,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               Top = 34
               Width = 52
               Height = 17
+              Margins.Top = 5
+              Margins.Right = 5
               Caption = 'Agent IP:'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 14671839
@@ -2931,6 +2928,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               Top = 57
               Width = 79
               Height = 17
+              Margins.Top = 5
+              Margins.Right = 5
               Caption = 'Server Status:'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 14671839
@@ -2945,6 +2944,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               Top = 57
               Width = 44
               Height = 17
+              Margins.Top = 5
+              Margins.Right = 5
               Caption = 'Inactive'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 8421631
@@ -2959,6 +2960,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               Top = 34
               Width = 93
               Height = 17
+              Margins.Top = 5
+              Margins.Right = 5
               Caption = '192.168.000.000'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 8421631
@@ -2977,10 +2980,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               Flat = True
               OnMouseEnter = Sbtn_AgentExampleMouseEnter
               OnMouseLeave = Sbtn_AgentExampleMouseLeave
-              ExplicitLeft = 72
-              ExplicitTop = 8
-              ExplicitWidth = 23
-              ExplicitHeight = 22
+              ExplicitLeft = -13
+              ExplicitTop = 67
             end
           end
         end
@@ -2990,12 +2991,12 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
   object Timer_ElapsedTime: TTimer
     Enabled = False
     OnTimer = Timer_ElapsedTimeTimer
-    Left = 813
-    Top = 7
+    Left = 378
+    Top = 124
   end
-  object Timer_TestServer: TTimer
+  object Timer_UpDateLiveMode: TTimer
     Interval = 800
-    Left = 126
-    Top = 564
+    Left = 254
+    Top = 124
   end
 end

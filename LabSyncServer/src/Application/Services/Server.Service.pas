@@ -99,7 +99,7 @@ begin
     Agent.ID := AgentID;
     Agent.IP := AgentIP;
     AContext.Data := Agent;
-    AContext.Connection.IOHandler.WriteLn('REGISTER_OK');
+    AContext.Connection.IOHandler.WriteLn('True');
     TThread.Queue(nil,
       procedure
       begin

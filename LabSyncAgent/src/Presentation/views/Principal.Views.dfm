@@ -159,6 +159,19 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 684
+    object image1: TImage
+      Left = 285
+      Top = 5
+      Width = 554
+      Height = 560
+      Align = alClient
+      Stretch = True
+      ExplicitLeft = 348
+      ExplicitTop = 151
+      ExplicitWidth = 432
+      ExplicitHeight = 337
+    end
     object Pnl_AgentStatus: TPanel
       Left = 5
       Top = 5
@@ -168,6 +181,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
+      ExplicitHeight = 558
       DesignSize = (
         280
         560)
@@ -186,7 +200,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_MachineInformation: TLabel
         AlignWithMargins = True
         Left = -1
-        Top = 129
+        Top = 116
         Width = 280
         Height = 19
         Margins.Left = 15
@@ -203,12 +217,11 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
         ParentFont = False
-        ExplicitTop = 128
       end
       object Lbl_MachineName: TLabel
         AlignWithMargins = True
         Left = 23
-        Top = 164
+        Top = 151
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -226,7 +239,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_MachineCPU: TLabel
         AlignWithMargins = True
         Left = 23
-        Top = 201
+        Top = 188
         Width = 80
         Height = 17
         Margins.Left = 10
@@ -244,7 +257,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_MachineRAM: TLabel
         AlignWithMargins = True
         Left = 23
-        Top = 238
+        Top = 225
         Width = 84
         Height = 17
         Margins.Left = 10
@@ -262,7 +275,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_LocalIP: TLabel
         AlignWithMargins = True
         Left = 23
-        Top = 402
+        Top = 371
         Width = 48
         Height = 17
         Margins.Left = 10
@@ -280,7 +293,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_MachineStatus: TLabel
         AlignWithMargins = True
         Left = 23
-        Top = 439
+        Top = 408
         Width = 38
         Height = 17
         Margins.Left = 10
@@ -298,7 +311,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_ReturnName: TLabel
         AlignWithMargins = True
         Left = 134
-        Top = 164
+        Top = 151
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -318,7 +331,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_ReturCPU: TLabel
         AlignWithMargins = True
         Left = 134
-        Top = 201
+        Top = 188
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -338,7 +351,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_ReturnRAM: TLabel
         AlignWithMargins = True
         Left = 134
-        Top = 238
+        Top = 225
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -358,7 +371,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_ReturnIP: TLabel
         AlignWithMargins = True
         Left = 134
-        Top = 402
+        Top = 371
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -378,7 +391,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_ReturnStatus: TLabel
         AlignWithMargins = True
         Left = 134
-        Top = 439
+        Top = 408
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -397,7 +410,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       end
       object Lbl_NetworkLab: TLabel
         Left = -1
-        Top = 360
+        Top = 329
         Width = 280
         Height = 19
         Margins.Left = 15
@@ -414,11 +427,10 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
         ParentFont = False
-        ExplicitTop = 358
       end
       object Shp_Separator: TShape
         Left = 23
-        Top = 324
+        Top = 304
         Width = 224
         Height = 2
         Margins.Left = 15
@@ -432,7 +444,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_MachineUser: TLabel
         AlignWithMargins = True
         Left = 23
-        Top = 275
+        Top = 262
         Width = 83
         Height = 17
         Margins.Left = 10
@@ -450,7 +462,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_ReturnMachineUser: TLabel
         AlignWithMargins = True
         Left = 134
-        Top = 275
+        Top = 262
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -469,7 +481,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_ReturnID: TLabel
         AlignWithMargins = True
         Left = 134
-        Top = 476
+        Top = 445
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -489,7 +501,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_MachineID: TLabel
         AlignWithMargins = True
         Left = 23
-        Top = 476
+        Top = 445
         Width = 69
         Height = 17
         Margins.Left = 10
@@ -507,7 +519,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_ReturnVersion: TLabel
         AlignWithMargins = True
         Left = 134
-        Top = 513
+        Top = 482
         Width = 91
         Height = 17
         Margins.Left = 10
@@ -527,7 +539,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Lbl_LabSyncVersion: TLabel
         AlignWithMargins = True
         Left = 23
-        Top = 513
+        Top = 482
         Width = 98
         Height = 17
         Margins.Left = 10
@@ -564,7 +576,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         ParentFont = False
         ExplicitTop = 70
       end
-      object Image1: TImage
+      object Image_Logo: TImage
         Left = 112
         Top = 19
         Width = 50
@@ -892,6 +904,73 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           00EE107E000077083F00803B841F00C01DC20F00E00EE1070070E7FF01DAD315
           37B4C79D6B0000000049454E44AE426082}
         Proportional = True
+      end
+      object Lbl_ServerStatus: TLabel
+        AlignWithMargins = True
+        Left = 23
+        Top = 519
+        Width = 79
+        Height = 17
+        Margins.Left = 10
+        Margins.Top = 10
+        Margins.Right = 10
+        Margins.Bottom = 10
+        Caption = 'Server Status:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 14671839
+        Font.Height = -12
+        Font.Name = '@Microsoft YaHei'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Lbl_ServerStatusResponse: TLabel
+        AlignWithMargins = True
+        Left = 134
+        Top = 519
+        Width = 113
+        Height = 17
+        Margins.Left = 10
+        Margins.Top = 10
+        Margins.Right = 10
+        Margins.Bottom = 10
+        AutoSize = False
+        Caption = 'DISCONNECTED'
+        Color = clBlack
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 8355711
+        Font.Height = -12
+        Font.Name = '@Microsoft YaHei'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        WordWrap = True
+      end
+      object Button1: TButton
+        Left = 6
+        Top = 37
+        Width = 75
+        Height = 25
+        Caption = 'Start Screen'
+        TabOrder = 0
+        OnClick = Button1Click
+      end
+      object BitBtn1: TBitBtn
+        Left = 6
+        Top = 6
+        Width = 75
+        Height = 25
+        Caption = 'TEST'
+        TabOrder = 1
+        OnClick = BitBtn1Click
+      end
+      object Button2: TButton
+        Left = 6
+        Top = 68
+        Width = 75
+        Height = 25
+        Caption = 'Stop Screen'
+        TabOrder = 2
+        OnClick = Button2Click
       end
     end
     object Pnl_Options: TPanel
@@ -1743,10 +1822,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Brush.Color = 1776411
           Pen.Color = 2697513
           Shape = stRoundRect
-          ExplicitLeft = 168
-          ExplicitTop = 16
-          ExplicitWidth = 65
-          ExplicitHeight = 65
+          ExplicitTop = 1
         end
         object Img_Messages: TImage
           Left = 11
@@ -2215,15 +2291,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           WordWrap = True
         end
       end
-      object BitBtn1: TBitBtn
-        Left = 0
-        Top = 410
-        Width = 75
-        Height = 25
-        Caption = 'TEST'
-        TabOrder = 10
-        OnClick = BitBtn1Click
-      end
     end
     object Pnl_LogReceiver: TPanel
       Left = 0
@@ -2234,6 +2301,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 2
+      ExplicitTop = 568
       object Shp_LogReceiver: TShape
         Left = 0
         Top = 0
@@ -2529,6 +2597,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 3
+      ExplicitTop = 563
     end
     object Panel1: TPanel
       Left = 0
@@ -2549,6 +2618,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 5
+      ExplicitHeight = 558
     end
   end
   object Timer_AgentLiveMode: TTimer
@@ -2727,5 +2797,10 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     OnTimer = Timer_ShellSecurityTimer
     Left = 306
     Top = 504
+  end
+  object Timer_UpdateServer: TTimer
+    OnTimer = Timer_UpdateServerTimer
+    Left = 306
+    Top = 452
   end
 end

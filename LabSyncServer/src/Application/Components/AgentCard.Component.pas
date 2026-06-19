@@ -19,6 +19,7 @@ uses Vcl.Graphics, Vcl.ExtCtrls, Vcl.ActnCtrls, Vcl.StdCtrls, Vcl.Buttons, Class
     function CreateLabel(const ACaption: string; const Atop, Aleft, Awidth, Aheight: integer; const Acolor: TColor):TLabel;
     procedure EventEnter(Sender: TObject);
     procedure EventLeave(Sender: TObject);
+    procedure ConfigurePanel(const AParent: TWinControl);
    public
     {Public Declarations}
     constructor CreateComponent(AOwner: TComponent; AParent: TWinControl; APicture: TPicture; const AName: string; const AIp: string; const AStatus: string);
@@ -26,18 +27,22 @@ uses Vcl.Graphics, Vcl.ExtCtrls, Vcl.ActnCtrls, Vcl.StdCtrls, Vcl.Buttons, Class
 
 implementation
 
-{ TCardFactory }
-
-constructor TAgentCard.CreateComponent(AOwner: TComponent; AParent: TWinControl; Apicture: TPicture; const AName: string; const AIp: string; const AStatus: string);
+procedure TAgentCard.ConfigurePanel(const AParent: TWinControl);
 begin
-  inherited Create(AOwner);
   Width := 210;
   Height:= 90;
   Align := alTop;
   UseDockManager := True;
   BevelOuter     := bvNone;
   Parent         := AParent;
+end;
 
+{ TCardFactory }
+
+constructor TAgentCard.CreateComponent(AOwner: TComponent; AParent: TWinControl; Apicture: TPicture; const AName: string; const AIp: string; const AStatus: string);
+begin
+  inherited Create(AOwner);
+  ConfigurePanel(AParent);
   CreateShape;
   CreateImage(Apicture); //Necessary Data
   CreateLabels(AName, AIp, AStatus);
@@ -49,9 +54,10 @@ begin
  FImage := Timage.Create(self);
  try
   FImage.Parent := self;
-  FImage.Top    := 11;
+  FImage.Left   := 5;
+  FImage.Top    := 18;
   FImage.Width  := 35;
-  FImage.Height := 60;
+  FImage.Height := 50;
   FImage.Proportional := True;
   Fimage.Picture := Apicture;
  finally
@@ -72,6 +78,7 @@ begin
   MyLabel.Top         := Atop;
   MyLabel.Width       := Awidth;
   MyLabel.Height     := Aheight;
+  MyLabel.Font.Size  := 9;
   MyLabel.Caption    := ACaption;
   Mylabel.Font.Color := AColor;
 
