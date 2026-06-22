@@ -137,9 +137,9 @@ type
     Lbl_ServerStatus: TLabel;
     Lbl_ServerStatusResponse: TLabel;
     Timer_UpdateServer: TTimer;
-    Lbl_NetworkLab: TLabel;
     Lbl_TryAgain: TLabel;
     Lbl_Disconnect: TLabel;
+    Lbl_NetworkLab: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -185,6 +185,7 @@ type
     procedure CreateObjects;
     procedure DestroyObjects;
     procedure StartServices;
+    procedure NoResize;
 
     {FUNCTIONS}
     function  FindShapeForLabel(ALabel: TLabel): TShape;
@@ -198,7 +199,6 @@ type
 
   var
   Frm_LabSyncAgent    : TFrm_LabSyncAgent;
-
 
 implementation
 {
@@ -333,6 +333,7 @@ end;
 
 procedure TFrm_LabSyncAgent.FormCreate(Sender: TObject);
 begin
+  NoResize;
   FViewerBatchSize := 250;
   CreateObjects;
   GetSysData;
@@ -546,6 +547,19 @@ begin
   ApplyVisualState(Lbl_StateFolders,    Shp_StateFolders);
   ApplyVisualState(Lbl_StateCommands,   Shp_StateCommands);
   ApplyVisualState(Lbl_StateInformation,Shp_StateInformation);
+end;
+
+procedure TFrm_LabSyncAgent.NoResize;
+  var
+  MAX_WIDTH  : integer;
+  MAX_HEIGHT : integer;
+begin
+  MAX_WIDTH  := Frm_LabSyncAgent.Width;  //NewValuesHere
+  MAX_HEIGHT := Frm_LabSyncAgent.Height; //NewValuesHere
+  Constraints.MaxWidth := MAX_WIDTH;
+  Constraints.MinWidth := MAX_WIDTH;
+  Constraints.MaxHeight:= MAX_HEIGHT;
+  Constraints.MinHeight:= MAX_HEIGHT;
 end;
 
 procedure TFrm_LabSyncAgent.OptionClick(Sender: TObject);

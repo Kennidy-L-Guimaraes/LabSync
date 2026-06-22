@@ -2788,7 +2788,6 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           ParentBackground = True
           TabOrder = 0
           UseWheelForScrolling = True
-          ExplicitTop = 28
           object Pnl_AgentCS000: TPanel
             Left = 0
             Top = 0

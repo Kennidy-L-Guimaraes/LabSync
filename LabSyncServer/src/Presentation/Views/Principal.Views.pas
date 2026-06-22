@@ -134,6 +134,7 @@ type
     procedure ApplyColor(const AShape: TShape);
     procedure RemoveColor(const AShape: TShape);
     procedure ApplyData;
+    procedure NoResize;
   end;
 
 var
@@ -147,12 +148,26 @@ implementation
 
 procedure TFrm_LabSyncServer.FormCreate(Sender: TObject);
 begin
+ NoResize;
  FController := TServerControll.Create(self, ScBox_Agents, Img_AgentExample.Picture);
  FController.InitializeIfNeeded;
  FController.ConnectServer;
  ApplyData;
 end;
 
+
+procedure TFrm_LabSyncServer.NoResize;
+  var
+  MAX_WIDTH  : integer;
+  MAX_HEIGHT : integer;
+begin
+  MAX_WIDTH  := Frm_LabSyncServer.Width;  //NewValuesHere
+  MAX_HEIGHT := Frm_LabSyncServer.Height; //NewValuesHere
+  Constraints.MaxWidth := MAX_WIDTH;
+  Constraints.MinWidth := MAX_WIDTH;
+  Constraints.MaxHeight:= MAX_HEIGHT;
+  Constraints.MinHeight:= MAX_HEIGHT;
+end;
 
 procedure TFrm_LabSyncServer.ApplyColor(const AShape: TShape);
 begin

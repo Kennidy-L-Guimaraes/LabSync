@@ -1,10 +1,9 @@
 object Frm_LabSyncAgent: TFrm_LabSyncAgent
   Left = 0
   Top = 0
-  AutoSize = True
   Caption = 'LabSync Agent'
-  ClientHeight = 680
-  ClientWidth = 843
+  ClientHeight = 696
+  ClientWidth = 844
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -153,8 +152,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
   object Pnl_Background: TPanel
     Left = 0
     Top = 0
-    Width = 843
-    Height = 680
+    Width = 844
+    Height = 696
     Align = alClient
     BevelOuter = bvNone
     Color = 1184274
@@ -165,8 +164,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     object image1: TImage
       Left = 285
       Top = 5
-      Width = 558
-      Height = 554
+      Width = 559
+      Height = 570
       Align = alClient
       Stretch = True
       ExplicitLeft = 348
@@ -178,7 +177,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       Left = 5
       Top = 5
       Width = 280
-      Height = 554
+      Height = 570
       Align = alLeft
       BevelOuter = bvNone
       ParentColor = True
@@ -186,12 +185,12 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       ExplicitHeight = 313
       DesignSize = (
         280
-        554)
+        570)
       object Shp_AgentStatus: TShape
         Left = 0
         Top = 0
         Width = 280
-        Height = 554
+        Height = 570
         Align = alClient
         Brush.Color = 1776411
         Pen.Color = 2697513
@@ -2296,8 +2295,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     end
     object Pnl_LogReceiver: TPanel
       Left = 0
-      Top = 564
-      Width = 843
+      Top = 580
+      Width = 844
       Height = 116
       Align = alBottom
       BevelOuter = bvNone
@@ -2308,7 +2307,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       object Shp_LogReceiver: TShape
         Left = 0
         Top = 0
-        Width = 843
+        Width = 844
         Height = 116
         Align = alClient
         Brush.Color = 1776411
@@ -2640,8 +2639,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     end
     object Pnl_Separator: TPanel
       Left = 0
-      Top = 559
-      Width = 843
+      Top = 575
+      Width = 844
       Height = 5
       Align = alBottom
       BevelOuter = bvNone
@@ -2653,7 +2652,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     object Panel1: TPanel
       Left = 0
       Top = 0
-      Width = 843
+      Width = 844
       Height = 5
       Align = alTop
       BevelOuter = bvNone
@@ -2665,7 +2664,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       Left = 0
       Top = 5
       Width = 5
-      Height = 554
+      Height = 570
       Align = alLeft
       BevelOuter = bvNone
       ParentColor = True
