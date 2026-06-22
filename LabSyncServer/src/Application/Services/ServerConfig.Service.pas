@@ -84,7 +84,7 @@ begin
     Exit;
   SL := TStringList.Create;
   try
-    SL.Values['Server'] := 'https://company.com:5555';
+    SL.Values['Server'] := '127.0.0.1';
     SaveFile(SL);
   finally
     SL.Free;

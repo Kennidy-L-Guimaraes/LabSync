@@ -28,7 +28,6 @@ type
     Lbl_ReturnRAM: TLabel;
     Lbl_ReturnIP: TLabel;
     Lbl_ReturnStatus: TLabel;
-    Lbl_NetworkLab: TLabel;
     Shp_Separator: TShape;
     Pnl_Options: TPanel;
     Lbl_MachineUser: TLabel;
@@ -138,6 +137,9 @@ type
     Lbl_ServerStatus: TLabel;
     Lbl_ServerStatusResponse: TLabel;
     Timer_UpdateServer: TTimer;
+    Lbl_NetworkLab: TLabel;
+    Lbl_TryAgain: TLabel;
+    Lbl_Disconnect: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_AgentLiveModeTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -155,6 +157,8 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Timer_UpdateServerTimer(Sender: TObject);
+    procedure Lbl_TryAgainClick(Sender: TObject);
+    procedure Lbl_DisconnectClick(Sender: TObject);
   private
     { Private declarations }
       FController      : TAgentController;
@@ -336,7 +340,8 @@ begin
   LoadConfig;
   FController.ShellSecurity;
   GetLogs;
-  Timer_LogReceiver.Enabled := True;
+  Timer_LogReceiver.Enabled  := True;
+  Timer_UpdateServer.Enabled := True;
   FController.ConnectServer;
 end;
 
@@ -454,9 +459,19 @@ begin
    begin
     FController.SetServer(Trim(Edt_Server.Text));
     FController.SetPort(Trim(Edt_Port.Text));
+    FController.ConnectServer;
    end
    else
    exit;
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_DisconnectClick(Sender: TObject);
+begin
+  try
+  FController.DisconnectServer;
+ except on E: Exception do
+  raise Exception.Create('Failed to Connect: '+ E.Message);
+ end;
 end;
 
 procedure TFrm_LabSyncAgent.Lbl_StateCommandsClick(Sender: TObject);
@@ -497,6 +512,15 @@ begin
     Timer_ShellSecurity.Enabled := True;
     end;
   end;
+end;
+
+procedure TFrm_LabSyncAgent.Lbl_TryAgainClick(Sender: TObject);
+begin
+ try
+  FController.ConnectServer;
+ except on E: Exception do
+  raise Exception.Create('Failed to Connect: '+ E.Message);
+ end;
 end;
 
 procedure TFrm_LabSyncAgent.LoadConfig;

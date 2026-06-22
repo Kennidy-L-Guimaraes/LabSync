@@ -37,7 +37,8 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       procedure ShellSecurity;
       procedure InitializeIfNeeded;
       procedure LogStartAndOver(const Value: string);
-      procedure ConnectServer;   
+      procedure ConnectServer;
+      procedure DisconnectServer;
       procedure CreateObjs;
       procedure BuildDTO;  
   end;
@@ -85,6 +86,11 @@ begin
   inherited;
 end;
 
+procedure TAgentController.DisconnectServer;
+begin
+ FServerAgent.Disconect;
+end;
+
 procedure TAgentController.InitializeIfNeeded;
 begin
     FConfig.Initialize;
@@ -102,7 +108,7 @@ begin
     FConfig.SetOption('Information', osEnabled);
     FConfig.SetStarted(True);
     //ServerConfig
-    FServerConfig.SetServerOption('Server', 'https://company.com');
+    FServerConfig.SetServerOption('Server', '127.0.0.1');
     FServerConfig.SetPortOption('Port', '5555'); //Default
    end
    else

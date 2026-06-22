@@ -1,7 +1,7 @@
 unit AgentConnect.Service;
 
 interface
- uses IdTCPClient, Controller.Dto, SysUtils, classes, Command.Logs, System.DateUtils;
+ uses IdTCPClient, Controller.Dto, SysUtils, classes, Command.Logs, System.DateUtils, dialogs;
   type
    TAgentConnect = class
      private
@@ -13,6 +13,8 @@ interface
       {Public Declarations}
       procedure Connect;
       procedure Disconect;
+      procedure CreateClient;
+      procedure DestroyClient;
       function  Isconnected: string;
       constructor Create(const AControllerDto: TControllerDto);
       destructor Destroy; override;
@@ -49,9 +51,14 @@ end;
 constructor TAgentConnect.Create(const AControllerDto: TControllerDto);
 begin
   inherited Create;
- FIdTCPClient   := TIdTCPClient.Create;
- FControllerDto := AControllerDto;
- FLog           := TLog.Create;
+  CreateClient;
+  FControllerDto := AControllerDto;
+  FLog           := TLog.Create;
+end;
+
+procedure TAgentConnect.CreateClient;
+begin
+  FIdTCPClient   := TIdTCPClient.Create(nil);
 end;
 
 destructor TAgentConnect.Destroy;
@@ -61,16 +68,26 @@ inherited;
  Flog.Free;
 end;
 
+procedure TAgentConnect.DestroyClient;
+begin
+ FreeAndNil(FIdTCPClient);
+end;
+
 procedure TAgentConnect.Disconect;
 var
- TimeStamp:  string;
+ TimeStamp: string;
 begin
   TimeStamp := FormatDateTime('yyyymmdd_hhnnss', Now);
-  If FIdTCPClient.Connected then
-  begin
-  FIdTCPClient.Disconnect;
-  Flog.DisconnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, 'DISCONNECTED');
+  try
+    FIdTCPClient.Disconnect;
+  except
+    on E: Exception do
+      Flog.DisconnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port,
+        'DISCONNECT_ERROR: ' + E.ClassName + ' - ' + E.Message);
   end;
+  DestroyClient;
+  CreateClient;
+  Flog.DisconnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, 'DISCONNECTED');
 end;
 
 function TAgentConnect.Isconnected: string;

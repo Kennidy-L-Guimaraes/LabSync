@@ -16,7 +16,7 @@ uses
      var
      AgentCardManager : TAgentCardManager;
      constructor Create;
-     destructor Destroy;
+     destructor Destroy; override;
      procedure Start(const Aport: integer);
      function  IsTheServerActive: string;
      procedure Stop;

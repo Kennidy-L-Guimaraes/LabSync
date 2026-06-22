@@ -103,7 +103,7 @@ begin
   FServerConfig.Initialize;
   if FConfig.AlreadyStarted = False then
    begin
-    FServerConfig.SetServerOption('Server', 'https://company.com');
+    FServerConfig.SetServerOption('Server', '127.0.0.1');
     FServerConfig.SetPortOption('Port', '5555'); //Default
    end;
    exit;
