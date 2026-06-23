@@ -14,7 +14,8 @@ uses
   Server.Service in 'src\Application\Services\Server.Service.pas',
   AgentCard.Component in 'src\Application\Components\AgentCard.Component.pas',
   AgentCard.Manager in 'src\Application\Managers\AgentCard.Manager.pas',
-  AgentInfo.Service in 'src\Application\Services\AgentInfo.Service.pas';
+  AgentInfo.Service in 'src\Application\Services\AgentInfo.Service.pas',
+  ServerConfig.Views in 'src\Presentation\Views\ServerConfig.Views.pas' {Frm_ServerConfig};
 
 {$R *.res}
 
@@ -22,5 +23,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrm_LabSyncServer, Frm_LabSyncServer);
+  Application.CreateForm(TFrm_ServerConfig, Frm_ServerConfig);
   Application.Run;
 end.

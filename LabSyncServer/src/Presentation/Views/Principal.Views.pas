@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.Buttons, Vcl.ComCtrls,
-  Server.Controller, IdContext, AgentCard.Component;
+  Server.Controller, IdContext, AgentCard.Component, ServerConfig.Views, DateUtils;
 
 type
   TFrm_LabSyncServer = class(TForm)
@@ -109,6 +109,12 @@ type
     Sbtn_AgentExample: TSpeedButton;
     Timer_ElapsedTime: TTimer;
     Timer_UpDateLiveMode: TTimer;
+    Pnl_StartServer: TPanel;
+    Shp_StartServer: TShape;
+    Lbl_StartServer: TLabel;
+    Pnl_ShutdownServer: TPanel;
+    Shp_ShutdownServer: TShape;
+    Lbl_ShutdownServer: TLabel;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);
@@ -125,10 +131,13 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer_ElapsedTimeTimer(Sender: TObject);
+    procedure Sbtn_SettingsClick(Sender: TObject);
+    procedure Lbl_ShutdownServerClick(Sender: TObject);
+    procedure Lbl_StartServerClick(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
-    FSeconds    : integer;
+    FStartTime  : TDateTime;
   public
     { Public declarations }
     procedure ApplyColor(const AShape: TShape);
@@ -148,6 +157,7 @@ implementation
 
 procedure TFrm_LabSyncServer.FormCreate(Sender: TObject);
 begin
+ FStartTime := now;
  NoResize;
  FController := TServerControll.Create(self, ScBox_Agents, Img_AgentExample.Picture);
  FController.InitializeIfNeeded;
@@ -155,6 +165,16 @@ begin
  ApplyData;
 end;
 
+
+procedure TFrm_LabSyncServer.Lbl_ShutdownServerClick(Sender: TObject);
+begin
+ FController.DisconnectServer;
+end;
+
+procedure TFrm_LabSyncServer.Lbl_StartServerClick(Sender: TObject);
+begin
+ FController.ConnectServer;
+end;
 
 procedure TFrm_LabSyncServer.NoResize;
   var
@@ -184,19 +204,6 @@ begin
  Lbl_serverAddressExample.Hint           := FController.GetServer;
  Lbl_ServerPortExample.Caption           := FController.GetPort;
  Lbl_ServerIPExample.Caption             := FController.GetIp;
- Lbl_ServerStatus.Caption                := FController.IsTheServerActive;
- if FController.IsTheServerActive = 'Active' then
- begin
-  Lbl_ServerNameExample.Font.Color           := ClLime;
-  Lbl_ServerTimeConnectionExample.Font.Color := ClLime;
-  Lbl_ServerDateConnectionExample.Font.Color := ClLime;
-  Lbl_ServerTimeElapsedExample.Font.Color    := ClLime;
-  Lbl_ServerStatus.Font.Color                := Cllime;
-  Lbl_ServerIPExample.Font.Color             := ClLime;
-  Timer_ElapsedTime.Enabled := True;
-  Lbl_ServerTimeConnectionExample.Caption := FormatDateTime('hh:mm:ss', now);
- end;
-
 end;
 
 procedure TFrm_LabSyncServer.FormClose(Sender: TObject;
@@ -215,6 +222,11 @@ begin
  AShape.Brush.Color := Shp_panelMenu.Brush.Color;
 end;
 
+procedure TFrm_LabSyncServer.Sbtn_SettingsClick(Sender: TObject);
+begin
+ Frm_ServerConfig.Show;
+end;
+
 procedure TFrm_LabSyncServer.Sbtn_SettingsMouseEnter(Sender: TObject);
 begin
  ApplyColor(Shp_MenuSettings);
@@ -228,16 +240,38 @@ end;
 procedure TFrm_LabSyncServer.Timer_ElapsedTimeTimer(Sender: TObject);
 var
   Hour, Minute, Second: Integer;
+  ElapsedSeconds: int64;
+  MyColor : TColor;
 begin
-  Inc(FSeconds);
-
-  Hour   := FSeconds div 3600;
-  Minute := (FSeconds mod 3600) div 60;
-  Second := FSeconds mod 60;
-
+ if FController.IsTheServerActive = true then
+ begin
+  MyColor := Cllime;
+  Lbl_ServerNameExample.Font.Color           := MyColor;
+  Lbl_ServerTimeConnectionExample.Font.Color := MyColor;
+  Lbl_ServerDateConnectionExample.Font.Color := MyColor;
+  Lbl_ServerTimeElapsedExample.Font.Color    := MyColor;
+  Lbl_ServerStatus.Font.Color                := MyColor;
+  Lbl_ServerIPExample.Font.Color             := MyColor;
+  Lbl_ServerStatus.Caption                   := 'Active';
+  Lbl_ServerTimeConnectionExample.Caption    := FormatDateTime('hh:mm:ss', FStartTime);
+  ElapsedSeconds := SecondsBetween(Now, FStartTime);
+  Hour   := ElapsedSeconds div 3600;
+  Minute := (ElapsedSeconds mod 3600) div 60;
+  Second := ElapsedSeconds mod 60;
   Lbl_ServerTimeElapsedExample.Caption :=
-    Format('%.2d:%.2d:%.2d', [Hour, Minute, Second]);
-
+  Format('%.2d:%.2d:%.2d', [Hour, Minute, Second]);
+ end
+ else
+ begin
+  MyColor := $005353FF;
+  Lbl_ServerNameExample.Font.Color           := MyColor;
+  Lbl_ServerTimeConnectionExample.Font.Color := MyColor;
+  Lbl_ServerDateConnectionExample.Font.Color := MyColor;
+  Lbl_ServerTimeElapsedExample.Font.Color    := MyColor;
+  Lbl_ServerStatus.Font.Color                := MyColor;
+  Lbl_ServerIPExample.Font.Color             := MyColor;
+  Lbl_ServerStatus.Caption                 := 'Inactive';
+ end;
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_LogsMouseEnter(Sender: TObject);

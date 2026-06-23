@@ -1618,6 +1618,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             Cursor = crHandPoint
             Align = alClient
             Flat = True
+            OnClick = Sbtn_SettingsClick
             OnMouseEnter = Sbtn_SettingsMouseEnter
             OnMouseLeave = Sbtn_SettingsMouseLeave
             ExplicitLeft = 120
@@ -2449,7 +2450,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
       object Pnl_ServerTime: TPanel
         Left = 296
         Top = 10
-        Width = 313
+        Width = 233
         Height = 84
         BevelOuter = bvNone
         ParentColor = True
@@ -2661,6 +2662,84 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           Font.Style = []
           ParentColor = False
           ParentFont = False
+        end
+      end
+      object Pnl_StartServer: TPanel
+        AlignWithMargins = True
+        Left = 539
+        Top = 20
+        Width = 108
+        Height = 32
+        BevelOuter = bvNone
+        ParentColor = True
+        TabOrder = 2
+        object Shp_StartServer: TShape
+          AlignWithMargins = True
+          Left = 11
+          Top = 2
+          Width = 88
+          Height = 29
+          Margins.Top = 0
+          Margins.Bottom = 0
+          Brush.Color = 1776411
+          Pen.Color = 46079
+          Shape = stRoundRect
+        end
+        object Lbl_StartServer: TLabel
+          Left = 16
+          Top = 8
+          Width = 78
+          Height = 17
+          Cursor = crHandPoint
+          Alignment = taCenter
+          AutoSize = False
+          Caption = 'Start Server'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 46079
+          Font.Height = -12
+          Font.Name = '@Microsoft YaHei'
+          Font.Style = [fsBold]
+          ParentFont = False
+          OnClick = Lbl_StartServerClick
+        end
+      end
+      object Pnl_ShutdownServer: TPanel
+        AlignWithMargins = True
+        Left = 537
+        Top = 58
+        Width = 103
+        Height = 32
+        BevelOuter = bvNone
+        ParentColor = True
+        TabOrder = 3
+        object Shp_ShutdownServer: TShape
+          AlignWithMargins = True
+          Left = 17
+          Top = 1
+          Width = 79
+          Height = 29
+          Margins.Top = 0
+          Margins.Bottom = 0
+          Brush.Color = 1776411
+          Pen.Color = 5460991
+          Shape = stRoundRect
+        end
+        object Lbl_ShutdownServer: TLabel
+          Left = 21
+          Top = 6
+          Width = 71
+          Height = 18
+          Cursor = crHandPoint
+          Alignment = taCenter
+          AutoSize = False
+          Caption = 'Shutdown'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 5460991
+          Font.Height = -12
+          Font.Name = '@Microsoft YaHei'
+          Font.Style = [fsBold]
+          ParentFont = False
+          OnClick = Lbl_ShutdownServerClick
         end
       end
     end
@@ -2988,7 +3067,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
     end
   end
   object Timer_ElapsedTime: TTimer
-    Enabled = False
+    Interval = 200
     OnTimer = Timer_ElapsedTimeTimer
     Left = 378
     Top = 124

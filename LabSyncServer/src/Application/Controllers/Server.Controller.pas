@@ -24,7 +24,7 @@ type
 
     procedure ConnectServer;
     procedure DisconnectServer;
-    function IsTheServerActive: string;
+    function IsTheServerActive: boolean;
     procedure InitializeIfNeeded;
     constructor Create(AOwner: TComponent; AContainer: TScrollBox; APicture: TPicture);
     destructor Destroy;
@@ -109,9 +109,12 @@ begin
    exit;
 end;
 
-function TServerControll.IsTheServerActive: string;
+function TServerControll.IsTheServerActive: boolean;
 begin
- Result := FServer.IsTheServerActive;
+ if FServer.IsTheServerActive = 'Active' then
+  Result := True
+ else
+  Result := False;
 end;
 
 

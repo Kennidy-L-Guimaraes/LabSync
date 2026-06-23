@@ -145,6 +145,10 @@
         <DCCReference Include="src\Application\Components\AgentCard.Component.pas"/>
         <DCCReference Include="src\Application\Managers\AgentCard.Manager.pas"/>
         <DCCReference Include="src\Application\Services\AgentInfo.Service.pas"/>
+        <DCCReference Include="src\Presentation\Views\ServerConfig.Views.pas">
+            <Form>Frm_ServerConfig</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

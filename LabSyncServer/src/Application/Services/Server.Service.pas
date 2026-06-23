@@ -3,7 +3,7 @@ interface
 uses
   IdTCPServer,
   IdContext, Classes, Windows, types, System.IOUtils, System.SysUtils, dialogs,
-  AgentCard.Manager, AgentInfo.Service;
+  AgentCard.Manager, AgentInfo.Service, Vcl.Forms;
  type
   TServerService = class
     private
@@ -20,7 +20,8 @@ uses
      procedure Start(const Aport: integer);
      function  IsTheServerActive: string;
      procedure Stop;
-
+     procedure DestroySocket;
+     procedure CreateSocket;
      function PingPongMessage(AContext: TIdContext; const Msg: string): string; //test remove it later
   end;
 
@@ -32,16 +33,26 @@ uses Server.Controller;
 constructor TServerService.Create;
 begin
    inherited;
-   FServer := TIdTCPServer.Create(nil);
-   FServer.OnExecute := ServerExecute;
-   FServer.OnDisconnect := ServerDisconnect;
+   CreateSocket;
+end;
+
+procedure TServerService.CreateSocket;
+begin
+  FServer := TIdTCPServer.Create(nil);
+  FServer.OnExecute    := ServerExecute;
+  FServer.OnDisconnect := ServerDisconnect;
 end;
 
 destructor TServerService.Destroy;
 begin
- FServer.Free;
- AgentCardManager.Free;
- inherited;
+  DestroySocket;
+  inherited;
+end;
+
+procedure TServerService.DestroySocket;
+begin
+  FreeAndNil(FServer);
+  FreeAndNil(AgentCardManager);
 end;
 
 function TServerService.IsTheServerActive: string;
@@ -66,6 +77,7 @@ procedure TServerService.ServerDisconnect(AContext: TIdContext);
 var
   Agent: TAgentInfo;
   AgentID: string;
+  LocalManager: TAgentCardManager;
 begin
   Agent := TAgentInfo(AContext.Data);
   if Assigned(Agent) then
@@ -73,10 +85,12 @@ begin
     AgentID := Agent.ID;
     Agent.Free;
     AContext.Data := nil;
+    LocalManager := AgentCardManager;
     TThread.Queue(nil,
       procedure
       begin
-        AgentCardManager.RemoveAgent(AgentID);
+        if Assigned(LocalManager) then
+          LocalManager.RemoveAgent(AgentID);
       end);
   end;
 end;
@@ -111,13 +125,21 @@ end;
 
 procedure TServerService.Start(const Aport: integer);
 begin
- FServer.DefaultPort := Aport;
- FServer.Active      := True;
+   if not Assigned(FServer) then
+    CreateSocket;
+  if not FServer.Active then
+  begin
+    FServer.DefaultPort := Aport;
+    FServer.Active      := True;
+  end;
 end;
 
 procedure TServerService.Stop;
 begin
+ if not Assigned(FServer) or not FServer.Active then
+    Exit;
   FServer.Active := False;
+  Application.ProcessMessages;
 end;
 
 end.
