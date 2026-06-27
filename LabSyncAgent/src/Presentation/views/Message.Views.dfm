@@ -52,8 +52,8 @@ object Frm_Message: TFrm_Message
         OnClick = Sbtn_CloseClick
       end
       object Lbl_Title: TLabel
-        Left = 16
-        Top = 9
+        Left = 47
+        Top = 8
         Width = 91
         Height = 17
         Caption = 'LabSync Agent'
@@ -65,10 +65,10 @@ object Frm_Message: TFrm_Message
         ParentFont = False
       end
       object Img_LabSyncIco: TImage
-        Left = 110
-        Top = 2
+        Left = 8
+        Top = 1
         Width = 33
-        Height = 33
+        Height = 32
         Picture.Data = {
           055449636F6E0000010001002020000001002000A81000001600000028000000
           2000000040000000010020000000000000100000130B0000130B000000000000

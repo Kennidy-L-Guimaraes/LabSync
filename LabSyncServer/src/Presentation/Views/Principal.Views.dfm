@@ -237,6 +237,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         Top = 2
         Width = 645
         Height = 404
+        BevelOuter = bvLowered
         ParentColor = True
         TabOrder = 1
         object Img_AgentScreen: TImage
