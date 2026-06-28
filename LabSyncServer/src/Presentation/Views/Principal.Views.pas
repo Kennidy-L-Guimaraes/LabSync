@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.Buttons, Vcl.ComCtrls,
-  Server.Controller, IdContext, AgentCard.Component, ServerConfig.Views, DateUtils;
+  Server.Controller, IdContext, AgentCard.Component, ServerConfig.Views, DateUtils,
+  GetLog.Service;
 
 type
   TFrm_LabSyncServer = class(TForm)
@@ -115,6 +116,7 @@ type
     Pnl_ShutdownServer: TPanel;
     Shp_ShutdownServer: TShape;
     Lbl_ShutdownServer: TLabel;
+    Timer_UpdateLog: TTimer;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);
@@ -134,17 +136,22 @@ type
     procedure Sbtn_SettingsClick(Sender: TObject);
     procedure Lbl_ShutdownServerClick(Sender: TObject);
     procedure Lbl_StartServerClick(Sender: TObject);
+    procedure Timer_UpdateLogTimer(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
     FStartTime  : TDateTime;
+    FGetLogs    : TGetLogService;
   public
     { Public declarations }
     procedure ApplyColor(const AShape: TShape);
     procedure RemoveColor(const AShape: TShape);
     procedure ApplyData;
     procedure NoResize;
-  end;
+    procedure CreateObjs;
+    procedure DestroyObjs;
+
+end;
 
 var
   Frm_LabSyncServer: TFrm_LabSyncServer;
@@ -157,9 +164,10 @@ implementation
 
 procedure TFrm_LabSyncServer.FormCreate(Sender: TObject);
 begin
+ CreateObjs;
  FStartTime := now;
  NoResize;
- FController := TServerControll.Create(self, ScBox_Agents, Img_AgentExample.Picture);
+ FController.CreateComponents(self, ScBox_Agents, Img_AgentExample.Picture);
  FController.InitializeIfNeeded;
  FController.ConnectServer;
  ApplyData;
@@ -206,10 +214,22 @@ begin
  Lbl_ServerIPExample.Caption             := FController.GetIp;
 end;
 
+procedure TFrm_LabSyncServer.CreateObjs;
+begin
+ FGetLogs    := TGetLogService.Create;
+ FController := TServerControll.Create;
+end;
+
+procedure TFrm_LabSyncServer.DestroyObjs;
+begin
+ FGetLogs.Free;
+ FController.Free;
+end;
+
 procedure TFrm_LabSyncServer.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
- FController.Free;
+ DestroyObjs;
 end;
 
 procedure TFrm_LabSyncServer.Pnl_BtnSettingsMouseEnter(Sender: TObject);
@@ -272,6 +292,11 @@ begin
   Lbl_ServerIPExample.Font.Color             := MyColor;
   Lbl_ServerStatus.Caption                 := 'Inactive';
  end;
+end;
+
+procedure TFrm_LabSyncServer.Timer_UpdateLogTimer(Sender: TObject);
+begin
+ FGetLogs.CreateComponent(Rch_LogReceiver);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_LogsMouseEnter(Sender: TObject);

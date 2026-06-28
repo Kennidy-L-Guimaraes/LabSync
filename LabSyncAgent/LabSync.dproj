@@ -141,7 +141,7 @@
         <DCCReference Include="src\Application\Services\ID.Service.pas"/>
         <DCCReference Include="..\shared\Application\src\services\Path.Service.pas"/>
         <DCCReference Include="src\Application\Services\Screen.Service.pas"/>
-        <DCCReference Include="src\Application\Logs\Command.Logs.pas"/>
+        <DCCReference Include="..\shared\Application\src\Logs\Command.Logs.pas"/>
         <DCCReference Include="src\Application\Services\Loop.Service.pas"/>
         <DCCReference Include="src\Application\Queue\Screenshot.Queue.pas"/>
         <DCCReference Include="src\Core\Command\GetPrint.Command.pas"/>
@@ -168,6 +168,7 @@
         </DCCReference>
         <DCCReference Include="src\Application\Dtos\Controller.Dto.pas"/>
         <DCCReference Include="src\Application\Services\AgentConnect.Service.pas"/>
+        <DCCReference Include="..\shared\Application\src\services\GetLog.Service.pas"/>
         <RcItem Include="LabSync_Icon.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon</ResourceId>

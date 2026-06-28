@@ -149,6 +149,7 @@
             <Form>Frm_ServerConfig</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\shared\Application\src\services\GetLog.Service.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

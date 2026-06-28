@@ -119,6 +119,7 @@ begin
    TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
    Flog.ConfigLog(TimeStamp, FID.GetID, Config); //Make a good log :)
   finally
+   sl.Free;
   end;
 end;
 
@@ -139,6 +140,7 @@ begin
    TimeStamp   := FormatDateTime('yyyymmdd_hhnnss', Now);
    Flog.ConfigLog(TimeStamp, FID.GetID, Config);
   finally
+   sl.Free;
   end;
 end;
 

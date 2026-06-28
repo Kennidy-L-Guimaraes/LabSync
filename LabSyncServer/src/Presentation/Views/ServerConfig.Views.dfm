@@ -12,6 +12,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poMainFormCenter
+  OnCreate = FormCreate
   TextHeight = 15
   object Pnl_Background: TPanel
     Left = 0
@@ -23,8 +24,6 @@ object Frm_ServerConfig: TFrm_ServerConfig
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
-    ExplicitWidth = 452
-    ExplicitHeight = 396
     object Scbx_SettingsContent: TScrollBox
       Left = 0
       Top = 33
@@ -35,8 +34,6 @@ object Frm_ServerConfig: TFrm_ServerConfig
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
-      ExplicitWidth = 448
-      ExplicitHeight = 359
       object Pnl_PortDNS: TPanel
         Left = 0
         Top = 8
@@ -86,7 +83,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
         end
         object Lbl_serverAddress: TLabel
           AlignWithMargins = True
-          Left = 44
+          Left = 27
           Top = 47
           Width = 70
           Height = 17
@@ -104,7 +101,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
         end
         object Lbl_ServerPort: TLabel
           AlignWithMargins = True
-          Left = 44
+          Left = 27
           Top = 72
           Width = 68
           Height = 17
@@ -120,17 +117,107 @@ object Frm_ServerConfig: TFrm_ServerConfig
           Font.Style = []
           ParentFont = False
         end
-        object Lbl_ServerIP: TLabel
+        object Label1: TLabel
           AlignWithMargins = True
-          Left = 44
-          Top = 97
-          Width = 55
+          Left = 249
+          Top = 47
+          Width = 57
           Height = 17
           Margins.Left = 5
           Margins.Top = 4
           Margins.Right = 5
           Margins.Bottom = 4
-          Caption = 'Server IP:'
+          Caption = 'Server ID:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 14671839
+          Font.Height = -12
+          Font.Name = '@Microsoft YaHei'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lbl_ServerIDExample: TLabel
+          AlignWithMargins = True
+          Left = 316
+          Top = 47
+          Width = 70
+          Height = 17
+          Margins.Left = 5
+          Margins.Top = 4
+          Margins.Right = 5
+          Margins.Bottom = 4
+          Caption = 'Server DNS:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 14671839
+          Font.Height = -12
+          Font.Name = '@Microsoft YaHei'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label3: TLabel
+          AlignWithMargins = True
+          Left = 249
+          Top = 72
+          Width = 88
+          Height = 17
+          Margins.Left = 5
+          Margins.Top = 4
+          Margins.Right = 5
+          Margins.Bottom = 4
+          Caption = 'Server Version:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 14671839
+          Font.Height = -12
+          Font.Name = '@Microsoft YaHei'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lbl_ServerVersionExample: TLabel
+          AlignWithMargins = True
+          Left = 347
+          Top = 72
+          Width = 31
+          Height = 17
+          Margins.Left = 5
+          Margins.Top = 4
+          Margins.Right = 5
+          Margins.Bottom = 4
+          Caption = '00.00'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 14671839
+          Font.Height = -12
+          Font.Name = '@Microsoft YaHei'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label5: TLabel
+          AlignWithMargins = True
+          Left = 249
+          Top = 97
+          Width = 76
+          Height = 17
+          Margins.Left = 5
+          Margins.Top = 4
+          Margins.Right = 5
+          Margins.Bottom = 4
+          Caption = 'IP Local LAN:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 14671839
+          Font.Height = -12
+          Font.Name = '@Microsoft YaHei'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lbl_ServerIPExample: TLabel
+          AlignWithMargins = True
+          Left = 335
+          Top = 97
+          Width = 69
+          Height = 17
+          Margins.Left = 5
+          Margins.Top = 4
+          Margins.Right = 5
+          Margins.Bottom = 4
+          Caption = '255.255.255'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 14671839
           Font.Height = -12
@@ -139,7 +226,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
           ParentFont = False
         end
         object Edt_ServerDns: TEdit
-          Left = 122
+          Left = 105
           Top = 46
           Width = 121
           Height = 25
@@ -159,7 +246,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
           Text = 'www.example.com'
         end
         object Edt_ServerPort: TEdit
-          Left = 122
+          Left = 105
           Top = 69
           Width = 121
           Height = 25
@@ -174,34 +261,14 @@ object Frm_ServerConfig: TFrm_ServerConfig
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = [fsItalic, fsUnderline]
+          NumbersOnly = True
           ParentFont = False
           TabOrder = 1
           Text = '5555'
         end
-        object Edt_ServerIP: TEdit
-          Left = 122
-          Top = 94
-          Width = 121
-          Height = 25
-          AutoSelect = False
-          AutoSize = False
-          BevelInner = bvNone
-          BevelOuter = bvNone
-          BorderStyle = bsNone
-          Color = 1184274
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = 14671839
-          Font.Height = -12
-          Font.Name = '@Microsoft YaHei'
-          Font.Style = [fsItalic, fsUnderline]
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 2
-          Text = '172.1.0.0.0 '
-        end
       end
       object Pnl_Connection: TPanel
-        Left = -2
+        Left = 0
         Top = 152
         Width = 435
         Height = 138
@@ -238,7 +305,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
         end
         object Lbl_StartServerAuto: TLabel
           AlignWithMargins = True
-          Left = 52
+          Left = 29
           Top = 50
           Width = 163
           Height = 15
@@ -258,7 +325,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
         end
         object Lbl_BtnPassword: TLabel
           AlignWithMargins = True
-          Left = 52
+          Left = 29
           Top = 75
           Width = 197
           Height = 17
@@ -277,7 +344,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
         end
         object Lbl_BtnBlockList: TLabel
           AlignWithMargins = True
-          Left = 52
+          Left = 29
           Top = 100
           Width = 150
           Height = 17
@@ -295,7 +362,7 @@ object Frm_ServerConfig: TFrm_ServerConfig
           ParentFont = False
         end
         object Chbx_StartServerAuto: TCheckBox
-          Left = 223
+          Left = 200
           Top = 50
           Width = 17
           Height = 17
@@ -316,8 +383,6 @@ object Frm_ServerConfig: TFrm_ServerConfig
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 2
-        ExplicitTop = 328
-        ExplicitWidth = 448
         object Pnl_SaveBtn: TPanel
           AlignWithMargins = True
           Left = 352
@@ -336,7 +401,6 @@ object Frm_ServerConfig: TFrm_ServerConfig
           ParentBackground = False
           ParentFont = False
           TabOrder = 0
-          ExplicitLeft = 365
           object Sbtn_Save: TSpeedButton
             Left = 0
             Top = 0
@@ -370,7 +434,6 @@ object Frm_ServerConfig: TFrm_ServerConfig
           ParentBackground = False
           ParentFont = False
           TabOrder = 1
-          ExplicitLeft = 279
           object Sbtn_Cancel: TSpeedButton
             Left = 0
             Top = 0
@@ -398,7 +461,6 @@ object Frm_ServerConfig: TFrm_ServerConfig
       Color = 855309
       ParentBackground = False
       TabOrder = 1
-      ExplicitWidth = 448
       object Lbl_Title: TLabel
         Left = 42
         Top = 8
@@ -578,7 +640,6 @@ object Frm_ServerConfig: TFrm_ServerConfig
         Color = 157
         ParentBackground = False
         TabOrder = 0
-        ExplicitLeft = 416
         object Sbtn_Close: TSpeedButton
           Left = -1
           Top = 0

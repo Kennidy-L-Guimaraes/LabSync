@@ -3070,12 +3070,18 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
   object Timer_ElapsedTime: TTimer
     Interval = 200
     OnTimer = Timer_ElapsedTimeTimer
-    Left = 378
+    Left = 375
     Top = 124
   end
   object Timer_UpDateLiveMode: TTimer
     Interval = 800
     Left = 254
+    Top = 124
+  end
+  object Timer_UpdateLog: TTimer
+    Interval = 100
+    OnTimer = Timer_UpdateLogTimer
+    Left = 479
     Top = 124
   end
 end

@@ -15,7 +15,8 @@ uses
   AgentCard.Component in 'src\Application\Components\AgentCard.Component.pas',
   AgentCard.Manager in 'src\Application\Managers\AgentCard.Manager.pas',
   AgentInfo.Service in 'src\Application\Services\AgentInfo.Service.pas',
-  ServerConfig.Views in 'src\Presentation\Views\ServerConfig.Views.pas' {Frm_ServerConfig};
+  ServerConfig.Views in 'src\Presentation\Views\ServerConfig.Views.pas' {Frm_ServerConfig},
+  GetLog.Service in '..\shared\Application\src\services\GetLog.Service.pas';
 
 {$R *.res}
 

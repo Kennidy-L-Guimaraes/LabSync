@@ -10,7 +10,7 @@ uses
   ID.Service in 'src\Application\Services\ID.Service.pas',
   Path.Service in '..\shared\Application\src\services\Path.Service.pas',
   Screen.Service in 'src\Application\Services\Screen.Service.pas',
-  Command.Logs in 'src\Application\Logs\Command.Logs.pas',
+  Command.Logs in '..\shared\Application\src\Logs\Command.Logs.pas',
   Loop.Service in 'src\Application\Services\Loop.Service.pas',
   Screenshot.Queue in 'src\Application\Queue\Screenshot.Queue.pas',
   GetPrint.Command in 'src\Core\Command\GetPrint.Command.pas',
@@ -28,7 +28,8 @@ uses
   Warning.Views in 'src\Presentation\views\Warning.Views.pas' {Frm_Warning},
   LogViewer.Views in 'src\Presentation\views\LogViewer.Views.pas' {Frm_LogViewer},
   Controller.Dto in 'src\Application\Dtos\Controller.Dto.pas',
-  AgentConnect.Service in 'src\Application\Services\AgentConnect.Service.pas';
+  AgentConnect.Service in 'src\Application\Services\AgentConnect.Service.pas',
+  GetLog.Service in '..\shared\Application\src\services\GetLog.Service.pas';
 
 {$R *.res}
 

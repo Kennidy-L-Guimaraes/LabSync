@@ -15,18 +15,25 @@ type
     FAgentCardManager : TAgentCardManager;
   public
    {Public Declarations}
+    {FUNCTION GET}
     function GetID      : string;
     function GetDate    : string;
     function GetServer  : string;
     function GetPort    : string;
     function GetVersion : string;
     function GetIp      : string;
+    function GetLog     : string;
+
+    {PROCEDURE SET}
+    procedure SetServer(Const Value: string);
+    procedure SetPort(Const Value: string);
 
     procedure ConnectServer;
     procedure DisconnectServer;
     function IsTheServerActive: boolean;
     procedure InitializeIfNeeded;
-    constructor Create(AOwner: TComponent; AContainer: TScrollBox; APicture: TPicture);
+    procedure CreateComponents(AOwner: TComponent; AContainer: TScrollBox; APicture: TPicture);
+    constructor Create;
     destructor Destroy;
  end;
 
@@ -42,13 +49,18 @@ begin
  FServer.AgentCardManager := FAgentCardManager;
 end;
 
-constructor TServerControll.Create(AOwner: TComponent; AContainer: TScrollBox; APicture: TPicture);
+constructor TServerControll.Create;
 begin
   FID           := TID.Create;
   FConfig       := TConfig.Create;
   IPService     := TLocalIPService.Create;
   FServerConfig := TserverConfig.Create;
   FServer       := TServerService.Create;
+end;
+
+procedure TServerControll.CreateComponents(AOwner: TComponent;
+  AContainer: TScrollBox; APicture: TPicture);
+begin
   FAgentCardManager := TAgentCardManager.Create(AOwner, AContainer, APicture);
 end;
 
@@ -82,6 +94,11 @@ begin
  Result := IPService.GetServerIp;
 end;
 
+function TServerControll.GetLog: string;
+begin
+
+end;
+
 function TServerControll.GetPort: string;
 begin
   Result := FServerConfig.GetPortOption('Port');
@@ -105,7 +122,9 @@ begin
    begin
     FServerConfig.SetServerOption('Server', '127.0.0.1');
     FServerConfig.SetPortOption('Port', '5555'); //Default
-   end;
+    FConfig.SetStarted(True);
+   end
+   else
    exit;
 end;
 
@@ -117,5 +136,15 @@ begin
   Result := False;
 end;
 
+
+procedure TServerControll.SetPort(const Value: string);
+begin
+  FServerConfig.SetPortOption('Port', Value);
+end;
+
+procedure TServerControll.SetServer(const Value: string);
+begin
+  FServerConfig.SetServerOption('Server', Value);
+end;
 
 end.

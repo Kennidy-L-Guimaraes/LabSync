@@ -24,7 +24,6 @@ type
     Sbtn_Close: TSpeedButton;
     Lbl_serverAddress: TLabel;
     Lbl_ServerPort: TLabel;
-    Lbl_ServerIP: TLabel;
     Lbl_StartServerAuto: TLabel;
     Lbl_BtnPassword: TLabel;
     Lbl_BtnBlockList: TLabel;
@@ -35,15 +34,22 @@ type
     Sbtn_Cancel: TSpeedButton;
     Edt_ServerDns: TEdit;
     Edt_ServerPort: TEdit;
-    Edt_ServerIP: TEdit;
     Chbx_StartServerAuto: TCheckBox;
+    Label1: TLabel;
+    lbl_ServerIDExample: TLabel;
+    Label3: TLabel;
+    lbl_ServerVersionExample: TLabel;
+    Label5: TLabel;
+    lbl_ServerIPExample: TLabel;
     procedure Sbtn_CloseClick(Sender: TObject);
     procedure Sbtn_SaveClick(Sender: TObject);
     procedure Lbl_StartServerAutoClick(Sender: TObject);
     procedure Sbtn_CancelClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
+    procedure ApplyData;
   public
     { Public declarations }
   end;
@@ -54,6 +60,21 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFrm_ServerConfig.ApplyData;
+begin
+ Edt_ServerDns.Text  := Fcontroller.GetServer;
+ Edt_ServerPort.Text := Fcontroller.GetPort;
+ lbl_ServerIDExample.Caption      := FController.GetID;
+ lbl_ServerVersionExample.Caption := FController.GetVersion;
+ lbl_ServerIPExample.Caption      := FController.GetIp;
+end;
+
+procedure TFrm_ServerConfig.FormCreate(Sender: TObject);
+begin
+ FController  := TServerControll.Create;
+ ApplyData;
+end;
 
 procedure TFrm_ServerConfig.Lbl_StartServerAutoClick(Sender: TObject);
 begin
@@ -74,6 +95,8 @@ end;
 procedure TFrm_ServerConfig.Sbtn_SaveClick(Sender: TObject);
 begin
  Showmessage('The changes will be applied when the server is restarted.');
+ FController.SetPort(Edt_ServerPort.Text);
+ FController.SetServer(Edt_ServerDns.Text);
  close;
 end;
 

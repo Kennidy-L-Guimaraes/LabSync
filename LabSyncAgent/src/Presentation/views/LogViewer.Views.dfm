@@ -13,6 +13,7 @@ object Frm_LogViewer: TFrm_LogViewer
   Position = poMainFormCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   TextHeight = 15
   object Pnl_background: TPanel
     Left = 0

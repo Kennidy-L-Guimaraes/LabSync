@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
-  Agent.Controller, Controller.Dto;
+  Agent.Controller, Controller.Dto, GetLog.Service;
 
 type
   TFrm_LogViewer = class(TForm)
@@ -17,8 +17,10 @@ type
     procedure Timer_LoadLogsTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
+    FGetLog   : TGetLogService;
   public
     { Public declarations }
   end;
@@ -44,8 +46,14 @@ var
  ControllerDto : TControllerDto;
 begin
   ControllerDto := Frm_LabSyncAgent.GetControllerDto;
+  FGetLog       := TGetLogService.Create;
   Lbl_ComputerInfo.Caption := ControllerDto.username + ' ~ID ' +
   ControllerDto.Id + ' V. ' + ControllerDto.version + ' -- ' + FormatDateTime('yyyy/mm/dd', Now);
+end;
+
+procedure TFrm_LogViewer.FormDestroy(Sender: TObject);
+begin
+ FGetLog.Free;
 end;
 
 procedure TFrm_LogViewer.Timer_LoadLogsTimer(Sender: TObject);
@@ -66,7 +74,7 @@ begin
 
     for i := Frm_LabSyncAgent.GetViewerIndex to MaxLine - 1 do
     begin
-      Frm_LabSyncAgent.AppendLogLine(
+      FGetLog.AppendLogLine(
         RichText_Logs,
         Frm_LabSyncAgent.GetViewerLogs[i]
       );

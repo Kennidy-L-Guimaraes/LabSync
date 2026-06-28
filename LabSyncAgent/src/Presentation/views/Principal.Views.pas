@@ -9,7 +9,7 @@ uses
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
   Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command,
   Agent.Controller, Vcl.Menus, CommandParsed.Dto, Message.Views, Warning.Views,
-  LogViewer.Views, Controller.Dto, IdTCPClient;
+  LogViewer.Views, Controller.Dto, IdTCPClient, GetLog.Service;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -172,11 +172,12 @@ type
       FlogViewer       : TFrm_LogViewer;
       FIdTCPClient     : TIdTCPClient;
       FScreenBusy      : Boolean;
+      FGetLog          : TGetLogService;
   public
     { Public declarations }
     {PROCEDURES}
-    procedure AppendLogLine(ARichEdit: TRichEdit; const Line: string);
-    procedure GetLogs;
+    //procedure AppendLogLine(ARichEdit: TRichEdit; const Line: string);
+    //procedure GetLogs;
     procedure StartViewerLoad;
     procedure GetSysData;
     procedure LoadConfig;
@@ -209,41 +210,6 @@ implementation
 }
 
 {$R *.dfm}
-procedure TFrm_LabSyncAgent.AppendLogLine(ARichEdit: TRichEdit; const Line: string);
-begin
-
-  if Pos('SUCCESS', Line) > 0 then
-    ARichEdit.SelAttributes.Color := clLime
-
-  else if Pos('ERROR', Line) > 0 then
-    ARichEdit.SelAttributes.Color := clRed
-
-  else if Pos('CONFIG', Line) > 0 then
-    ARichEdit.SelAttributes.Color := clAqua
-
-  else if Pos('SHELL-ENABLED', Line) > 0 then
-    ARichEdit.SelAttributes.Color := clYellow
-
-  else if Pos('SHELL-DISABLE', Line) > 0 then
-    ARichEdit.SelAttributes.Color := $004080FF
-
-  else if Pos('START SYSTEM', Line) > 0 then
-    ARichEdit.SelAttributes.Color := clMoneyGreen
-
-  else if Pos('OVER SYSTEM', Line) > 0 then
-    ARichEdit.SelAttributes.Color := clMedGray
-
-  else if Pos('SERVER - CONNECT', line) > 0 then
-    ARichEdit.SelAttributes.Color := TColor($00FF379B)
-
-  else if Pos('SERVER - DISCONNECT', line) > 0 then
-    ARichEdit.SelAttributes.Color := TColor($00FF80FF)
-
-  else
-    ARichEdit.SelAttributes.Color := clSilver;
-
-  ARichEdit.SelText := Line + sLineBreak;
-end;
 
 procedure TFrm_LabSyncAgent.ApplyVisualState(ALabel: TLabel; AShape: TShape);
 begin
@@ -304,6 +270,7 @@ end;
 procedure TFrm_LabSyncAgent.CreateObjects;
 begin
  FController    := TAgentController.Create;
+ FGetLog        := TGetLogService.Create;
  FController.InitializeIfNeeded;
  FControllerDto := FController.GetDTO;
  FlogViewer     := TFrm_LogViewer.Create(nil);
@@ -340,7 +307,7 @@ begin
   FController.LogStartAndOver('Start');
   LoadConfig;
   FController.ShellSecurity;
-  GetLogs;
+  //GetLogs;
   Timer_LogReceiver.Enabled  := True;
   Timer_UpdateServer.Enabled := True;
   FController.ConnectServer;
@@ -349,6 +316,7 @@ end;
 procedure TFrm_LabSyncAgent.DestroyObjects;
 begin
  FController.Free;
+ FGetLog.Free;
  Freeandnil(FlogViewer);
  Freeandnil(FWarning);
 end;
@@ -356,62 +324,6 @@ end;
 function TFrm_LabSyncAgent.GetControllerDto: TControllerDto;
 begin
  Result := FControllerDto;
-end;
-
-procedure TFrm_LabSyncAgent.GetLogs;
-const
-  MAX_INITIAL_LINES = 250;
-
-var
-  Logs      : TStringList;
-  i         : Integer;
-  StartLine : Integer;
-
-begin
-  Logs := TStringList.Create;
-  try
-    Logs.Text := FController.GetLogs;
-    Rch_LogReceiver.Perform(WM_SETREDRAW, 0, 0);
-
-    try
-      // FIRST LOAD
-      if FLastLogCount = 0 then
-      begin
-        Rch_LogReceiver.Clear;
-        StartLine := Logs.Count - MAX_INITIAL_LINES;
-
-        if StartLine < 0 then
-          StartLine := 0;
-
-        for i := StartLine to Logs.Count - 1 do
-        begin
-          AppendLogLine(Rch_LogReceiver, Logs[i]);
-        end;
-      end
-      // APPEND ONLY NEW LINES
-      else
-      begin
-        for i := FLastLogCount to Logs.Count - 1 do
-        begin
-          AppendLogLine(Rch_LogReceiver, Logs[i]);
-        end;
-      end;
-
-      FLastLogCount := Logs.Count;
-
-    finally
-      // MAIN RICHEDIT
-      Rch_LogReceiver.Perform(WM_SETREDRAW, 1, 0);
-      Rch_LogReceiver.Invalidate;
-
-    end;
-    // AUTO SCROLL MAIN
-    Rch_LogReceiver.SelStart := Rch_LogReceiver.GetTextLen;
-    Rch_LogReceiver.Perform(WM_VSCROLL, SB_BOTTOM, 0);
-
-  finally
-    Logs.Free;
-  end;
 end;
 
 procedure TFrm_LabSyncAgent.GetSysData;
@@ -682,7 +594,7 @@ end;
 
 procedure TFrm_LabSyncAgent.Timer_LogReceiverTimer(Sender: TObject);
 begin
-  getlogs;
+  FGetLog.CreateComponent(Rch_LogReceiver);
 end;
 
 procedure TFrm_LabSyncAgent.Timer_ShellSecurityTimer(Sender: TObject);
