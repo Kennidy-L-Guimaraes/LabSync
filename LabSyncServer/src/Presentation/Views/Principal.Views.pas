@@ -96,7 +96,6 @@ type
     Rch_LogReceiver: TRichEdit;
     Lbl_RecentLogs: TLabel;
     Pnl_Agents: TPanel;
-    Lbl_Agents: TLabel;
     ScBox_Agents: TScrollBox;
     Pnl_AgentCS000: TPanel;
     Img_AgentExample: TImage;
@@ -125,6 +124,8 @@ type
     Image5: TImage;
     Image6: TImage;
     Image7: TImage;
+    Lbl_Agents: TLabel;
+    Shape1: TShape;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);

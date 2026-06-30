@@ -156,9 +156,10 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     Height = 696
     Align = alClient
     BevelOuter = bvNone
-    Color = 1184274
+    Color = 1511692
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 694
     object image1: TImage
       Left = 285
       Top = 5
@@ -166,10 +167,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       Height = 570
       Align = alClient
       Stretch = True
-      ExplicitLeft = 348
-      ExplicitTop = 151
-      ExplicitWidth = 432
-      ExplicitHeight = 337
+      ExplicitHeight = 536
     end
     object Pnl_AgentStatus: TPanel
       Left = 5
@@ -180,6 +178,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
+      ExplicitHeight = 568
       DesignSize = (
         280
         570)
@@ -189,8 +188,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Width = 280
         Height = 570
         Align = alClient
-        Brush.Color = 1776411
-        Pen.Color = 2697513
+        Brush.Color = 2037777
+        Pen.Color = 2498076
         Pen.Width = 2
         ExplicitTop = 200
         ExplicitHeight = 435
@@ -318,7 +317,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         AutoSize = False
         Caption = 'Machine Name:'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -338,7 +337,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         AutoSize = False
         Caption = 'Machine Name:'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -358,7 +357,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         AutoSize = False
         Caption = 'Machine Name:'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -378,7 +377,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         AutoSize = False
         Caption = 'Machine Name:'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -398,7 +397,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         AutoSize = False
         Caption = 'Machine Name:'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -414,8 +413,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Margins.Top = 15
         Margins.Right = 15
         Margins.Bottom = 15
-        Brush.Color = 4078652
-        Pen.Color = clMedGray
+        Brush.Color = 2498076
+        Pen.Color = 2498076
         Pen.Style = psClear
       end
       object Lbl_MachineUser: TLabel
@@ -448,7 +447,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Margins.Bottom = 10
         Caption = 'Machine Name:'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -468,7 +467,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         AutoSize = False
         Caption = 'Machine Name:'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -506,7 +505,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         AutoSize = False
         Caption = 'Machine Name:'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -912,7 +911,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Caption = 'DISCONNECTED'
         Color = clBlack
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = 8355711
+        Font.Color = 5193786
         Font.Height = -12
         Font.Name = '@Microsoft YaHei'
         Font.Style = []
@@ -995,8 +994,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -1037,7 +1036,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Information'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1057,7 +1056,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Allow retrieving system information.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1114,8 +1113,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -1163,7 +1162,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Commands'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1183,7 +1182,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Allow execution of Shell commands.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1240,8 +1239,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -1301,7 +1300,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Folders'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1321,7 +1320,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Allow access to files and folders.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1378,8 +1377,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -1447,7 +1446,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Edit registry'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1467,7 +1466,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Allow editing of Windows registry entries.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1524,8 +1523,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -1606,7 +1605,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Shutdown'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1626,7 +1625,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Allow computer to shut down or restart.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1683,8 +1682,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -1740,7 +1739,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Downloads'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1760,7 +1759,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Allow downloads from all sources.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1817,8 +1816,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitTop = 1
         end
@@ -1897,7 +1896,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Messages'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1917,7 +1916,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Allow sending message or notification.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -1974,8 +1973,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -2024,7 +2023,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Live Mode'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -2044,7 +2043,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Check the computer screen in real time.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -2101,8 +2100,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 41
           Align = alClient
-          Brush.Color = 1776411
-          Pen.Color = 2697513
+          Brush.Color = 2037777
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -2140,7 +2139,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Screenshot'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -2160,7 +2159,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Computer screenshots.'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -2217,8 +2216,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Width = 519
           Height = 35
           Align = alClient
-          Brush.Color = 1118481
-          Pen.Color = 2697513
+          Brush.Color = 1183242
+          Pen.Color = 2498076
           Shape = stRoundRect
           ExplicitLeft = 168
           ExplicitTop = 16
@@ -2239,7 +2238,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Permission'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -2260,7 +2259,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Description'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -2281,7 +2280,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           AutoSize = False
           Caption = 'Status'
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = 8355711
+          Font.Color = 11178890
           Font.Height = -12
           Font.Name = '@Microsoft YaHei'
           Font.Style = []
@@ -2299,14 +2298,15 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 2
+      ExplicitTop = 578
       object Shp_LogReceiver: TShape
         Left = 0
         Top = 0
         Width = 844
         Height = 116
         Align = alClient
-        Brush.Color = 1776411
-        Pen.Color = 2697513
+        Brush.Color = 2037777
+        Pen.Color = 2498076
         Pen.Width = 2
         ExplicitTop = 1
         ExplicitWidth = 839
@@ -2340,7 +2340,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Width = 797
         Height = 43
         BevelOuter = bvNone
-        Color = 1776411
+        Color = 2037777
         ParentBackground = False
         TabOrder = 0
         object Lbl_ExecutingCommands: TLabel
@@ -2415,7 +2415,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
           Height = 43
           BevelOuter = bvNone
           Caption = 'Pnl_Connection'
-          Color = 1776411
+          Color = 2037777
           ParentBackground = False
           TabOrder = 0
           object Shp_ConnectServer: TShape
@@ -2423,7 +2423,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
             Top = 1
             Width = 465
             Height = 37
-            Brush.Color = 1776411
+            Brush.Color = 2037777
             Pen.Color = 2697513
             Shape = stRoundRect
           end
@@ -2576,9 +2576,9 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
             BevelOuter = bvNone
             BorderStyle = bsNone
             CharCase = ecLowerCase
-            Color = 1776411
+            Color = 2037777
             Font.Charset = DEFAULT_CHARSET
-            Font.Color = 5131854
+            Font.Color = 5193786
             Font.Height = -12
             Font.Name = 'Segoe UI'
             Font.Style = [fsItalic, fsUnderline]
@@ -2598,9 +2598,9 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
             BevelOuter = bvNone
             BorderStyle = bsNone
             CharCase = ecLowerCase
-            Color = 1776411
+            Color = 2037777
             Font.Charset = DEFAULT_CHARSET
-            Font.Color = 5131854
+            Font.Color = 5193786
             Font.Height = -12
             Font.Name = 'Segoe UI'
             Font.Style = [fsItalic, fsUnderline]
@@ -2618,7 +2618,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
         Height = 58
         BevelInner = bvNone
         BorderStyle = bsNone
-        Color = 1776411
+        Color = 2037777
         Ctl3D = False
         EnableURLs = True
         Font.Charset = ANSI_CHARSET
@@ -2641,6 +2641,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 3
+      ExplicitTop = 573
     end
     object Panel1: TPanel
       Left = 0
@@ -2649,7 +2650,8 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       Height = 5
       Align = alTop
       BevelOuter = bvNone
-      ParentColor = True
+      Color = 1511692
+      ParentBackground = False
       TabOrder = 4
     end
     object Panel2: TPanel
@@ -2661,6 +2663,7 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 5
+      ExplicitHeight = 568
     end
   end
   object Timer_AgentLiveMode: TTimer

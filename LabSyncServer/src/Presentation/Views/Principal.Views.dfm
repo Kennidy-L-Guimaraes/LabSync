@@ -238,10 +238,24 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         Top = 2
         Width = 645
         Height = 404
-        BevelOuter = bvLowered
+        BevelOuter = bvNone
         Color = 2037777
         ParentBackground = False
         TabOrder = 1
+        object Shape1: TShape
+          Left = 0
+          Top = 0
+          Width = 645
+          Height = 404
+          Align = alClient
+          Brush.Color = 2037777
+          Pen.Color = 3484446
+          Pen.Width = 2
+          ExplicitLeft = 2
+          ExplicitTop = 2
+          ExplicitWidth = 643
+          ExplicitHeight = 402
+        end
         object Image1: TImage
           Left = 2
           Top = 144
@@ -330,10 +344,10 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           ParentFont = False
         end
         object Img_AgentScreen: TImage
-          Left = 1
-          Top = 1
-          Width = 643
-          Height = 402
+          Left = 0
+          Top = 0
+          Width = 645
+          Height = 404
           Cursor = crHandPoint
           Align = alClient
           ParentShowHint = False
@@ -2849,17 +2863,18 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
       Margins.Right = 2
       Margins.Bottom = 2
       BevelOuter = bvNone
-      Color = 1776411
+      Color = 2037777
       ParentBackground = False
       TabOrder = 4
       object Shp_Agents: TShape
         Left = 0
-        Top = 0
+        Top = 27
         Width = 240
-        Height = 603
+        Height = 576
         Align = alClient
         Brush.Color = 2037777
         Pen.Color = 2498076
+        Pen.Style = psClear
         Pen.Width = 2
         ExplicitTop = 10
         ExplicitHeight = 701
@@ -2876,6 +2891,26 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         Brush.Color = 3484446
         Pen.Color = 3484446
         Pen.Style = psClear
+      end
+      object Lbl_Agents: TLabel
+        AlignWithMargins = True
+        Left = 10
+        Top = 3
+        Width = 227
+        Height = 21
+        Margins.Left = 10
+        Align = alTop
+        Caption = 'Agents'
+        Color = 2037777
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 14671839
+        Font.Height = -16
+        Font.Name = '@Microsoft YaHei'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ExplicitLeft = 9
+        ExplicitTop = 2
       end
       object Pnl_RecentLogs: TPanel
         AlignWithMargins = True
@@ -2927,35 +2962,19 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         end
       end
       object Pnl_Agents: TPanel
-        Left = 15
-        Top = 17
-        Width = 210
-        Height = 354
+        Left = 11
+        Top = 38
+        Width = 218
+        Height = 330
         BevelOuter = bvNone
         Color = 2037777
         ParentBackground = False
         TabOrder = 1
-        object Lbl_Agents: TLabel
-          AlignWithMargins = True
-          Left = 3
-          Top = 3
-          Width = 204
-          Height = 21
-          Align = alTop
-          Caption = 'Agents'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = 14671839
-          Font.Height = -16
-          Font.Name = '@Microsoft YaHei'
-          Font.Style = []
-          ParentFont = False
-          ExplicitWidth = 53
-        end
         object ScBox_Agents: TScrollBox
           Left = 0
-          Top = 27
-          Width = 210
-          Height = 326
+          Top = 0
+          Width = 218
+          Height = 297
           VertScrollBar.Tracking = True
           Align = alTop
           BevelInner = bvNone
@@ -2964,27 +2983,32 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           ParentBackground = True
           TabOrder = 0
           UseWheelForScrolling = True
+          ExplicitLeft = -13
+          ExplicitTop = 34
+          ExplicitWidth = 210
           object Pnl_AgentCS000: TPanel
             Left = 0
             Top = 0
-            Width = 210
+            Width = 218
             Height = 85
             Align = alTop
             BevelOuter = bvNone
             ParentColor = True
             TabOrder = 0
             Visible = False
+            ExplicitWidth = 210
             object Shp_btnAgentExample: TShape
               Left = 0
               Top = 0
-              Width = 210
+              Width = 218
               Height = 85
               Align = alClient
               Brush.Color = 1776411
               Pen.Color = 2697513
               Shape = stRoundRect
-              ExplicitTop = 3
-              ExplicitHeight = 89
+              ExplicitLeft = 8
+              ExplicitTop = 80
+              ExplicitWidth = 210
             end
             object Img_AgentExample: TImage
               Left = 11

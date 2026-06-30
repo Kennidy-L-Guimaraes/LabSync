@@ -82,9 +82,6 @@ Coordinates=528,418,148,58
 [Pnl_BtnSaveScreen]
 Coordinates=888,282,129,58
 
-[Lbl_Agents]
-Coordinates=222,350,79,58
-
 [Lbl_ServerDateConnectionExample]
 Coordinates=422,214,219,58
 
@@ -291,5 +288,5 @@ Coordinates=925,554,118,36
 Coordinates=129,214,126,58
 
 []
-Coordinates=1620,661,91,36
+Coordinates=222,350,79,58
 
