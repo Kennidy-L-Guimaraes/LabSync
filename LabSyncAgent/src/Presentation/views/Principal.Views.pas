@@ -9,7 +9,8 @@ uses
   Screenshot.Queue, Vcl.Imaging.jpeg, Transporter.Dto, Vcl.Imaging.pngimage,
   Vcl.ComCtrls, Vcl.Buttons, Config.Service, GetSysInfo.Command,
   Agent.Controller, Vcl.Menus, CommandParsed.Dto, Message.Views, Warning.Views,
-  LogViewer.Views, Controller.Dto, IdTCPClient, GetLog.Service;
+  LogViewer.Views, Controller.Dto, IdTCPClient, GetLog.Service,
+  ApplicationMode.types;
 
 type
   TFrm_LabSyncAgent = class(TForm)
@@ -270,7 +271,7 @@ end;
 procedure TFrm_LabSyncAgent.CreateObjects;
 begin
  FController    := TAgentController.Create;
- FGetLog        := TGetLogService.Create;
+ FGetLog        := TGetLogService.Create(amAgent);
  FController.InitializeIfNeeded;
  FControllerDto := FController.GetDTO;
  FlogViewer     := TFrm_LogViewer.Create(nil);

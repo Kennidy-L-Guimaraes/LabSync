@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.Buttons, Vcl.ComCtrls,
   Server.Controller, IdContext, AgentCard.Component, ServerConfig.Views, DateUtils,
-  GetLog.Service;
+  GetLog.Service, ApplicationMode.types;
 
 type
   TFrm_LabSyncServer = class(TForm)
@@ -117,6 +117,14 @@ type
     Shp_ShutdownServer: TShape;
     Lbl_ShutdownServer: TLabel;
     Timer_UpdateLog: TTimer;
+    Image1: TImage;
+    Label1: TLabel;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    Image5: TImage;
+    Image6: TImage;
+    Image7: TImage;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);
@@ -199,7 +207,7 @@ end;
 
 procedure TFrm_LabSyncServer.ApplyColor(const AShape: TShape);
 begin
- AShape.Brush.Color := ClRed;
+ AShape.Brush.Color := $0017110C;
 end;
 
 procedure TFrm_LabSyncServer.ApplyData;
@@ -216,7 +224,7 @@ end;
 
 procedure TFrm_LabSyncServer.CreateObjs;
 begin
- FGetLogs    := TGetLogService.Create;
+ FGetLogs    := TGetLogService.Create(amServer);
  FController := TServerControll.Create;
 end;
 
@@ -229,6 +237,7 @@ end;
 procedure TFrm_LabSyncServer.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
+ FController.DisconnectServer;
  DestroyObjs;
 end;
 

@@ -2,7 +2,8 @@ unit Server.Controller;
 
 interface
 uses Config.Service, ID.Service, ServerConfig.Service, SysUtils, DateUtils, Classes,
-  LocalIP.Service, Server.Service, AgentCard.Manager, Vcl.Graphics, Vcl.Forms;
+  LocalIP.Service, Server.Service, AgentCard.Manager, Vcl.Graphics, Vcl.Forms,
+  Command.Logs, ApplicationMode.types;
 type
  TServerControll = class
   private
@@ -12,6 +13,7 @@ type
     FID           : TID;
     IPService     : TLocalIPService;
     FServer       : TServerService;
+    FLog          : Tlog;
     FAgentCardManager : TAgentCardManager;
   public
    {Public Declarations}
@@ -52,6 +54,7 @@ end;
 constructor TServerControll.Create;
 begin
   FID           := TID.Create;
+  FLog          := Tlog.Create(amServer);
   FConfig       := TConfig.Create;
   IPService     := TLocalIPService.Create;
   FServerConfig := TserverConfig.Create;
@@ -66,12 +69,13 @@ end;
 
 destructor TServerControll.Destroy;
 begin
+  inherited Destroy;
   FID.Free;
+  FLog.Free;
   FConfig.Free;
   FServerConfig.Free;
   IPService.Free;
   FServer.Free;
-  inherited Destroy;
 end;
 
 procedure TServerControll.DisconnectServer;
@@ -95,8 +99,13 @@ begin
 end;
 
 function TServerControll.GetLog: string;
+var
+ Content : string;
 begin
-
+  Content := FLog.ReadLogs('Audit.log');
+  if Content = '' then
+    Exit;
+   Result := Content;
 end;
 
 function TServerControll.GetPort: string;

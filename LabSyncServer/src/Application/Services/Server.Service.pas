@@ -3,12 +3,14 @@ interface
 uses
   IdTCPServer,
   IdContext, Classes, Windows, types, System.IOUtils, System.SysUtils, dialogs,
-  AgentCard.Manager, AgentInfo.Service, Vcl.Forms;
+  AgentCard.Manager, AgentInfo.Service, Vcl.Forms, ApplicationMode.types, DateUtils,
+  Command.Logs;
  type
   TServerService = class
     private
      {Private Declarations}
      FServer : TIdTCPServer;
+     FLog    : Tlog;
      procedure ServerExecute(AContext: TIdContext);
      procedure ServerDisconnect(AContext: TIdContext);
     public
@@ -34,6 +36,7 @@ constructor TServerService.Create;
 begin
    inherited;
    CreateSocket;
+   Flog := Tlog.Create(amServer);
 end;
 
 procedure TServerService.CreateSocket;
@@ -124,22 +127,50 @@ begin
 end;
 
 procedure TServerService.Start(const Aport: integer);
+var
+ TimeStamp: string;
+ Controller: TServerControll;
 begin
-   if not Assigned(FServer) then
+ if not Assigned(FServer) then
     CreateSocket;
+ try
+  Controller := TServerControll.Create;
+ try
+  Timestamp      := FormatDateTime('yyyymmdd_hhnnss', Now);
   if not FServer.Active then
   begin
     FServer.DefaultPort := Aport;
     FServer.Active      := True;
   end;
+  Flog.ServerStatus(ssOnline, TimeStamp, Controller.GetID, Controller.GetVersion, Controller.GetIp, 'ACTIVE');
+ except on E: exception do
+  Flog.ServerStatus(ssOffline, TimeStamp, Controller.GetID, Controller.GetVersion, Controller.GetIp, E.Message);
+ end;
+ finally
+ Controller.Free;
+ end;
 end;
 
 procedure TServerService.Stop;
+var
+ TimeStamp: string;
+ Controller: TServerControll;
 begin
  if not Assigned(FServer) or not FServer.Active then
     Exit;
+ try
+  Controller := TServerControll.Create;
+ try
+  Timestamp      := FormatDateTime('yyyymmdd_hhnnss', Now);
   FServer.Active := False;
   Application.ProcessMessages;
+  Flog.ServerStatus(ssOffline, TimeStamp, Controller.GetID, Controller.GetVersion, Controller.GetIp, 'INACTIVE');
+ except on E: exception do
+  Flog.ServerStatus(ssOffline, TimeStamp, Controller.GetID, Controller.GetVersion, Controller.GetIp, E.Message);
+ end;
+ finally
+ Controller.Free;
+ end;
 end;
 
 end.

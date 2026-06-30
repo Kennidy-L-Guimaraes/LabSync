@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons,
-  Transporter.Dto, Server.Controller;
+  Transporter.Dto, Server.Controller, Vcl.Imaging.pngimage;
 
 type
   TFrm_ServerConfig = class(TForm)
@@ -41,6 +41,8 @@ type
     lbl_ServerVersionExample: TLabel;
     Label5: TLabel;
     lbl_ServerIPExample: TLabel;
+    Image1: TImage;
+    Image2: TImage;
     procedure Sbtn_CloseClick(Sender: TObject);
     procedure Sbtn_SaveClick(Sender: TObject);
     procedure Lbl_StartServerAutoClick(Sender: TObject);

@@ -7,7 +7,7 @@ uses
   Config.Service in 'src\Application\Services\Config.Service.pas',
   Path.Service in '..\shared\Application\src\services\Path.Service.pas',
   ServerConfig.Service in 'src\Application\Services\ServerConfig.Service.pas',
-  Command.Logs in 'src\Application\logs\Command.Logs.pas',
+  Command.Logs in '..\shared\Application\src\logs\Command.Logs.pas',
   Transporter.Dto in '..\shared\Application\src\Dtos\Transporter.Dto.pas',
   ID.Service in 'src\Application\Services\ID.Service.pas',
   LocalIP.Service in 'src\Application\Services\LocalIP.Service.pas',
@@ -16,7 +16,8 @@ uses
   AgentCard.Manager in 'src\Application\Managers\AgentCard.Manager.pas',
   AgentInfo.Service in 'src\Application\Services\AgentInfo.Service.pas',
   ServerConfig.Views in 'src\Presentation\Views\ServerConfig.Views.pas' {Frm_ServerConfig},
-  GetLog.Service in '..\shared\Application\src\services\GetLog.Service.pas';
+  GetLog.Service in '..\shared\Application\src\services\GetLog.Service.pas',
+  ApplicationMode.types in '..\shared\Application\src\types\ApplicationMode.types.pas';
 
 {$R *.res}
 

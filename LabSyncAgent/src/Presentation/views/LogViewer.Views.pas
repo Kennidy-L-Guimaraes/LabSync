@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
-  Agent.Controller, Controller.Dto, GetLog.Service;
+  Agent.Controller, Controller.Dto, GetLog.Service, ApplicationMode.types;
 
 type
   TFrm_LogViewer = class(TForm)
@@ -46,7 +46,7 @@ var
  ControllerDto : TControllerDto;
 begin
   ControllerDto := Frm_LabSyncAgent.GetControllerDto;
-  FGetLog       := TGetLogService.Create;
+  FGetLog       := TGetLogService.Create(amAgent);
   Lbl_ComputerInfo.Caption := ControllerDto.username + ' ~ID ' +
   ControllerDto.Id + ' V. ' + ControllerDto.version + ' -- ' + FormatDateTime('yyyy/mm/dd', Now);
 end;

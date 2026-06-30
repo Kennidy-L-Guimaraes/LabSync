@@ -4,7 +4,7 @@ interface
 
 uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
   Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service, DateUtils, SysUtils, Generics.Collections, Classes,
-  Controller.Dto, AgentConnect.Service;
+  Controller.Dto, AgentConnect.Service, ApplicationMode.types;
  type
   TAgentController = class
     private
@@ -70,7 +70,7 @@ begin
  Fconfig       := TConfig.Create;
  FServerConfig := TServerConfig.Create; 
  FDispatcher   := TCommandDispatcher.Create;
- FLog          := Tlog.create;
+ FLog          := Tlog.create(amAgent);
  FID           := TID.Create;
  FSysInfo      := TStringList.Create;
 end;

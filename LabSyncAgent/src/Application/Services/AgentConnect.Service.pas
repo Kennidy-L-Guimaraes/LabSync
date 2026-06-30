@@ -1,7 +1,8 @@
 unit AgentConnect.Service;
 
 interface
- uses IdTCPClient, Controller.Dto, SysUtils, classes, Command.Logs, System.DateUtils, dialogs;
+ uses IdTCPClient, Controller.Dto, SysUtils, classes, Command.Logs, System.DateUtils, dialogs,
+  ApplicationMode.types;
   type
    TAgentConnect = class
      private
@@ -53,7 +54,7 @@ begin
   inherited Create;
   CreateClient;
   FControllerDto := AControllerDto;
-  FLog           := TLog.Create;
+  FLog           := TLog.Create(amAgent);
 end;
 
 procedure TAgentConnect.CreateClient;

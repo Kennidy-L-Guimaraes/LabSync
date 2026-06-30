@@ -1,7 +1,10 @@
 unit Command.Logs;
 
 interface
- uses Windows, System.IOUtils, SysUtils, Transporter.Dto, Dialogs;
+ uses Windows, System.IOUtils, SysUtils, Transporter.Dto, Dialogs, Path.Service,
+  ApplicationMode.types;
+ type
+  TServerStatus = (ssOnline, ssOffline);
  type
   TLog = class
   public
@@ -15,6 +18,11 @@ interface
     class procedure StartAndOver(const Status, TimeStamp, ID, Version, User, IP: string);
     class procedure ConnectServer(const TimeStamp, Server, Port, messages: string);
     class procedure DisconnectServer(const TimeStamp, Server, Port, messages: string);
+
+    {UNIQUE FOR SERVER}
+    class procedure ServerStatus(const Status: TServerStatus; TimeStamp, ID, Version, IP, ErrorMessage: string);
+    constructor Create(const Avalue: TApplicationMode);
+    class var   FPathServerOrAgent: string;
   private
     {Private Declarations}
     class function  GetLogPath(const nameOfLog: string): string;
@@ -27,7 +35,7 @@ class function TLog.GetLogPath(const nameOfLog: string): string;
 var
   BaseDir: string;
 begin
-  BaseDir := TPath.Combine(GetEnvironmentVariable('APPDATA'), 'LabSync\Logs');
+  BaseDir  := TPath.Combine(GetEnvironmentVariable('APPDATA'), 'LabSync\'+FPathServerOrAgent+'\Logs');
 
   if not TDirectory.Exists(BaseDir) then
     TDirectory.CreateDirectory(BaseDir);
@@ -52,6 +60,17 @@ begin
   TFile.AppendAllText(GetLogPath(NameOfLog), Line + sLineBreak, TEncoding.UTF8);
  except
   raise Exception.Create('The log could not be saved to the local system.');
+ end;
+end;
+
+class procedure TLog.ServerStatus(const Status: TServerStatus; TimeStamp, ID, Version,
+  IP, ErrorMessage: string);
+begin
+ case Status of
+   ssOnline:
+    Tlog.SaveLog(Format('SERVER ONLINE ##### | Time: %s | ID: %s | Version: %s | IP: %s | Message: %s', [TimeStamp, ID, Version, IP, ErrorMessage]), 'Audit.log');
+   ssOffline:
+    Tlog.SaveLog(Format('SERVER OFFLINE ##### | Time: %s | ID: %s | Version: %s | IP: %s | Message: %s', [TimeStamp, ID, Version, IP, ErrorMessage]), 'Audit.log');
  end;
 end;
 
@@ -85,6 +104,18 @@ class procedure TLog.ConnectServer(const TimeStamp, Server, Port,
 begin
  //Use For Connect
  TLog.SaveLog(Format('SERVER - CONNECT | Time: %s | %s | IP: %s | PORT: %s ', [TimeStamp, messages, server, port]), 'Audit.log');
+end;
+
+constructor TLog.Create(const Avalue: TApplicationMode);
+begin
+  inherited Create;
+  case AValue of
+  TApplicationMode.amServer:
+    FPathServerOrAgent := 'Server';
+
+  TApplicationMode.amAgent:
+    FPathServerOrAgent := 'Machine';
+  end;
 end;
 
 class procedure TLog.DisconnectServer(const TimeStamp, Server, Port,

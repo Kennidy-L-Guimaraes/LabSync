@@ -3,7 +3,7 @@ unit ServerConfig.Service;
 interface
 
 uses System.Classes, System.SysUtils, System.IOUtils, Winapi.ShlObj, Path.Service,
-  Command.Logs, ID.Service;
+  Command.Logs, ID.Service, ApplicationMode.types;
 type
  TServerConfig = class
    private
@@ -32,7 +32,7 @@ implementation
 constructor TServerConfig.Create;
 begin
   FFilePath := GetPathConfig;
-  FLog       := TLog.Create;
+  FLog       := TLog.Create(amAgent);
   FID        := TID.Create;
 end;
 

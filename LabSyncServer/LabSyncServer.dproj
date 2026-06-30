@@ -137,7 +137,7 @@
         <DCCReference Include="src\Application\Services\Config.Service.pas"/>
         <DCCReference Include="..\shared\Application\src\services\Path.Service.pas"/>
         <DCCReference Include="src\Application\Services\ServerConfig.Service.pas"/>
-        <DCCReference Include="src\Application\logs\Command.Logs.pas"/>
+        <DCCReference Include="..\shared\Application\src\logs\Command.Logs.pas"/>
         <DCCReference Include="..\shared\Application\src\Dtos\Transporter.Dto.pas"/>
         <DCCReference Include="src\Application\Services\ID.Service.pas"/>
         <DCCReference Include="src\Application\Services\LocalIP.Service.pas"/>
@@ -150,6 +150,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\shared\Application\src\services\GetLog.Service.pas"/>
+        <DCCReference Include="..\shared\Application\src\types\ApplicationMode.types.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

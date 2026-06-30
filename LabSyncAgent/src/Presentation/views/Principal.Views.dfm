@@ -159,7 +159,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     Color = 1184274
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 694
     object image1: TImage
       Left = 285
       Top = 5
@@ -181,7 +180,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
-      ExplicitHeight = 568
       DesignSize = (
         280
         570)
@@ -2301,7 +2299,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 2
-      ExplicitTop = 578
       object Shp_LogReceiver: TShape
         Left = 0
         Top = 0
@@ -2644,7 +2641,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 3
-      ExplicitTop = 573
     end
     object Panel1: TPanel
       Left = 0
@@ -2665,7 +2661,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 5
-      ExplicitHeight = 568
     end
   end
   object Timer_AgentLiveMode: TTimer

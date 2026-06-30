@@ -30,7 +30,7 @@ implementation
 procedure TAgentCard.ConfigurePanel(const AParent: TWinControl);
 begin
   Width := 210;
-  Height:= 90;
+  Height:= 80;
   Align := alTop;
   UseDockManager := True;
   BevelOuter     := bvNone;
@@ -54,8 +54,8 @@ begin
  FImage := Timage.Create(self);
  try
   FImage.Parent := self;
-  FImage.Left   := 5;
-  FImage.Top    := 18;
+  FImage.Left   := 10;
+  FImage.Top    := 25;
   FImage.Width  := 35;
   FImage.Height := 50;
   FImage.Proportional := True;
@@ -94,19 +94,19 @@ var
 begin
   ColorLabel := $00DFDFDF;
   Status     := trim(AStatus);
-  CreateLabel('Server Status: ', 57, 46, 79, 17, ColorLabel);
-  CreateLabel('Agent: ', 11, 46, 37, 17, ColorLabel);
-  CreateLabel('Agent IP: ', 34, 46, 52, 17, ColorLabel);
-  createLabel(AName, 11, 91, 79, 17, ColorLabel);
+  CreateLabel('Server Status: ', 57, 52, 79, 17, ColorLabel);
+  CreateLabel('Agent: ', 11, 52, 37, 17, ColorLabel);
+  CreateLabel('Agent IP: ', 34, 52, 52, 17, ColorLabel);
+  createLabel(AName, 11, 97, 79, 17, ColorLabel);
   if sametext(status, 'active') then
    begin
-    CreateLabel(AIp, 34, 104, 93, 17, TColor(ClLime));
-    CreateLabel(AStatus, 57, 131, 44, 17, TColor(ClLime))
+    CreateLabel(AIp, 34, 112, 93, 17, TColor(ClLime));
+    CreateLabel(AStatus, 57, 137, 44, 17, TColor(ClLime))
    end
   else
    begin
-    CreateLabel(AIp, 34, 104, 93, 17, TColor($008080FF));
-    CreateLabel(AStatus, 57, 131, 44, 17, TColor($008080FF))
+    CreateLabel(AIp, 34, 112, 93, 17, TColor($008080FF));
+    CreateLabel(AStatus, 57, 137, 44, 17, TColor($008080FF))
    end;
 end;
 
@@ -116,8 +116,9 @@ begin
  try
  FShape.Parent  := Self;
  FShape.Align       := alClient;
- FShape.Brush.Color := TColor(1776411);
- FShape.Pen.Color   := TColor(2697513);
+ FShape.Brush.Color := TColor($0017110C);
+ FShape.Shape       := stRectangle;
+ FShape.Pen.Color   := TColor($004F403A);
  finally
 
  end;
@@ -140,12 +141,12 @@ end;
 
 procedure TAgentCard.EventEnter(Sender: TObject);
 begin
- FShape.Brush.Color := clred;
+ FShape.Brush.Color := $0017110C;
 end;
 
 procedure TAgentCard.EventLeave(Sender: TObject);
 begin
- FShape.Brush.Color := $001B1B1B;
+ FShape.Brush.Color := $0017110C;
 end;
 
 end.
