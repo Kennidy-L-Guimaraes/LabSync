@@ -11,7 +11,7 @@ object Frm_Warning: TFrm_Warning
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
-  Position = poMainFormCenter
+  Position = poOwnerFormCenter
   TextHeight = 15
   object Pnl_Background: TPanel
     Left = 0
@@ -20,10 +20,9 @@ object Frm_Warning: TFrm_Warning
     Height = 231
     Align = alClient
     BevelOuter = bvNone
-    Color = 1184274
+    Color = 1511692
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 200
     object Pnl_Close: TPanel
       Left = 0
       Top = 0
@@ -31,7 +30,7 @@ object Frm_Warning: TFrm_Warning
       Height = 33
       Align = alTop
       BevelOuter = bvNone
-      Color = 1184274
+      Color = 1511692
       ParentBackground = False
       TabOrder = 0
       object Sbtn_Close: TSpeedButton
@@ -126,9 +125,9 @@ object Frm_Warning: TFrm_Warning
       Height = 145
       TabStop = False
       BorderStyle = bsNone
-      Color = 1184274
+      Color = 1511692
       Font.Charset = ANSI_CHARSET
-      Font.Color = clAliceblue
+      Font.Color = 11178890
       Font.Height = -12
       Font.Name = 'Segoe UI'
       Font.Style = []
@@ -152,7 +151,6 @@ object Frm_Warning: TFrm_Warning
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 2
-      ExplicitTop = 159
       object Pnl_BtnNo: TPanel
         AlignWithMargins = True
         Left = 190
@@ -166,7 +164,7 @@ object Frm_Warning: TFrm_Warning
         Margins.Bottom = 5
         Align = alLeft
         BevelOuter = bvNone
-        Color = 1776411
+        Color = 986121
         ParentBackground = False
         TabOrder = 0
         object Spbtn_No: TSpeedButton
@@ -203,7 +201,7 @@ object Frm_Warning: TFrm_Warning
         Margins.Bottom = 5
         Align = alLeft
         BevelOuter = bvNone
-        Color = 1776411
+        Color = 986121
         ParentBackground = False
         TabOrder = 1
         object SpBtn_Yes: TSpeedButton

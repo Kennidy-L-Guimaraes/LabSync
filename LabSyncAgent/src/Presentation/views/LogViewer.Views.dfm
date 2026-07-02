@@ -10,7 +10,7 @@ object Frm_LogViewer: TFrm_LogViewer
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
-  Position = poMainFormCenter
+  Position = poOwnerFormCenter
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -22,9 +22,10 @@ object Frm_LogViewer: TFrm_LogViewer
     Height = 298
     Align = alClient
     BevelOuter = bvNone
-    Color = 1776411
+    Color = 1511692
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 296
     object RichText_Logs: TRichEdit
       AlignWithMargins = True
       Left = 15
@@ -35,7 +36,7 @@ object Frm_LogViewer: TFrm_LogViewer
       Align = alClient
       BevelInner = bvNone
       BorderStyle = bsNone
-      Color = 1776411
+      Color = 1511692
       Ctl3D = False
       EnableURLs = True
       Font.Charset = ANSI_CHARSET
@@ -48,6 +49,7 @@ object Frm_LogViewer: TFrm_LogViewer
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
+      ExplicitHeight = 265
     end
     object Pnl_ComputerInfo: TPanel
       Left = 0

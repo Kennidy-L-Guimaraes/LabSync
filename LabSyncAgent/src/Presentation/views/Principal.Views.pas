@@ -236,7 +236,7 @@ var
   Dispatcher   : TCommandDispatcher;
   Config       : TConfig;
 begin
-  {Config       := Tconfig.Create;
+  Config       := Tconfig.Create;
   Dispatcher   := TCommandDispatcher.Create;
   ID           := TId.Create;
   try
@@ -249,7 +249,7 @@ begin
    Config.Free;
    Dispatcher.Free;
    ID.Free;
-  end;}
+  end;
 end;
 
 procedure TFrm_LabSyncAgent.Button1Click(Sender: TObject);
