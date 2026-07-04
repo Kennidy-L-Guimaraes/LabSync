@@ -506,7 +506,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         Margins.Right = 5
         Margins.Bottom = 10
         AutoSize = False
-        Caption = '192.168.000.000'
+        Caption = '255.255.255.0'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 5193786
         Font.Height = -12
@@ -2442,9 +2442,9 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           AlignWithMargins = True
           Left = 136
           Top = 33
-          Width = 93
+          Width = 79
           Height = 17
-          Caption = '192.168.000.000'
+          Caption = '255.255.255.0'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 8421631
           Font.Height = -12
@@ -2909,8 +2909,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
         Font.Style = []
         ParentColor = False
         ParentFont = False
-        ExplicitLeft = 9
-        ExplicitTop = 2
+        ExplicitWidth = 53
       end
       object Pnl_RecentLogs: TPanel
         AlignWithMargins = True
@@ -2983,36 +2982,32 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           ParentBackground = True
           TabOrder = 0
           UseWheelForScrolling = True
-          ExplicitLeft = -13
-          ExplicitTop = 34
-          ExplicitWidth = 210
           object Pnl_AgentCS000: TPanel
             Left = 0
             Top = 0
             Width = 218
-            Height = 85
+            Height = 105
             Align = alTop
             BevelOuter = bvNone
             ParentColor = True
             TabOrder = 0
             Visible = False
-            ExplicitWidth = 210
             object Shp_btnAgentExample: TShape
               Left = 0
               Top = 0
               Width = 218
-              Height = 85
+              Height = 105
               Align = alClient
               Brush.Color = 1776411
               Pen.Color = 2697513
-              Shape = stRoundRect
               ExplicitLeft = 8
               ExplicitTop = 80
               ExplicitWidth = 210
+              ExplicitHeight = 85
             end
             object Img_AgentExample: TImage
-              Left = 11
-              Top = 18
+              Left = 7
+              Top = 28
               Width = 35
               Height = 50
               Picture.Data = {
@@ -3078,11 +3073,9 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             object Lbl_AgentName: TLabel
               AlignWithMargins = True
               Left = 52
-              Top = 11
+              Top = 32
               Width = 37
               Height = 17
-              Margins.Top = 5
-              Margins.Right = 5
               Caption = 'Agent:'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 14671839
@@ -3093,8 +3086,8 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             end
             object Lbl_AgentNameExample: TLabel
               AlignWithMargins = True
-              Left = 97
-              Top = 11
+              Left = 95
+              Top = 32
               Width = 79
               Height = 17
               Margins.Top = 5
@@ -3110,11 +3103,9 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             object Lbl_AgentIP: TLabel
               AlignWithMargins = True
               Left = 52
-              Top = 34
+              Top = 55
               Width = 52
               Height = 17
-              Margins.Top = 5
-              Margins.Right = 5
               Caption = 'Agent IP:'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 14671839
@@ -3126,11 +3117,9 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             object Lbl_Status: TLabel
               AlignWithMargins = True
               Left = 52
-              Top = 57
+              Top = 78
               Width = 79
               Height = 17
-              Margins.Top = 5
-              Margins.Right = 5
               Caption = 'Server Status:'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 14671839
@@ -3142,7 +3131,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             object Lbl_StatusAgentExample: TLabel
               AlignWithMargins = True
               Left = 137
-              Top = 57
+              Top = 78
               Width = 44
               Height = 17
               Margins.Top = 5
@@ -3157,13 +3146,13 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             end
             object Lbl_IPAgentExample: TLabel
               AlignWithMargins = True
-              Left = 112
-              Top = 32
-              Width = 93
+              Left = 110
+              Top = 55
+              Width = 79
               Height = 17
               Margins.Top = 5
               Margins.Right = 5
-              Caption = '192.168.000.000'
+              Caption = '255.255.255.0'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 8421631
               Font.Height = -12
@@ -3172,14 +3161,44 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
               ParentFont = False
             end
             object Sbtn_AgentExample: TSpeedButton
-              Left = -13
-              Top = 67
+              Left = -9
+              Top = 91
               Width = 210
-              Height = 89
+              Height = 71
               Cursor = crHandPoint
               Flat = True
               OnMouseEnter = Sbtn_AgentExampleMouseEnter
               OnMouseLeave = Sbtn_AgentExampleMouseLeave
+            end
+            object Label2: TLabel
+              AlignWithMargins = True
+              Left = 52
+              Top = 9
+              Width = 56
+              Height = 17
+              Caption = 'Machine: '
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = 14671839
+              Font.Height = -12
+              Font.Name = '@Microsoft YaHei'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label3: TLabel
+              AlignWithMargins = True
+              Left = 114
+              Top = 9
+              Width = 79
+              Height = 17
+              Margins.Top = 5
+              Margins.Right = 5
+              Caption = 'Server Name:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = 8355711
+              Font.Height = -12
+              Font.Name = '@Microsoft YaHei'
+              Font.Style = []
+              ParentFont = False
             end
           end
         end

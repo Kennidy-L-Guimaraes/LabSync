@@ -44,7 +44,7 @@ begin
   if FIdTCPClient.Connected then
   begin
   Flog.ConnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, 'CONNECTED');
-  Machine := 'REGISTER|'+FControllerDto.ID+'|'+FControllerdto.Ip; //Language Simple
+  Machine := 'REGISTER|'+FControllerDto.ID+'|'+FControllerdto.Ip +'|'+ FControllerdto.username; //Language Simple
   FIdTCPClient.IOHandler.WriteLn(machine);
   end;
 end;

@@ -14,7 +14,7 @@ type
     FAgents    : TObjectDictionary<string, TAgentInfo>;
    public
     {Public Declarations}
-    procedure RegisterAgent(Const AId: string; const AIp: string);
+    procedure RegisterAgent(const AId, AMachineUser, AIp: string);
     procedure RemoveAgent(const AId: string);
     constructor Create(AOwner: TComponent;  AContainer: TScrollBox; Apicture: TPicture);
     destructor Destroy;
@@ -41,7 +41,7 @@ begin
   inherited;
 end;
 
-procedure TAgentCardManager.RegisterAgent(const AId, AIp: string);
+procedure TAgentCardManager.RegisterAgent(const AId, AMachineUser, AIp: string);
 var
  Card : TAgentCard;
  Agent: TAgentInfo;
@@ -49,7 +49,7 @@ begin
  try
    if FCards.ContainsKey(AId) then
     Exit;
-    Card    := TAgentCard.CreateComponent(FOwner, FContainer, Fpicture, AId, AIp, 'Active');
+    Card    := TAgentCard.CreateComponent(FOwner, FContainer, Fpicture, AId, AMachineUser, AIp, 'Active');
     Agent   := TAgentInfo.Create;
 
     FCards.Add(AId, Card);  //Add in List

@@ -126,6 +126,8 @@ type
     Image7: TImage;
     Lbl_Agents: TLabel;
     Shape1: TShape;
+    Label2: TLabel;
+    Label3: TLabel;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);

@@ -100,18 +100,20 @@ end;
 
 procedure TServerService.ServerExecute(AContext: TIdContext);
 var
-  Msg: string;
-  Parts: TArray<string>;
-  AgentID: string;
-  AgentIP: string;
-  Agent: TAgentInfo;
+  Msg         : string;
+  Parts       : TArray<string>;
+  AgentID     : string;
+  AgentIP     : string;
+  MachineUser : string;
+  Agent       : TAgentInfo;
 begin
   Msg := AContext.Connection.IOHandler.ReadLn;
   Parts := Msg.Split(['|']);
-  if (Length(Parts) = 3) and (Parts[0] = 'REGISTER') then
+  if (Length(Parts) = 4) and (Parts[0] = 'REGISTER') then
   begin
-    AgentID := Parts[1];
-    AgentIP := Parts[2];
+    AgentID     := Parts[1];
+    AgentIP     := Parts[2];
+    MachineUser := Parts[3];
     Agent := TAgentInfo.Create;
     Agent.ID := AgentID;
     Agent.IP := AgentIP;
@@ -120,7 +122,7 @@ begin
     TThread.Queue(nil,
       procedure
       begin
-       AgentCardManager.RegisterAgent(AgentID, AgentIP);
+       AgentCardManager.RegisterAgent(AgentID, MachineUser, AgentIP);
       end);
 
   end;
