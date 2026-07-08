@@ -18,10 +18,6 @@ type
     Lbl_LabSyncAgent: TLabel;
     Img_logo: TImage;
     Shp_PanelMenu: TShape;
-    Pnl_liveModeInformation: TPanel;
-    Shp_AgentScreenMode: TShape;
-    Lbl_AgentScreenMode: TLabel;
-    Shp_AgentScreenModeCircle: TShape;
     Pnl_AgentScreen: TPanel;
     Img_AgentScreen: TImage;
     Pnl_QuickActions: TPanel;
@@ -82,17 +78,7 @@ type
     Lbl_ServerTimeConnectionExample: TLabel;
     Lbl_ServerDateConnectionExample: TLabel;
     Lbl_ServerTimeElapsedExample: TLabel;
-    Pnl_BtnSendCommand: TPanel;
-    Shp_BtnSendCommand: TShape;
-    Img_BtnSendCommand: TImage;
-    Lbl_BtnSendCommand: TLabel;
-    Sbtn_SendCommand: TSpeedButton;
     Lbl_QuickActions: TLabel;
-    Pnl_BtnFileTransfer: TPanel;
-    Shp_BtnFileTransfer: TShape;
-    Img_BtnFileTransfer: TImage;
-    Lbl_BtnFileTransfer: TLabel;
-    SBtn_FileTransfer: TSpeedButton;
     Rch_LogReceiver: TRichEdit;
     Lbl_RecentLogs: TLabel;
     Pnl_Agents: TPanel;
@@ -128,6 +114,59 @@ type
     Shape1: TShape;
     Label2: TLabel;
     Label3: TLabel;
+    Pnl_ActionsSend: TPanel;
+    Pnl_Shutdown: TPanel;
+    Shp_BtnShutdown: TShape;
+    Img_Shutdown: TImage;
+    Lbl_PermissionShutdown: TLabel;
+    Lbl_DescriptionShutdown: TLabel;
+    SpeedButton1: TSpeedButton;
+    Pnl_Messages: TPanel;
+    Shp_Messages: TShape;
+    Img_Messages: TImage;
+    Lbl_TitleMessages: TLabel;
+    Lbl_DescriptionMessage: TLabel;
+    Sbtn_Messages: TSpeedButton;
+    Pnl_SendCommand: TPanel;
+    Shp_Command: TShape;
+    Img_Shell: TImage;
+    Lbl_TitleCommand: TLabel;
+    Lbl_DescriptionCommand: TLabel;
+    Sbtn_Command: TSpeedButton;
+    Pnl_ActionsTake: TPanel;
+    Pnl_livemode: TPanel;
+    Shp_LiveMode: TShape;
+    Img_LiveMode: TImage;
+    Lbl_TitleLiveMode: TLabel;
+    Lbl_DescriptionLiveMode: TLabel;
+    Sbtn_LiveMode: TSpeedButton;
+    Pnl_Screenshot: TPanel;
+    Shp_Screenshot: TShape;
+    Img_Screenshot: TImage;
+    Lbl_TitleScreenshot: TLabel;
+    Lbl_DescriptionScreenshot: TLabel;
+    Sbtn_Screenshot: TSpeedButton;
+    Pnl_Information: TPanel;
+    Shp_Information: TShape;
+    Img_Information: TImage;
+    Lbl_TitleInformation: TLabel;
+    Lbl_DescriptionInformation: TLabel;
+    Sbtn_Information: TSpeedButton;
+    Pnl_InternetConnection: TPanel;
+    Img_InternetIcon: TImage;
+    Lbl_InternetConnection: TLabel;
+    Lbl_Network: TLabel;
+    Lbl_InternetConnectionExample: TLabel;
+    Lbl_NetworkExample: TLabel;
+    Shape7: TShape;
+    Lbl_TitleTarget: TLabel;
+    Lbl_TargetExample: TLabel;
+    ChBx_AllTargets: TCheckBox;
+    Lbl_AllTargets: TLabel;
+    Timer_InternetConnection: TTimer;
+    Lbl_NetworkType: TLabel;
+    Lbl_NetworkTypeExample: TLabel;
+    Button1: TButton;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);
@@ -135,10 +174,6 @@ type
     procedure Sbtn_LogsMouseLeave(Sender: TObject);
     procedure Sbtn_AgentListMouseEnter(Sender: TObject);
     procedure Sbtn_AgentListMouseLeave(Sender: TObject);
-    procedure Sbtn_SendCommandMouseEnter(Sender: TObject);
-    procedure Sbtn_SendCommandMouseLeave(Sender: TObject);
-    procedure SBtn_FileTransferMouseLeave(Sender: TObject);
-    procedure SBtn_FileTransferMouseEnter(Sender: TObject);
     procedure Sbtn_AgentExampleMouseEnter(Sender: TObject);
     procedure Sbtn_AgentExampleMouseLeave(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -148,6 +183,9 @@ type
     procedure Lbl_ShutdownServerClick(Sender: TObject);
     procedure Lbl_StartServerClick(Sender: TObject);
     procedure Timer_UpdateLogTimer(Sender: TObject);
+    procedure Lbl_AllTargetsClick(Sender: TObject);
+    procedure Timer_InternetConnectionTimer(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
@@ -184,6 +222,14 @@ begin
  ApplyData;
 end;
 
+
+procedure TFrm_LabSyncServer.Lbl_AllTargetsClick(Sender: TObject);
+begin
+ if ChBx_AllTargets.State = cbChecked then
+  ChBx_AllTargets.State := cbUnchecked
+ else
+  ChBx_AllTargets.State := cbChecked;
+end;
 
 procedure TFrm_LabSyncServer.Lbl_ShutdownServerClick(Sender: TObject);
 begin
@@ -223,6 +269,11 @@ begin
  Lbl_serverAddressExample.Hint           := FController.GetServer;
  Lbl_ServerPortExample.Caption           := FController.GetPort;
  Lbl_ServerIPExample.Caption             := FController.GetIp;
+end;
+
+procedure TFrm_LabSyncServer.Button1Click(Sender: TObject);
+begin
+  Showmessage(FController.GetConnectionName);
 end;
 
 procedure TFrm_LabSyncServer.CreateObjs;
@@ -306,6 +357,13 @@ begin
  end;
 end;
 
+procedure TFrm_LabSyncServer.Timer_InternetConnectionTimer(Sender: TObject);
+begin
+ Lbl_InternetConnectionExample.Caption := FController.HasInternetConnection;
+ Lbl_NetworkTypeExample.Caption        := FController.GetConnectionType;
+ Lbl_NetworkExample.Caption            := FController.GetConnectionName;
+end;
+
 procedure TFrm_LabSyncServer.Timer_UpdateLogTimer(Sender: TObject);
 begin
  FGetLogs.CreateComponent(Rch_LogReceiver);
@@ -339,26 +397,6 @@ end;
 procedure TFrm_LabSyncServer.Sbtn_AgentExampleMouseLeave(Sender: TObject);
 begin
   RemoveColor(Shp_btnAgentExample);
-end;
-
-procedure TFrm_LabSyncServer.Sbtn_SendCommandMouseEnter(Sender: TObject);
-begin
-  ApplyColor(Shp_BtnSendCommand);
-end;
-
-procedure TFrm_LabSyncServer.Sbtn_SendCommandMouseLeave(Sender: TObject);
-begin
- RemoveColor(Shp_BtnSendCommand);
-end;
-
-procedure TFrm_LabSyncServer.SBtn_FileTransferMouseEnter(Sender: TObject);
-begin
- ApplyColor(Shp_BtnFileTransfer);
-end;
-
-procedure TFrm_LabSyncServer.SBtn_FileTransferMouseLeave(Sender: TObject);
-begin
-  RemoveColor(Shp_BtnFileTransfer);
 end;
 
 end.
