@@ -151,6 +151,8 @@
         </DCCReference>
         <DCCReference Include="..\shared\Application\src\services\GetLog.Service.pas"/>
         <DCCReference Include="..\shared\Application\src\types\ApplicationMode.types.pas"/>
+        <DCCReference Include="..\..\..\..\Documents\Embarcadero\Studio\23.0\Imports\NETWORKLIST_TLB.pas"/>
+        <None Include="..\shared\Application\src\Dlls\wlanapi.dll"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -177,6 +179,12 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="4">
+                <DeployFile LocalName="..\shared\Application\src\Dlls\wlanapi.dll" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="..\shared\imgs\LabSync_Icon.ico" Configuration="Debug" Class="UWP_DelphiLogo44">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>

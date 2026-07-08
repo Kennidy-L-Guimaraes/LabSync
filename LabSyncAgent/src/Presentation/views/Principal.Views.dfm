@@ -3058,6 +3058,6 @@ object Frm_LabSyncAgent: TFrm_LabSyncAgent
     Interval = 800
     OnTimer = Timer_UpdateServerTimer
     Left = 306
-    Top = 452
+    Top = 455
   end
 end

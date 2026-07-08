@@ -58,8 +58,8 @@ begin
  Line := NewLog;
  try
   TFile.AppendAllText(GetLogPath(NameOfLog), Line + sLineBreak, TEncoding.UTF8);
- except
-  raise Exception.Create('The log could not be saved to the local system.');
+ except on E: exception do
+  raise Exception.Create('The log could not be saved to the local system.'+ E.Message);
  end;
 end;
 

@@ -30,7 +30,8 @@ uses
   Controller.Dto in 'src\Application\Dtos\Controller.Dto.pas',
   AgentConnect.Service in 'src\Application\Services\AgentConnect.Service.pas',
   GetLog.Service in '..\shared\Application\src\services\GetLog.Service.pas',
-  ApplicationMode.types in '..\shared\Application\src\types\ApplicationMode.types.pas';
+  ApplicationMode.types in '..\shared\Application\src\types\ApplicationMode.types.pas',
+  HeartBeat.Thread in 'src\Application\Threads\HeartBeat.Thread.pas';
 
 {$R *.res}
 

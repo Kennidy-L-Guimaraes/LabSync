@@ -17,7 +17,8 @@ uses
   AgentInfo.Service in 'src\Application\Services\AgentInfo.Service.pas',
   ServerConfig.Views in 'src\Presentation\Views\ServerConfig.Views.pas' {Frm_ServerConfig},
   GetLog.Service in '..\shared\Application\src\services\GetLog.Service.pas',
-  ApplicationMode.types in '..\shared\Application\src\types\ApplicationMode.types.pas';
+  ApplicationMode.types in '..\shared\Application\src\types\ApplicationMode.types.pas',
+  NETWORKLIST_TLB in '..\..\..\..\Documents\Embarcadero\Studio\23.0\Imports\NETWORKLIST_TLB.pas';
 
 {$R *.res}
 

@@ -13,10 +13,12 @@ interface
      public
       {Public Declarations}
       procedure Connect;
-      procedure Disconect;
+      procedure Diconnect;
       procedure CreateClient;
       procedure DestroyClient;
-      function  Isconnected: string;
+      procedure RegisterMachineInServer;
+      function  Isconnected: boolean;
+      function  Ping: boolean; 
       constructor Create(const AControllerDto: TControllerDto);
       destructor Destroy; override;
    end;
@@ -30,22 +32,22 @@ var
  Machine : string;
  TimeStamp:  string;
 begin
+ if FIdTCPClient.Connected then
+   Exit;
   TimeStamp := FormatDateTime('yyyymmdd_hhnnss', Now);
   try
-  FIdTCPClient.Host := FcontrollerDto.Server;
-  FIdTCPClient.Port := strtoInt(FControllerDto.Port);
-  FIdTCPClient.Connect;
+    FIdTCPClient.Host := FcontrollerDto.Server;
+    FIdTCPClient.Port := strtoInt(FControllerDto.Port);
+    FIdTCPClient.Connect;
   except on E: Exception do
    begin
-    Flog.ConnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, Uppercase(E.Message));
+    //Flog.ConnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, E.Message); //Error Connection                                                                                                                   Flog.ConnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, Uppercase(E.Message));
     exit;
    end;
   end;
   if FIdTCPClient.Connected then
   begin
-  Flog.ConnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, 'CONNECTED');
-  Machine := 'REGISTER|'+FControllerDto.ID+'|'+FControllerdto.Ip +'|'+ FControllerdto.username; //Language Simple
-  FIdTCPClient.IOHandler.WriteLn(machine);
+    Flog.ConnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, 'CONNECTED');
   end;
 end;
 
@@ -70,11 +72,11 @@ inherited;
 end;
 
 procedure TAgentConnect.DestroyClient;
-begin
+begin  
  FreeAndNil(FIdTCPClient);
 end;
 
-procedure TAgentConnect.Disconect;
+procedure TAgentConnect.Diconnect;
 var
  TimeStamp: string;
 begin
@@ -91,16 +93,43 @@ begin
   Flog.DisconnectServer(TimeStamp, FControllerdto.ip, Fcontrollerdto.Port, 'DISCONNECTED');
 end;
 
-function TAgentConnect.Isconnected: string;
-var
- Response : String;
+function TAgentConnect.Isconnected: boolean;
 begin
-  If FIdTCPClient.Connected then
-   Response := 'CONNECTED'
-  else
-   Response := 'DISCONNECTED';
-   //Response
-   Result   := Response;
+  Result := FIdTCPClient.Connected and Ping;
+end;
+
+function TAgentConnect.Ping: boolean;
+var
+  pong: string;
+begin
+ if not FIdTCPClient.Connected then
+  Exit(False); 
+ try 
+ FIdTCPClient.IOHandler.Writeln('PING');
+ FIdTCPClient.IOHandler.ReadTimeout := 2000; 
+ pong := FIdTCPClient.IOHandler.ReadLn;
+
+ if sametext('PONG', pong) then 
+    Result := True
+    
+ else 
+    Result := False;
+    //Diconnect;    
+ except on E: exception do
+  begin
+    if FIdTCPClient.Connected then Diconnect;
+    Result := False;
+  end;
+ end;
+end;
+
+procedure TAgentConnect.RegisterMachineInServer;
+var
+ Machine : string;
+ TimeStamp:  string;
+begin
+  Machine := 'REGISTER|'+FControllerDto.ID+'|'+FControllerdto.Ip +'|'+ FControllerdto.username; //Language Simple
+  FIdTCPClient.IOHandler.WriteLn(machine);
 end;
 
 end.

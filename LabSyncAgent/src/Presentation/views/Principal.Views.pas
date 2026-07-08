@@ -198,7 +198,6 @@ type
 
     procedure TestScreen; //Test Remove Later
   end;
-
   var
   Frm_LabSyncAgent    : TFrm_LabSyncAgent;
 
@@ -271,6 +270,7 @@ end;
 procedure TFrm_LabSyncAgent.CreateObjects;
 begin
  FController    := TAgentController.Create;
+ FController.StartHeartBeat;
  FGetLog        := TGetLogService.Create(amAgent);
  FController.InitializeIfNeeded;
  FControllerDto := FController.GetDTO;
@@ -316,6 +316,7 @@ end;
 
 procedure TFrm_LabSyncAgent.DestroyObjects;
 begin
+ FController.StopHeartBeat;
  FController.Free;
  FGetLog.Free;
  Freeandnil(FlogViewer);
@@ -374,6 +375,7 @@ begin
     FController.SetServer(Trim(Edt_Server.Text));
     FController.SetPort(Trim(Edt_Port.Text));
     FController.ConnectServer;
+    FController.StartHeartBeat;
    end
    else
    exit;
@@ -383,6 +385,7 @@ procedure TFrm_LabSyncAgent.Lbl_DisconnectClick(Sender: TObject);
 begin
   try
   FController.DisconnectServer;
+  FController.StopHeartBeat;
  except on E: Exception do
   raise Exception.Create('Failed to Connect: '+ E.Message);
  end;
@@ -432,6 +435,7 @@ procedure TFrm_LabSyncAgent.Lbl_TryAgainClick(Sender: TObject);
 begin
  try
   FController.ConnectServer;
+  FController.StartHeartBeat;
  except on E: Exception do
   raise Exception.Create('Failed to Connect: '+ E.Message);
  end;

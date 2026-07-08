@@ -4,7 +4,7 @@ interface
 
 uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
   Transporter.Dto, Command.Parser, CommandParsed.Dto, ServerConfig.Service, DateUtils, SysUtils, Generics.Collections, Classes,
-  Controller.Dto, AgentConnect.Service, ApplicationMode.types;
+  Controller.Dto, AgentConnect.Service, ApplicationMode.types, HeartBeat.Thread;
  type
   TAgentController = class
     private
@@ -17,6 +17,7 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       FSysInfo      : TStringlist;
       FControllerDto: TControllerDto;
       FServerAgent  : TAgentConnect;
+      FHeartbeatThread : THeartbeatThread;
     public
       constructor Create;
       destructor Destroy; override;
@@ -40,8 +41,14 @@ uses Config.Service, Command.Dispatcher, Command.Logs, ID.Service,
       procedure ConnectServer;
       procedure DisconnectServer;
       procedure CreateObjs;
-      procedure BuildDTO;  
+      procedure BuildDTO;
+      procedure TryAndConnect;
+
+     {PROCEDURES THeartbeatThread}
+     procedure  StartHeartBeat;
+     procedure  StopHeartBeat;
   end;
+
 
 implementation
 
@@ -77,6 +84,7 @@ end;
 
 destructor TAgentController.Destroy;
 begin
+  StopHeartBeat;
   Fconfig.Free;
   FDispatcher.Free;
   FLog.Free;
@@ -88,7 +96,7 @@ end;
 
 procedure TAgentController.DisconnectServer;
 begin
- FServerAgent.Disconect;
+ FServerAgent.Diconnect;
 end;
 
 procedure TAgentController.InitializeIfNeeded;
@@ -131,6 +139,22 @@ begin
     begin
      FConfig.SetOption('Commands', osDisabled);
     end;
+end;
+
+procedure TAgentController.StartHeartBeat;
+begin
+  if Assigned(FHeartbeatThread) then
+    Exit;
+    FHeartbeatThread := THeartbeatThread.Create(TryAndConnect);
+end;
+
+procedure TAgentController.StopHeartBeat;
+begin
+  if not Assigned(FHeartbeatThread) then
+     Exit;
+    FHeartbeatThread.Terminate;
+    FHeartbeatThread.WaitFor;
+    FreeAndNil(FHeartbeatThread);
 end;
 
 function TAgentController.GetDTO: TControllerDto;
@@ -196,8 +220,14 @@ begin
 end;
 
 function TAgentController.GetServerStatus: string;
+var
+ Response: string;
 begin
-  Result := FServerAgent.Isconnected;
+  if FServerAgent.Isconnected = True then
+     Response := 'Connected'
+     else
+     Response := 'Connecting...';
+   Result := Response;
 end;
 
 function TAgentController.GetSysInfo: TCommandResult;
@@ -223,4 +253,18 @@ begin
   FConfig.SetOption(Key, Result);
 end;
 
+procedure TAgentController.TryAndConnect;
+begin
+  FServerAgent.Connect;
+  try
+   if FServerAgent.Isconnected = True then
+      FServerAgent.RegisterMachineInServer
+   else
+      Exit;
+  Except on E: exception do
+  begin
+   raise Exception.Create('Unable to connect or verify the ping. '+E.Message);
+  end;
+  end;
+end;
 end.

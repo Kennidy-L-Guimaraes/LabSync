@@ -33,7 +33,6 @@ uses
      function    GetConnectionType: string;
      function    GetConnectionName: string; 
      function    HasInternetConnection: Boolean;
-     function    PingPongMessage(AContext: TIdContext; const Msg: string): string; //test remove it later
   end;
 
 implementation
@@ -172,14 +171,6 @@ begin
  Result := 'Inactive';
 end;
 
-
-function TServerService.PingPongMessage(AContext: TIdContext;
-  const Msg: string): string;
-begin
-   AContext.Connection.IOHandler.WriteLn('Trying to connect to: ');
-   Result := Msg;
-end;
-
 procedure TServerService.ServerDisconnect(AContext: TIdContext);
 var
   Agent: TAgentInfo;
@@ -212,15 +203,20 @@ var
   Agent       : TAgentInfo;
 begin
   Msg := AContext.Connection.IOHandler.ReadLn;
+  if SameText(Msg, 'PING') then
+   begin
+    AContext.Connection.IOHandler.WriteLn('PONG');
+    Exit;
+   end;
   Parts := Msg.Split(['|']);
   if (Length(Parts) = 4) and (Parts[0] = 'REGISTER') then
   begin
     AgentID     := Parts[1];
     AgentIP     := Parts[2];
     MachineUser := Parts[3];
-    Agent := TAgentInfo.Create;
-    Agent.ID := AgentID;
-    Agent.IP := AgentIP;
+    Agent       := TAgentInfo.Create;
+    Agent.ID    := AgentID;
+    Agent.IP    := AgentIP;
     AContext.Data := Agent;
     AContext.Connection.IOHandler.WriteLn('True');
     TThread.Queue(nil,
