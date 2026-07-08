@@ -4,7 +4,8 @@ uses
   IdTCPServer,
   IdContext, Classes, Windows, types, System.IOUtils, System.SysUtils, dialogs,
   AgentCard.Manager, AgentInfo.Service, Vcl.Forms, ApplicationMode.types, DateUtils,
-  Command.Logs;
+  Command.Logs, IDHttp, Winapi.IpHlpApi, Winapi.IpTypes, Winapi.Winsock2,  ActiveX,
+  ComObj, NETWORKLIST_TLB;
  type
   TServerService = class
     private
@@ -17,14 +18,22 @@ uses
      {Public Declarations}
      var
      AgentCardManager : TAgentCardManager;
+     {CONSTRUCTOR / DESTRUCTOR}
      constructor Create;
-     destructor Destroy; override;
-     procedure Start(const Aport: integer);
-     function  IsTheServerActive: string;
-     procedure Stop;
-     procedure DestroySocket;
-     procedure CreateSocket;
-     function PingPongMessage(AContext: TIdContext; const Msg: string): string; //test remove it later
+     destructor  Destroy; override;
+
+     {PROCEDURES}
+     procedure   Start(const Aport: integer);
+     procedure   Stop;
+     procedure   DestroySocket;
+     procedure   CreateSocket;
+
+     {FUNCTIONS}
+     function    IsTheServerActive: string;
+     function    GetConnectionType: string;
+     function    GetConnectionName: string; 
+     function    HasInternetConnection: Boolean;
+     function    PingPongMessage(AContext: TIdContext; const Msg: string): string; //test remove it later
   end;
 
 implementation
@@ -56,6 +65,101 @@ procedure TServerService.DestroySocket;
 begin
   FreeAndNil(FServer);
   FreeAndNil(AgentCardManager);
+end;
+
+function TServerService.GetConnectionName: string;
+var
+  NetworkListManager: INetworkListManager;
+  Connections: IEnumNetworkConnections;
+  Connection: INetworkConnection;
+  Fetched: LongWord;
+begin
+  Result := '';
+
+  CoInitialize(nil);
+  try
+    NetworkListManager := CoNetworkListManager.Create;
+
+    Connections := NetworkListManager.GetNetworkConnections;
+
+    Fetched := 0;
+
+    while True do
+    begin
+      Connection := nil;
+
+      Connections.Next(1, Connection, Fetched);
+
+      if Fetched = 0 then
+        Break;
+
+      if Connection.IsConnected then
+      begin
+        Result := Connection.GetNetwork.GetName;
+        Exit;
+      end;
+    end;
+
+  finally
+    CoUninitialize;
+  end;
+end;
+
+function TServerService.GetConnectionType: string;
+var
+  Buffer: PIP_ADAPTER_ADDRESSES;
+  Size: ULONG;
+  Adapter: PIP_ADAPTER_ADDRESSES;
+begin
+  Result := '';
+
+  Size := 0;
+  GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, nil, nil, @Size);
+
+  GetMem(Buffer, Size);
+  try
+    if GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, nil, Buffer, @Size) = ERROR_SUCCESS then
+    begin
+      Adapter := Buffer;
+
+      while Adapter <> nil do
+      begin
+        if (Adapter.OperStatus = IfOperStatusUp) and
+           (Adapter.FirstUnicastAddress <> nil) then
+        begin
+          Result := Adapter.FriendlyName;
+          Exit;
+        end;
+
+        Adapter := Adapter.Next;
+      end;
+    end;
+  finally
+    FreeMem(Buffer);
+  end;
+end;
+
+function TServerService.HasInternetConnection: Boolean;
+var
+  HTTP: TIdHTTP;
+begin
+  Result := False;
+
+  HTTP := TIdHTTP.Create(nil);
+  try
+    HTTP.ConnectTimeout := 2000;
+    HTTP.ReadTimeout := 2000;
+
+    try
+      HTTP.Head('http://clients3.google.com/generate_204');
+      Result := True;
+    except
+      Result := False;
+    end;
+
+  finally
+    HTTP.Free;
+  end;
 end;
 
 function TServerService.IsTheServerActive: string;
