@@ -25,14 +25,19 @@ type
     function GetVersion : string;
     function GetIp      : string;
     function GetLog     : string;
+    function GetConnectionType: string;
+    function GetConnectionName: string;
+    //
+    function IsTheServerActive: boolean;
+    function HasInternetConnection: string;
 
     {PROCEDURE SET}
     procedure SetServer(Const Value: string);
     procedure SetPort(Const Value: string);
 
+    //
     procedure ConnectServer;
     procedure DisconnectServer;
-    function IsTheServerActive: boolean;
     procedure InitializeIfNeeded;
     procedure CreateComponents(AOwner: TComponent; AContainer: TScrollBox; APicture: TPicture);
     constructor Create;
@@ -83,6 +88,16 @@ begin
   Fserver.Stop;
 end;
 
+function TServerControll.GetConnectionName: string;
+begin
+ Result := FServer.GetConnectionName;
+end;
+
+function TServerControll.GetConnectionType: string;
+begin
+ Result := FServer.GetConnectionType;
+end;
+
 function TServerControll.GetDate: string;
 begin
  Result := FormatDateTime('yyyy/mm/dd', Now)
@@ -121,6 +136,14 @@ end;
 function TServerControll.GetVersion: string;
 begin
  Result := FID.getVersion;
+end;
+
+function TServerControll.HasInternetConnection: string;
+begin
+  if FServer.HasInternetConnection = True then
+   Result := 'Connected'
+   else
+   Result := 'Disconnected';
 end;
 
 procedure TServerControll.InitializeIfNeeded;
