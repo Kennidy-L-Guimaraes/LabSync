@@ -3,11 +3,15 @@ unit Server.Controller;
 interface
 uses Config.Service, ID.Service, ServerConfig.Service, SysUtils, DateUtils, Classes,
   LocalIP.Service, Server.Service, AgentCard.Manager, Vcl.Graphics, Vcl.Forms,
-  Command.Logs, ApplicationMode.types;
+  Command.Logs, ApplicationMode.types, dialogs;
+
+type
+  TTargetChangedEvent = procedure(Sender: TObject) of object;
 type
  TServerControll = class
   private
    {Private Declarations}
+    FOnTargetChanged: TTargetChangedEvent;
     FConfig       : TConfig;
     FServerConfig : TServerConfig;
     FID           : TID;
@@ -17,6 +21,8 @@ type
     FAgentCardManager : TAgentCardManager;
   public
    {Public Declarations}
+   property  OnTargetChanged: TTargetChangedEvent read FOnTargetChanged write FOnTargetChanged;
+   procedure AgentSelected(Sender: TObject);
     {FUNCTION GET}
     function GetID      : string;
     function GetDate    : string;
@@ -27,6 +33,8 @@ type
     function GetLog     : string;
     function GetConnectionType: string;
     function GetConnectionName: string;
+    function GetTarget:string;
+
     //
     function IsTheServerActive: boolean;
     function HasInternetConnection: string;
@@ -50,6 +58,12 @@ implementation
 
 uses Principal.Views;
 
+procedure TServerControll.AgentSelected(Sender: TObject);
+begin
+ if Assigned(FOnTargetChanged) then
+    FOnTargetChanged(Self);
+end;
+
 procedure TServerControll.ConnectServer;
 begin
  FServer.Start(StrToInt(GetPort));
@@ -70,6 +84,7 @@ procedure TServerControll.CreateComponents(AOwner: TComponent;
   AContainer: TScrollBox; APicture: TPicture);
 begin
   FAgentCardManager := TAgentCardManager.Create(AOwner, AContainer, APicture);
+  FAgentCardManager.OnAgentSelected := AgentSelected;
 end;
 
 destructor TServerControll.Destroy;
@@ -86,6 +101,11 @@ end;
 procedure TServerControll.DisconnectServer;
 begin
   Fserver.Stop;
+end;
+
+function TServerControll.GetTarget: string;
+begin
+ Result := FAgentCardManager.AgentInfoDto.AgentID;
 end;
 
 function TServerControll.GetConnectionName: string;

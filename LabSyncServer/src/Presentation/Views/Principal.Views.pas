@@ -199,6 +199,7 @@ type
     procedure NoResize;
     procedure CreateObjs;
     procedure DestroyObjs;
+    procedure TargetChanged(Sender: TObject);
 
 end;
 
@@ -280,6 +281,7 @@ procedure TFrm_LabSyncServer.CreateObjs;
 begin
  FGetLogs    := TGetLogService.Create(amServer);
  FController := TServerControll.Create;
+ FController.OnTargetChanged := TargetChanged;
 end;
 
 procedure TFrm_LabSyncServer.DestroyObjs;
@@ -318,6 +320,11 @@ end;
 procedure TFrm_LabSyncServer.Sbtn_SettingsMouseLeave(Sender: TObject);
 begin
  RemoveColor(Shp_MenuSettings);
+end;
+
+procedure TFrm_LabSyncServer.TargetChanged;
+begin
+   Lbl_TargetExample.Caption := FController.GetTarget;
 end;
 
 procedure TFrm_LabSyncServer.Timer_ElapsedTimeTimer(Sender: TObject);

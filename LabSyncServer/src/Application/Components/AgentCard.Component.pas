@@ -1,11 +1,19 @@
 unit AgentCard.Component;
 
 interface
-uses Vcl.Graphics, Vcl.ExtCtrls, Vcl.ActnCtrls, Vcl.StdCtrls, Vcl.Buttons, Classes, Vcl.Controls, SysUtils;
+uses Vcl.Graphics, Vcl.ExtCtrls, Vcl.ActnCtrls, Vcl.StdCtrls, Vcl.Buttons, Classes, Vcl.Controls, SysUtils, AgentInfo.DTO;
+ type
+  TAgentSelectedEvent = procedure(Sender: TObject) of object;
  type
  TAgentCard = class(TPanel)
    private
     {Private Declarations}
+    FOnAgentSelected: TAgentSelectedEvent;
+    FAgentInfo   : TAgentInfoDto;
+    FID          : string;
+    FIP          : string;
+    FUser        : string;
+    FStatus      : string;
     FShape       : TShape;
     FImage       : TImage;
     FLabel       : TLabel;
@@ -14,15 +22,23 @@ uses Vcl.Graphics, Vcl.ExtCtrls, Vcl.ActnCtrls, Vcl.StdCtrls, Vcl.Buttons, Class
     FColorLabel  : TColor;
     procedure CreateShape;
     procedure CreateImage(const Apicture: TPicture);
-    procedure CreateLabels(const AName, AMachine: string; const AIp: string; const AStatus: string);
+    procedure CreateLabels(const AUser, AID: string; const AIp: string; const AStatus: string);
     procedure CreateSpeedButton;
-    function CreateLabel(const ACaption: string; const Atop, Aleft, Awidth, Aheight: integer; const Acolor: TColor):TLabel;
+    function  CreateLabel(const ACaption: string; const Atop, Aleft, Awidth, Aheight: integer; const Acolor: TColor):TLabel;
     procedure EventEnter(Sender: TObject);
     procedure EventLeave(Sender: TObject);
     procedure ConfigurePanel(const AParent: TWinControl);
+    procedure MyButtonClick(Sender: TObject);
+
    public
     {Public Declarations}
-    constructor CreateComponent(AOwner: TComponent; AParent: TWinControl; APicture: TPicture; const AName, AMachine: string; const AIp: string; const AStatus: string);
+    property ID    : string read FID;
+    property IP    : string read FIP;
+    property User  : string read FUser;
+    property Status: string read FStatus;
+    constructor CreateComponent(AOwner: TComponent; AParent: TWinControl;
+            Apicture: TPicture; const AID, AUser: string; const AIp: string; const AStatus: string);
+    property OnAgentSelected: TAgentSelectedEvent read FOnAgentSelected write FOnAgentSelected;
  end;
 
 implementation
@@ -39,13 +55,18 @@ end;
 
 { TCardFactory }
 
-constructor TAgentCard.CreateComponent(AOwner: TComponent; AParent: TWinControl; Apicture: TPicture; const AName, AMachine: string; const AIp: string; const AStatus: string);
+constructor TAgentCard.CreateComponent(AOwner: TComponent; AParent: TWinControl;
+            Apicture: TPicture; const AID, AUser: string; const AIp: string; const AStatus: string);
 begin
   inherited Create(AOwner);
+  FID     := AID;
+  FIP     := AIP;
+  FUser   := AUser;
+  FStatus := AStatus;
   ConfigurePanel(AParent);
   CreateShape;
   CreateImage(Apicture); //Necessary Data
-  CreateLabels(AName, AMachine, AIp, AStatus);
+  CreateLabels(AUser, AID, AIp, AStatus);
   CreateSpeedButton;
 end;
 
@@ -87,7 +108,7 @@ begin
  end;
 end;
 
-procedure TAgentCard.CreateLabels(const AName, AMachine: string; const AIp: string; const AStatus: string);
+procedure TAgentCard.CreateLabels(const AUser, AID: string; const AIp: string; const AStatus: string);
 var
   ColorOpt   : TColor;
   ColorInfo  : TColor;
@@ -107,11 +128,11 @@ begin
 
   // Machine
   Lbl := CreateLabel('Machine:', 9, Left, 56, Height, ColorOpt);
-  CreateLabel( AMachine, Lbl.Top, lbl.Left + Lbl.Width + Spacing, 80, Lbl.Height, Colorinfo);
+  CreateLabel(AUser, Lbl.Top, lbl.Left + Lbl.Width + Spacing, 80, Lbl.Height, Colorinfo);
 
   // Agent
   Lbl := CreateLabel('Agent:', 32, Left, 37, Height, ColorOpt);
-  CreateLabel(AName, Lbl.Top, Lbl.Left + Lbl.Width + Spacing, 79, Lbl.Height, Colorinfo);
+  CreateLabel(AID, Lbl.Top, Lbl.Left + Lbl.Width + Spacing, 79, Lbl.Height, Colorinfo);
 
   // Agent IP
   Lbl := CreateLabel('Agent IP:', 55, Left, 52, Height, ColorOpt);
@@ -152,6 +173,7 @@ begin
    FSpeedButton.Cursor  := crHandPoint;
    FSpeedButton.Align   := alClient;
    FSpeedButton.Flat    := True;
+   FSpeedButton.OnClick      := MyButtonClick;
    FSpeedButton.OnMouseEnter := EventEnter;
    FSpeedButton.OnMouseLeave := EventLeave;
   finally
@@ -167,6 +189,12 @@ end;
 procedure TAgentCard.EventLeave(Sender: TObject);
 begin
  FShape.Brush.Color := $0017110C;
+end;
+
+procedure TAgentCard.MyButtonClick(Sender: TObject);
+begin
+ if Assigned(FOnAgentSelected) then
+    FOnAgentSelected(Self);
 end;
 
 end.

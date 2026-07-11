@@ -152,6 +152,7 @@
         <DCCReference Include="..\shared\Application\src\services\GetLog.Service.pas"/>
         <DCCReference Include="..\shared\Application\src\types\ApplicationMode.types.pas"/>
         <DCCReference Include="..\..\..\..\Documents\Embarcadero\Studio\23.0\Imports\NETWORKLIST_TLB.pas"/>
+        <DCCReference Include="src\Application\DTOs\AgentInfo.DTO.pas"/>
         <None Include="..\shared\Application\src\Dlls\wlanapi.dll"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
