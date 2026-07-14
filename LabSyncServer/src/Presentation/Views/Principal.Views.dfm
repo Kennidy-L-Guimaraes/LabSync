@@ -294,7 +294,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 5193786
           Font.Height = -12
-          Font.Name = '@Microsoft YaHei'
+          Font.Name = '@Malgun Gothic'
           Font.Style = []
           ParentFont = False
         end
@@ -2193,6 +2193,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             Cursor = crHandPoint
             Align = alClient
             Flat = True
+            OnClick = SpeedButton1Click
             ExplicitLeft = 128
             ExplicitTop = 16
             ExplicitWidth = 23
@@ -2324,6 +2325,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             Cursor = crHandPoint
             Align = alClient
             Flat = True
+            OnClick = Sbtn_MessagesClick
             ExplicitLeft = 128
             ExplicitTop = 16
             ExplicitWidth = 23
@@ -2402,6 +2404,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             Cursor = crHandPoint
             Align = alClient
             Flat = True
+            OnClick = Sbtn_CommandClick
             ExplicitLeft = 128
             ExplicitTop = 16
             ExplicitWidth = 23
@@ -2592,6 +2595,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             Cursor = crHandPoint
             Align = alClient
             Flat = True
+            OnClick = Sbtn_LiveModeClick
             ExplicitLeft = 128
             ExplicitTop = 16
             ExplicitWidth = 23
@@ -2699,6 +2703,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             Cursor = crHandPoint
             Align = alClient
             Flat = True
+            OnClick = Sbtn_ScreenshotClick
             ExplicitLeft = 128
             ExplicitTop = 16
             ExplicitWidth = 23
@@ -2809,6 +2814,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
             Cursor = crHandPoint
             Align = alClient
             Flat = True
+            OnClick = Sbtn_InformationClick
             ExplicitLeft = 128
             ExplicitTop = 16
             ExplicitWidth = 23

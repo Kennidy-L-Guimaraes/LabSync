@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.Buttons, Vcl.ComCtrls,
   Server.Controller, IdContext, AgentCard.Component, ServerConfig.Views, DateUtils,
-  GetLog.Service, ApplicationMode.types;
+  GetLog.Service, ApplicationMode.types, Commands.Mapper;
 
 type
   TFrm_LabSyncServer = class(TForm)
@@ -186,11 +186,18 @@ type
     procedure Lbl_AllTargetsClick(Sender: TObject);
     procedure Timer_InternetConnectionTimer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure Sbtn_InformationClick(Sender: TObject);
+    procedure Sbtn_ScreenshotClick(Sender: TObject);
+    procedure Sbtn_LiveModeClick(Sender: TObject);
+    procedure Sbtn_CommandClick(Sender: TObject);
+    procedure Sbtn_MessagesClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
     FStartTime  : TDateTime;
     FGetLogs    : TGetLogService;
+    FCommand    : TCommandMapper;
   public
     { Public declarations }
     procedure ApplyColor(const AShape: TShape);
@@ -200,6 +207,7 @@ type
     procedure CreateObjs;
     procedure DestroyObjs;
     procedure TargetChanged(Sender: TObject);
+    function  TargetOption: string;
 
 end;
 
@@ -209,6 +217,8 @@ var
 implementation
 
 {$R *.dfm}
+
+uses SendMessageBox.Views;
 
 { TFrm_LabSyncServer }
 
@@ -307,6 +317,11 @@ begin
  AShape.Brush.Color := Shp_panelMenu.Brush.Color;
 end;
 
+procedure TFrm_LabSyncServer.Sbtn_ScreenshotClick(Sender: TObject);
+begin
+  FController.SendCommand(TargetOption, FCommand.Mapp(cGetPrint), '');
+end;
+
 procedure TFrm_LabSyncServer.Sbtn_SettingsClick(Sender: TObject);
 begin
  Frm_ServerConfig.Show;
@@ -322,10 +337,23 @@ begin
  RemoveColor(Shp_MenuSettings);
 end;
 
+procedure TFrm_LabSyncServer.SpeedButton1Click(Sender: TObject);
+begin
+  FController.SendCommand(TargetOption, FCommand.Mapp(cExecShutdown), '');
+end;
+
 procedure TFrm_LabSyncServer.TargetChanged;
 begin
    Lbl_TargetExample.Caption := FController.GetTarget;
 end;
+
+function TFrm_LabSyncServer.TargetOption: string;
+begin
+ if ChBx_AllTargets.Checked then
+  Result := 'All'
+  else
+  Result := FController.GetTarget;
+ end;
 
 procedure TFrm_LabSyncServer.Timer_ElapsedTimeTimer(Sender: TObject);
 var
@@ -376,6 +404,11 @@ begin
  FGetLogs.CreateComponent(Rch_LogReceiver);
 end;
 
+procedure TFrm_LabSyncServer.Sbtn_LiveModeClick(Sender: TObject);
+begin
+  FController.SendCommand(TargetOption, FCommand.Mapp(cGetLiveMode), '');
+end;
+
 procedure TFrm_LabSyncServer.Sbtn_LogsMouseEnter(Sender: TObject);
 begin
  ApplyColor(Shp_MenuLogs);
@@ -386,6 +419,19 @@ begin
  RemoveColor(Shp_MenuLogs);
 end;
 
+procedure TFrm_LabSyncServer.Sbtn_MessagesClick(Sender: TObject);
+var
+  MessageBox: TFrm_MessageBox;
+begin
+  MessageBox := TFrm_MessageBox.Create(nil, TargetOption);
+  try
+    if MessageBox.ShowModal = mrOk then
+      FController.SendCommand(TargetOption, FCommand.Mapp(cShowMsg), MessageBox.Messages);
+  finally
+    MessageBox.Free;
+  end;
+end;
+
 procedure TFrm_LabSyncServer.Sbtn_AgentListMouseEnter(Sender: TObject);
 begin
  ApplyColor(Shp_MenuAgentList);
@@ -394,6 +440,16 @@ end;
 procedure TFrm_LabSyncServer.Sbtn_AgentListMouseLeave(Sender: TObject);
 begin
  RemoveColor(Shp_MenuAgentList);
+end;
+
+procedure TFrm_LabSyncServer.Sbtn_CommandClick(Sender: TObject);
+begin
+  FController.SendCommand(TargetOption, FCommand.Mapp(cExecCommand), '');
+end;
+
+procedure TFrm_LabSyncServer.Sbtn_InformationClick(Sender: TObject);
+begin
+  FController.SendCommand(TargetOption, FCommand.Mapp(cGetSysInfo), '');
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_AgentExampleMouseEnter(Sender: TObject);
