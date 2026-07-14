@@ -153,6 +153,11 @@
         <DCCReference Include="..\shared\Application\src\types\ApplicationMode.types.pas"/>
         <DCCReference Include="..\..\..\..\Documents\Embarcadero\Studio\23.0\Imports\NETWORKLIST_TLB.pas"/>
         <DCCReference Include="src\Application\DTOs\AgentInfo.DTO.pas"/>
+        <DCCReference Include="..\shared\Application\src\Mappers\Commands.Mapper.pas"/>
+        <DCCReference Include="src\Presentation\Views\SendMessageBox.Views.pas">
+            <Form>Frm_MessageBox</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="..\shared\Application\src\Dlls\wlanapi.dll"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

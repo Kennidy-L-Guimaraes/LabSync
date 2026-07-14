@@ -19,7 +19,9 @@ uses
   GetLog.Service in '..\shared\Application\src\services\GetLog.Service.pas',
   ApplicationMode.types in '..\shared\Application\src\types\ApplicationMode.types.pas',
   NETWORKLIST_TLB in '..\..\..\..\Documents\Embarcadero\Studio\23.0\Imports\NETWORKLIST_TLB.pas',
-  AgentInfo.DTO in 'src\Application\DTOs\AgentInfo.DTO.pas';
+  AgentInfo.DTO in 'src\Application\DTOs\AgentInfo.DTO.pas',
+  Commands.Mapper in '..\shared\Application\src\Mappers\Commands.Mapper.pas',
+  SendMessageBox.Views in 'src\Presentation\Views\SendMessageBox.Views.pas' {Frm_MessageBox};
 
 {$R *.res}
 
@@ -28,5 +30,6 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrm_LabSyncServer, Frm_LabSyncServer);
   Application.CreateForm(TFrm_ServerConfig, Frm_ServerConfig);
+  Application.CreateForm(TFrm_MessageBox, Frm_MessageBox);
   Application.Run;
 end.

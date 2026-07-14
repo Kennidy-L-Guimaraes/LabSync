@@ -31,7 +31,8 @@ uses
   AgentConnect.Service in 'src\Application\Services\AgentConnect.Service.pas',
   GetLog.Service in '..\shared\Application\src\services\GetLog.Service.pas',
   ApplicationMode.types in '..\shared\Application\src\types\ApplicationMode.types.pas',
-  HeartBeat.Thread in 'src\Application\Threads\HeartBeat.Thread.pas';
+  HeartBeat.Thread in 'src\Application\Threads\HeartBeat.Thread.pas',
+  Commands.Mapper in '..\shared\Application\src\Mappers\Commands.Mapper.pas';
 
 {$R *.res}
 

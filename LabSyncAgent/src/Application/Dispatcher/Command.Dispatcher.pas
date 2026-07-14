@@ -6,7 +6,7 @@ uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
   ID.Service, Vcl.ExtCtrls, Loop.Service, Screenshot.Queue, Classes,
   GetPrint.Command, GetLiveMode.Command, CommandSuggestion.Service,
   GetSysInfo.Command, Transporter.Dto, Config.Service, CommandParsed.Dto,
-  showMessage.Command, ExecShutdown.Command;
+  showMessage.Command, ExecShutdown.Command, Commands.Mapper;
  type
   TCommandDispatcher = Class
     public
@@ -15,6 +15,8 @@ uses Command.Parser, SysUtils, Windows, Dialogs, Command.Logs, System.IOUtils,
        function Execute(const Command: string; AConfig: TConfig; AContext: TExecutionContext): TCommandResult;
     private
      {Private Declarations}
+      var
+       FCommand: TCommandMapper;
       function ReturnError(const Command, Suggestion, ErrorMsg: string): TCommandResult;
       procedure ReturnPermission(Const ACmdName, APermission: string);
       function CheckPermission(const AOption: string; AConfig: TConfig; AContext: TExecutionContext; ACmdName: string): Boolean;
@@ -49,7 +51,7 @@ begin
        not SameText(Trim(Parsed.Target), TId.GetID) then
            Exit; //Another Machine
 
-  if Parsed.Name = '$get_print' then
+  if Parsed.Name = FCommand.Mapp(cGetPrint) then
           begin
           if (AContext = ecRemote) and (AConfig.GetOption('Printscreen') <> osEnabled) then
               Exit(ReturnError(Parsed.Name, '', 'Permission denied'));
@@ -57,25 +59,25 @@ begin
           end
 
 
-  else if Parsed.name = '$get_livemode'  then
+  else if Parsed.name = FCommand.Mapp(cGetLiveMode)  then
           begin
           if CheckPermission('LiveMode', AConfig, AContext, Parsed.Name) then
               Result := TGetLiveModeCommand.Run(Command);
           end
 
-  else if Parsed.name = '$get_sysinfo' then
+  else if Parsed.name = FCommand.Mapp(cGetSysInfo) then
           begin
           if CheckPermission('Information', AConfig, AContext, Parsed.Name) then
              Result  := TGetSysInfoCommand.Run(Command, Acontext);
           end
 
-  else if Parsed.name = '$show_msg' then
+  else if Parsed.name = FCommand.Mapp(cShowMsg) then
           begin
            if CheckPermission('Messages', AConfig, AContext, Parsed.Name) then
               Result := TShowMessageCommand.Run(Command, Acontext)
            end
 
-  else if Parsed.name = '$exec_shutdown' then
+  else if Parsed.name = FCommand.Mapp(cExecShutdown) then
           begin
            if CheckPermission('Shutdown', AConfig, AContext, Parsed.Name) then
               Result := TExecShutdownCommand.Run(Command,AContext);

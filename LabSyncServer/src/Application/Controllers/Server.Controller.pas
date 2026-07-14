@@ -36,8 +36,10 @@ type
     function GetTarget:string;
 
     //
-    function IsTheServerActive: boolean;
-    function HasInternetConnection: string;
+    function  IsTheServerActive: boolean;
+    function  HasInternetConnection: string;
+    procedure SendCommand(const Target, Command, Value: string);
+    function  TargetVerification(const Target: string): boolean;
 
     {PROCEDURE SET}
     procedure SetServer(Const Value: string);
@@ -189,6 +191,12 @@ begin
 end;
 
 
+procedure TServerControll.SendCommand(const Target, Command, Value: string);
+begin
+  if TargetVerification(Target) = True then
+  Showmessage(' Target: '+Target + ' Command: ' + Command + 'Value: ' + Value);
+end;
+
 procedure TServerControll.SetPort(const Value: string);
 begin
   FServerConfig.SetPortOption('Port', Value);
@@ -197,6 +205,14 @@ end;
 procedure TServerControll.SetServer(const Value: string);
 begin
   FServerConfig.SetServerOption('Server', Value);
+end;
+
+function TServerControll.TargetVerification(const Target: string): boolean;
+begin
+  if sameText(Target, '') then
+  Result := False
+  else
+  Result := True;
 end;
 
 end.

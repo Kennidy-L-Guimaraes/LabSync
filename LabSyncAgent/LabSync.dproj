@@ -171,6 +171,7 @@
         <DCCReference Include="..\shared\Application\src\services\GetLog.Service.pas"/>
         <DCCReference Include="..\shared\Application\src\types\ApplicationMode.types.pas"/>
         <DCCReference Include="src\Application\Threads\HeartBeat.Thread.pas"/>
+        <DCCReference Include="..\shared\Application\src\Mappers\Commands.Mapper.pas"/>
         <RcItem Include="LabSync_Icon.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon</ResourceId>
