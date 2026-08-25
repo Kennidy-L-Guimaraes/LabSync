@@ -21,7 +21,11 @@ uses
   NETWORKLIST_TLB in '..\..\..\..\Documents\Embarcadero\Studio\23.0\Imports\NETWORKLIST_TLB.pas',
   AgentInfo.DTO in 'src\Application\DTOs\AgentInfo.DTO.pas',
   Commands.Mapper in '..\shared\Application\src\Mappers\Commands.Mapper.pas',
-  SendMessageBox.Views in 'src\Presentation\Views\SendMessageBox.Views.pas' {Frm_MessageBox};
+  SendMessageBox.Views in 'src\Presentation\Views\SendMessageBox.Views.pas' {Frm_MessageBox},
+  ServerResponseEnvelope.Classes in 'src\Application\Classes\ServerResponseEnvelope.Classes.pas',
+  Normalizer.Service in '..\shared\Application\src\services\Normalizer.Service.pas',
+  ServerResponseContent.DTO in 'src\Application\DTOs\ServerResponseContent.DTO.pas',
+  CryptDecrypt.Service in '..\shared\Application\src\services\CryptDecrypt.Service.pas';
 
 {$R *.res}
 

@@ -158,6 +158,10 @@
             <Form>Frm_MessageBox</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\Application\Classes\ServerResponseEnvelope.Classes.pas"/>
+        <DCCReference Include="..\shared\Application\src\services\Normalizer.Service.pas"/>
+        <DCCReference Include="src\Application\DTOs\ServerResponseContent.DTO.pas"/>
+        <DCCReference Include="..\shared\Application\src\services\CryptDecrypt.Service.pas"/>
         <None Include="..\shared\Application\src\Dlls\wlanapi.dll"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
