@@ -1438,7 +1438,6 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           Height = 25
           Caption = 'TEST'
           TabOrder = 0
-          Visible = False
           OnClick = Button1Click
         end
       end

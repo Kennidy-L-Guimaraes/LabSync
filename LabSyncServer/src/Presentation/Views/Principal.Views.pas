@@ -284,7 +284,7 @@ end;
 
 procedure TFrm_LabSyncServer.Button1Click(Sender: TObject);
 begin
-  Showmessage(FController.GetConnectionName);
+  FController.CryptContent(TargetOption, FCommand.Mapp(cGetLiveMode), '');
 end;
 
 procedure TFrm_LabSyncServer.CreateObjs;

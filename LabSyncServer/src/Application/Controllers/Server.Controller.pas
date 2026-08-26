@@ -3,7 +3,7 @@ unit Server.Controller;
 interface
 uses Config.Service, ID.Service, ServerConfig.Service, SysUtils, DateUtils, Classes,
   LocalIP.Service, Server.Service, AgentCard.Manager, Vcl.Graphics, Vcl.Forms,
-  Command.Logs, ApplicationMode.types, dialogs;
+  Command.Logs, ApplicationMode.types, dialogs, ServerResponseEnvelope.Classes, Commands.Mapper;
 
 type
   TTargetChangedEvent = procedure(Sender: TObject) of object;
@@ -19,8 +19,10 @@ type
     FServer       : TServerService;
     FLog          : Tlog;
     FAgentCardManager : TAgentCardManager;
+    FEnvelope     : TServerResponseEnvelope;
   public
    {Public Declarations}
+    Json: string;
    property  OnTargetChanged: TTargetChangedEvent read FOnTargetChanged write FOnTargetChanged;
    procedure AgentSelected(Sender: TObject);
     {FUNCTION GET}
@@ -50,6 +52,7 @@ type
     procedure DisconnectServer;
     procedure InitializeIfNeeded;
     procedure CreateComponents(AOwner: TComponent; AContainer: TScrollBox; APicture: TPicture);
+    procedure CryptContent(ACTarget, ACName, ACValue: string); //ACommand
     constructor Create;
     destructor Destroy;
  end;
@@ -58,7 +61,7 @@ implementation
 
 { TServerControll }
 
-uses Principal.Views;
+uses Principal.Views, ServerResponseContent.DTO;
 
 procedure TServerControll.AgentSelected(Sender: TObject);
 begin
@@ -80,6 +83,7 @@ begin
   IPService     := TLocalIPService.Create;
   FServerConfig := TserverConfig.Create;
   FServer       := TServerService.Create;
+  FEnvelope     := TServerResponseEnvelope.Create;
 end;
 
 procedure TServerControll.CreateComponents(AOwner: TComponent;
@@ -87,6 +91,22 @@ procedure TServerControll.CreateComponents(AOwner: TComponent;
 begin
   FAgentCardManager := TAgentCardManager.Create(AOwner, AContainer, APicture);
   FAgentCardManager.OnAgentSelected := AgentSelected;
+end;
+
+procedure TServerControll.CryptContent(ACTarget, ACName, ACValue: string);
+Var
+ Content : TServerResponseContent;
+begin
+  Content.CommandTarget := ACTarget;
+  Content.CommandName   := ACName;
+  Content.CommandValue  := ACValue;
+
+  Content.ServerID      := GetID;
+  Content.Version       := GetVersion;
+  Content.CommandType   := ctResponse;
+  Content.TimeStamp     := now;
+
+  Json := FEnvelope.CreateEnvelope(Content);
 end;
 
 destructor TServerControll.Destroy;
@@ -98,6 +118,7 @@ begin
   FServerConfig.Free;
   IPService.Free;
   FServer.Free;
+  FEnvelope.Free;
 end;
 
 procedure TServerControll.DisconnectServer;

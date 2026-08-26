@@ -14,7 +14,7 @@ implementation
 
 class function TNormalize.RemoveSpace(AValue: string): string;
 begin
- trim(AValue);
+ Result := trim(AValue);
 end;
 
 end.
