@@ -42,6 +42,7 @@ type
     function  HasInternetConnection: string;
     procedure SendCommand(const Target, Command, Value: string);
     function  TargetVerification(const Target: string): boolean;
+    function StatusServerNotification: string;
 
     {PROCEDURE SET}
     procedure SetServer(Const Value: string);
@@ -71,6 +72,11 @@ end;
 
 procedure TServerControll.ConnectServer;
 begin
+  if FServer.IsTheServerActive = 'Active' then
+  begin
+  StatusServerNotification;
+  exit;
+  end;
  FServer.Start(StrToInt(GetPort));
  FServer.AgentCardManager := FAgentCardManager;
 end;
@@ -123,6 +129,11 @@ end;
 
 procedure TServerControll.DisconnectServer;
 begin
+  if FServer.IsTheServerActive = 'Inactive' then
+  begin
+  StatusServerNotification;
+  exit;
+  end;
   Fserver.Stop;
 end;
 
@@ -226,6 +237,11 @@ end;
 procedure TServerControll.SetServer(const Value: string);
 begin
   FServerConfig.SetServerOption('Server', Value);
+end;
+
+function TServerControll.StatusServerNotification: string;
+begin
+ showmessage('The server is currently '+ FServer.IsTheServerActive + '. ' + 'Port: '+GetPort + ' IP: ' + GetIp);
 end;
 
 function TServerControll.TargetVerification(const Target: string): boolean;
