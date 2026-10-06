@@ -167,6 +167,7 @@ type
     Lbl_NetworkType: TLabel;
     Lbl_NetworkTypeExample: TLabel;
     Button1: TButton;
+    Svdl_SaveScreen: TSaveDialog;
     procedure Pnl_BtnSettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseEnter(Sender: TObject);
     procedure Sbtn_SettingsMouseLeave(Sender: TObject);
@@ -192,6 +193,7 @@ type
     procedure Sbtn_CommandClick(Sender: TObject);
     procedure Sbtn_MessagesClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure Lbl_BtnSaveScreenClick(Sender: TObject);
   private
     { Private declarations }
     FController : TServerControll;
@@ -207,6 +209,7 @@ type
     procedure CreateObjs;
     procedure DestroyObjs;
     procedure TargetChanged(Sender: TObject);
+    procedure SaveScreen;
     function  TargetOption: string;
 
 end;
@@ -240,6 +243,11 @@ begin
   ChBx_AllTargets.State := cbUnchecked
  else
   ChBx_AllTargets.State := cbChecked;
+end;
+
+procedure TFrm_LabSyncServer.Lbl_BtnSaveScreenClick(Sender: TObject);
+begin
+ SaveScreen;
 end;
 
 procedure TFrm_LabSyncServer.Lbl_ShutdownServerClick(Sender: TObject);
@@ -289,8 +297,8 @@ end;
 
 procedure TFrm_LabSyncServer.CreateObjs;
 begin
- FGetLogs    := TGetLogService.Create(amServer);
- FController := TServerControll.Create;
+ FGetLogs                    := TGetLogService.Create(amServer);
+ FController                 := TServerControll.Create;
  FController.OnTargetChanged := TargetChanged;
 end;
 
@@ -450,6 +458,19 @@ end;
 procedure TFrm_LabSyncServer.Sbtn_InformationClick(Sender: TObject);
 begin
   FController.SendCommand(TargetOption, FCommand.Mapp(cGetSysInfo), '');
+end;
+
+procedure TFrm_LabSyncServer.SaveScreen;
+Var
+ ID, Target: string;
+begin
+  ID     := StringReplace(FController.GetID, ':', '.', [rfReplaceAll]);
+  Target := StringReplace(FController.GetTarget, ':', '.', [rfReplaceAll]);
+  Svdl_SaveScreen.DefaultExt := 'jpg';
+  Svdl_SaveScreen.FileName   := 'Screen_' + ID + ' _ ' + Target + ' _ ' + Now.Format('dd.MM.yyyy_HH.mm.ss');
+  if not Svdl_SaveScreen.Execute then
+    Exit;
+  Img_AgentScreen.Picture.SaveToFile(Svdl_SaveScreen.FileName);
 end;
 
 procedure TFrm_LabSyncServer.Sbtn_AgentExampleMouseEnter(Sender: TObject);

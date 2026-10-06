@@ -386,6 +386,7 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
           Font.Name = '@Microsoft YaHei'
           Font.Style = [fsBold]
           ParentFont = False
+          OnClick = Lbl_BtnSaveScreenClick
         end
       end
     end
@@ -4141,6 +4142,14 @@ object Frm_LabSyncServer: TFrm_LabSyncServer
   object Timer_InternetConnection: TTimer
     OnTimer = Timer_InternetConnectionTimer
     Left = 602
+    Top = 124
+  end
+  object Svdl_SaveScreen: TSaveDialog
+    Filter = 
+      'PNG Image (*.png)|*.png|JPEG Image (*.jpg)|*.jpg|Bitmap (*.bmp)|' +
+      '*.bmp'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
+    Left = 711
     Top = 124
   end
 end
